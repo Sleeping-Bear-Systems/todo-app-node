@@ -1,7 +1,7 @@
 import z from "zod";
 
 const environmentVariablesSchema = z.object({
-  port: z.coerce.number().optional().default(3000),
+  PORT: z.coerce.number().optional().default(3000),
 });
 
 export type AppConfig = Readonly<{
@@ -13,6 +13,6 @@ export function createAppConfig(
 ): AppConfig {
   const environmentVariables = environmentVariablesSchema.parse(env);
   return {
-    port: environmentVariables.port,
+    port: environmentVariables.PORT,
   };
 }

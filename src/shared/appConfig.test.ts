@@ -4,7 +4,7 @@ import { createAppConfig } from "./appConfig.js";
 
 describe("createAppConfig", () => {
   test("validates behavior", () => {
-    const env = { port: "1234" };
+    const env = { PORT: "1234" };
     const appConfig = createAppConfig(env);
     assert.equal(appConfig.port, 1234);
   });
