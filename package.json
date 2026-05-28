@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "biome:check": "biome check .",
-    "biome:ci": "bunx biome ci .",
+    "biome:ci": "biome ci .",
     "biome:fix": "biome check --write .",
     "build": "tsc",
     "dev": "tsx watch src/index.ts",
