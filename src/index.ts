@@ -1,11 +1,12 @@
 import { serve } from "@hono/node-server";
 import { Hono } from "hono";
+import { pingApi } from "./features/ping/pingApi.js";
+
+const apiRoutes = new Hono().route("/ping", pingApi);
 
 const app = new Hono();
 
-app.get("/", (c) => {
-  return c.text("Hello Hono!");
-});
+app.route("/api", apiRoutes);
 
 serve(
   {
