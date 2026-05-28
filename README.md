@@ -9,6 +9,16 @@ npm install
 npm run build
 ```
 
+## Linting and Formatting
+
+```pwsh
+npm run biome:check
+```
+
+``` pwsh
+npm run biome:fix
+```
+
 ## Running the application
 
 ```pwsh
