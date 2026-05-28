@@ -2,9 +2,14 @@
   "$schema": "https://json.schemastore.org/tsconfig",
   "extends": ["@tsconfig/node24", "@tsconfig/strictest"],
   "compilerOptions": {
+    "baseUrl": "./src",
     "erasableSyntaxOnly": true,
     "jsx": "react-jsx",
     "jsxImportSource": "hono/jsx",
+    "paths": {
+      "@shared/*": ["shared/*"],
+      "@features/*": ["features/*"]
+    },
     "rewriteRelativeImportExtensions": true,
     "types": ["node"],
     "verbatimModuleSyntax": true
