@@ -2,6 +2,7 @@ import { pingApi } from "@features/ping/pingApi.js";
 import { serve } from "@hono/node-server";
 import { createAppConfig } from "@shared/appConfig.js";
 import type { AppVariables } from "@shared/appVariables.js";
+import { systemClock } from "@shared/clock.js";
 import { createStructuredLogger } from "@shared/structuredLogger.js";
 import { Hono } from "hono";
 
@@ -19,6 +20,7 @@ const app = new Hono<{ Variables: AppVariables }>();
 app.use("*", async (c, next) => {
   c.set("appConfig", appConfig);
   c.set("logger", logger);
+  c.set("clock", systemClock);
   await next();
 });
 
