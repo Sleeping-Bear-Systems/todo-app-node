@@ -1,0 +1,9 @@
+# default
+* text=auto eol=lf
+
+# text files
+*.svg text
+
+# binary files
+*.png binary
+*.jpg binary
