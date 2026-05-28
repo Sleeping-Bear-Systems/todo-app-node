@@ -1,9 +1,9 @@
+import { pingApi } from "@features/ping/pingApi.js";
 import { serve } from "@hono/node-server";
+import { createAppConfig } from "@shared/appConfig.js";
+import type { AppVariables } from "@shared/appVariables.js";
+import { createStructuredLogger } from "@shared/structuredLogger.js";
 import { Hono } from "hono";
-import { pingApi } from "./features/ping/pingApi.js";
-import { createAppConfig } from "./shared/appConfig.js";
-import type { AppVariables } from "./shared/appVariables.js";
-import { createStructuredLogger } from "./shared/structuredLogger.ts";
 
 const appConfig = createAppConfig(process.env);
 const logger = createStructuredLogger(appConfig);
