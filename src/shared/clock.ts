@@ -6,8 +6,8 @@ export const systemClock: Clock = {
   now: () => new Date(),
 };
 
-export function createFixedClock(now: Date): Clock {
+export function createFixedClock(fixedDate: Date): Clock {
   return {
-    now: () => now,
+    now: () => fixedDate,
   } as const;
 }
