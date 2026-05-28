@@ -15,7 +15,7 @@ npm run build
 npm run biome:check
 ```
 
-``` pwsh
+```pwsh
 npm run biome:fix
 ```
 
