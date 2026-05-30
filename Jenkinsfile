@@ -16,5 +16,19 @@ pipeline {
                 }
             }
         }
+        stage('Playwright E2E') {
+            agent {
+                docker {
+                    image 'node:26'
+                }
+            }
+            steps {
+                script {
+                    sh 'npm install'
+                    sh 'npx playwright install --with-deps'
+                    sh 'npm run playwright:test'
+                }
+            }
+        }
     }
 }
