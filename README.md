@@ -79,3 +79,10 @@ Run the built application:
 ```pwsh
 npm run start
 ```
+
+## Jenkins CI setup
+
+This repository includes two Jenkins pipeline definitions:
+
+- `Jenkinsfile`: fast CI (install, build, lint, unit tests)
+- `Jenkinsfile.e2e`: Playwright E2E tests
