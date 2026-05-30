@@ -10,7 +10,7 @@
     "build": "tsc -b && tsc-alias -p tsconfig.app.json",
     "dev": "tsx watch src/index.ts",
     "start": "node dist/index.js",
-    "test": "node --import tsx --test **/*.test.ts"
+    "test": "node --import tsx --test ./src/**/*.test.ts ./src/**/*.test.tsx"
   },
   "dependencies": {
     "@datalust/winston-seq": "^3.0.1",
