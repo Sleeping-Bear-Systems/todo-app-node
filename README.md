@@ -68,6 +68,21 @@ Show the latest Playwright HTML report:
 npm run playwright:report
 ```
 
+## Jenkins CI setup
+
+This repository includes two Jenkins pipeline definitions:
+
+- `Jenkinsfile`: fast CI (install, build, lint, unit tests)
+- `Jenkinsfile.e2e`: Playwright E2E tests
+
+Recommended merge-gating configuration for `main`:
+
+1. Create a Jenkins job that uses `Jenkinsfile` and runs on push/PR updates.
+2. Create a second Jenkins job that uses `Jenkinsfile.e2e` and runs on PR updates.
+3. Configure GitHub branch protection to require both Jenkins status checks.
+
+This keeps CI responsibilities separated while still requiring E2E to pass before merge.
+
 ## Running the application
 
 ```pwsh
