@@ -1,7 +1,9 @@
 import { defineConfig, devices } from "@playwright/test";
 
-const isCI = !!process.env.CI;
-const port = process.env.PORT ?? "3000";
+// biome-ignore lint/complexity/useLiteralKeys: noPropertyAccessFromIndexSignature = true
+const isCI = !!process.env["CI"];
+// biome-ignore lint/complexity/useLiteralKeys: noPropertyAccessFromIndexSignature = true
+const port = process.env["PORT"] ?? "3000";
 const baseUrl = `http://localhost:${port}`;
 
 /**
