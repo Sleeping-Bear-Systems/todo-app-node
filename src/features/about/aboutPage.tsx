@@ -12,6 +12,12 @@ export const aboutPage = new Hono<{ Variables: AppVariables }>().get(
     return c.html(
       <Page title="About">
         <h1>About</h1>
+        <img
+          src="/images/sleeping_bear_logo.svg"
+          alt="Sleeping Bear Systems logo"
+          width="200"
+          height="200"
+        />
         <div>&copy; {copyrightYears} Sleeping Bear Systems</div>
       </Page>,
     );
