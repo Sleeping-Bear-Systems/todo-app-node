@@ -1,4 +1,5 @@
 import { serve } from "@hono/node-server";
+import { serveStatic } from "@hono/node-server/serve-static";
 import { Hono } from "hono";
 import { aboutPage } from "#features/about/aboutPage.js";
 import { pingApi } from "#features/ping/pingApi.js";
@@ -29,6 +30,9 @@ app.use("*", async (c, next) => {
   c.set("clock", systemClock);
   await next();
 });
+
+// serve static assets
+app.use("/*", serveStatic({ root: "./public" }));
 
 // add routes
 app.route("/api", apiRoutes);
