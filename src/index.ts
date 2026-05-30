@@ -33,6 +33,9 @@ app.use("*", async (c, next) => {
 // add routes
 app.route("/api", apiRoutes);
 app.route("/", pageRoutes);
+app.get("/", (c) => {
+  return c.redirect("/about");
+});
 
 // run application
 serve(
