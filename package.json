@@ -9,6 +9,7 @@
   },
   "devDependencies": {
     "@biomejs/biome": "^2.4.16",
+    "@playwright/test": "^1.60.0",
     "@tsconfig/node24": "^24.0.4",
     "@tsconfig/strictest": "^2.0.8",
     "@types/node": "^25.9.1",
@@ -28,6 +29,11 @@
     "build": "tsc -b",
     "build:force": "tsc -b --force",
     "dev": "tsx watch --tsconfig tsconfig.app.json src/index.ts",
+    "playwright:install": "playwright install",
+    "playwright:test": "playwright test",
+    "playwright:test:headed": "playwright test --headed",
+    "playwright:test:ui": "playwright test --ui",
+    "playwright:report": "playwright show-report",
     "start": "node dist/index.js",
     "test": "node --import tsx --test ./src/**/*.test.ts ./src/**/*.test.tsx"
   },
