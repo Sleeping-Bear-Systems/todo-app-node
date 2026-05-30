@@ -1,10 +1,10 @@
+import { aboutPage } from "@features/about/aboutPage.js";
 import { pingApi } from "@features/ping/pingApi.js";
 import { serve } from "@hono/node-server";
 import { createAppConfig } from "@shared/appConfig.js";
 import type { AppVariables } from "@shared/appVariables.js";
 import { systemClock } from "@shared/clock.js";
 import { createStructuredLogger } from "@shared/structuredLogger.js";
-import { aboutPage } from "about/aboutPage.jsx";
 import { Hono } from "hono";
 
 const appConfig = createAppConfig(process.env);
