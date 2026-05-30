@@ -19,13 +19,12 @@ pipeline {
         stage('Playwright E2E') {
             agent {
                 docker {
-                    image 'node:26'
+                    image 'mcr.microsoft.com/playwright:v1.60.0-jammy'
                 }
             }
             steps {
                 script {
                     sh 'npm ci'
-                    sh 'npx playwright install --with-deps'
                     sh 'npm run playwright:test'
                 }
             }
