@@ -1,6 +1,6 @@
-import type { AppVariables } from "@shared/appVariables.js";
-import { Page } from "@shared/page.js";
 import { Hono } from "hono";
+import type { AppVariables } from "#shared/appVariables.js";
+import { Page } from "#shared/page.js";
 
 export const aboutPage = new Hono<{ Variables: AppVariables }>().get(
   "/",

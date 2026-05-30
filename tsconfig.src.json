@@ -1,14 +1,12 @@
 {
   "$schema": "https://json.schemastore.org/tsconfig",
   "compilerOptions": {
-    "baseUrl": "./src",
     "composite": true,
-    "ignoreDeprecations": "6.0",
     "jsx": "react-jsx",
     "jsxImportSource": "hono/jsx",
     "paths": {
-      "@features/*": ["features/*"],
-      "@shared/*": ["shared/*"]
+      "#features/*": ["./src/features/*"],
+      "#shared/*": ["./src/shared/*"]
     },
     "rootDir": "./src"
   },
