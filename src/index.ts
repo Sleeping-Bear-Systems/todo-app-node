@@ -4,6 +4,7 @@ import { createAppConfig } from "@shared/appConfig.js";
 import type { AppVariables } from "@shared/appVariables.js";
 import { systemClock } from "@shared/clock.js";
 import { createStructuredLogger } from "@shared/structuredLogger.js";
+import { aboutPage } from "about/aboutPage.jsx";
 import { Hono } from "hono";
 
 const appConfig = createAppConfig(process.env);
@@ -12,6 +13,11 @@ const logger = createStructuredLogger(appConfig);
 const apiRoutes = new Hono<{ Variables: AppVariables }>().route(
   "/ping",
   pingApi,
+);
+
+const pageRoutes = new Hono<{ Variables: AppVariables }>().route(
+  "/about",
+  aboutPage,
 );
 
 const app = new Hono<{ Variables: AppVariables }>();
@@ -26,6 +32,7 @@ app.use("*", async (c, next) => {
 
 // add routes
 app.route("/api", apiRoutes);
+app.route("/", pageRoutes);
 
 // run application
 serve(
