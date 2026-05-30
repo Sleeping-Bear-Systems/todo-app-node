@@ -1,3 +1,4 @@
+import { aboutPage } from "@features/about/aboutPage.js";
 import { pingApi } from "@features/ping/pingApi.js";
 import { serve } from "@hono/node-server";
 import { createAppConfig } from "@shared/appConfig.js";
@@ -14,6 +15,11 @@ const apiRoutes = new Hono<{ Variables: AppVariables }>().route(
   pingApi,
 );
 
+const pageRoutes = new Hono<{ Variables: AppVariables }>().route(
+  "/about",
+  aboutPage,
+);
+
 const app = new Hono<{ Variables: AppVariables }>();
 
 // add services
@@ -26,6 +32,10 @@ app.use("*", async (c, next) => {
 
 // add routes
 app.route("/api", apiRoutes);
+app.route("/", pageRoutes);
+app.get("/", (c) => {
+  return c.redirect("/about");
+});
 
 // run application
 serve(
