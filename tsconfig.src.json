@@ -7,8 +7,8 @@
     "jsx": "react-jsx",
     "jsxImportSource": "hono/jsx",
     "paths": {
-      "@features/*": ["features/*"],
-      "@shared/*": ["shared/*"]
+      "#features/*": ["features/*"],
+      "#shared/*": ["shared/*"]
     },
     "rootDir": "./src"
   },
