@@ -9,7 +9,7 @@ pipeline {
             }
             steps {
                 script {
-                    sh 'npm install'
+                    sh 'npm ci'
                     sh 'npm run build'
                     sh 'npm run biome:ci'
                     sh 'npm run test'
@@ -24,7 +24,7 @@ pipeline {
             }
             steps {
                 script {
-                    sh 'npm install'
+                    sh 'npm ci'
                     sh 'npx playwright install --with-deps'
                     sh 'npm run playwright:test'
                 }
