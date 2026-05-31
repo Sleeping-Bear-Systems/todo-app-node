@@ -1,3 +1,4 @@
+/** biome-ignore-all lint/complexity/useLiteralKeys: noPropertyAccessFromIndexSignature = true */
 import assert from "node:assert/strict";
 import { describe, test } from "node:test";
 import { Hono } from "hono";
@@ -15,7 +16,8 @@ describe("loginApi", () => {
       url: undefined,
     },
     jwt: {
-      secretKey: "fake_jwt_secret_key_only_used_for_testing_the_login_api_01234567",
+      secretKey:
+        "fake_jwt_secret_key_only_used_for_testing_the_login_api_01234567",
       cookieName: "todo-app-node",
     },
   } as const;
