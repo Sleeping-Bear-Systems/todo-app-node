@@ -31,11 +31,20 @@ export function getOrCreateUser(
   return user;
 }
 
-export function verifyUser(username: string, password: string) {
+export function verifyUser(
+  username: string,
+  password: string,
+): Omit<User, "passwordHash"> | undefined {
   const normalizedUsername = username.trim().toLowerCase();
   const passwordHash = createHash("sha256").update(password).digest("hex");
   const existing = users.find(
     (u) => u.username === normalizedUsername && u.passwordHash === passwordHash,
   );
-  return existing;
+  return existing
+    ? {
+        id: existing.id,
+        username: existing.username,
+        role: existing.role,
+      }
+    : undefined;
 }
