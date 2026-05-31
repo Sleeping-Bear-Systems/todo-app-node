@@ -14,7 +14,7 @@ pipeline {
                 script {
                     sh 'npm ci'
                     sh 'npm run playwright:test'
-                    sh "archiveArtifacts artifacts: 'playwright-report/**', allowEmptyArchive: true"
+                    archiveArtifacts artifacts: 'playwright-report/**', allowEmptyArchive: true
                 }
             }
             post {
