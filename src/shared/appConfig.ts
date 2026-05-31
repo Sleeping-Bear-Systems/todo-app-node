@@ -11,13 +11,14 @@ const environmentVariablesSchema = z.object({
 export type AppConfig = Readonly<{
   port: number;
   environment: string;
-  seq: {
+  seq: Readonly<{
     apiKey: string | undefined;
     url: string | undefined;
-  };
-  jwt: {
+  }>;
+  jwt: Readonly<{
     secretKey: string;
-  };
+    cookieName: string;
+  }>;
 }>;
 
 export function createAppConfig(
@@ -33,6 +34,7 @@ export function createAppConfig(
     },
     jwt: {
       secretKey: environmentVariables.JWT_SECRET_KEY,
+      cookieName: "todo-app-node",
     },
   };
 }

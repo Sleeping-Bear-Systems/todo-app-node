@@ -62,6 +62,11 @@ describe("createAppConfig", () => {
     assert.equal(appConfig.jwt.secretKey, validJwtSecretKey);
   });
 
+  test("jwt cookieName uses the application default", () => {
+    const appConfig = createAppConfig(createEnv());
+    assert.equal(appConfig.jwt.cookieName, "todo-app-node");
+  });
+
   test("throws when JWT_SECRET_KEY is missing", () => {
     assert.throws(() =>
       createAppConfig(createEnv({ JWT_SECRET_KEY: undefined })),
