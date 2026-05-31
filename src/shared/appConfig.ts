@@ -5,6 +5,7 @@ const environmentVariablesSchema = z.object({
   NODE_ENV: z.string().optional().default("development"),
   SEQ_API_KEY: z.string().optional(),
   SEQ_URL: z.url().optional(),
+  JWT_SECRET_KEY: z.string().min(32),
 });
 
 export type AppConfig = Readonly<{
@@ -13,6 +14,9 @@ export type AppConfig = Readonly<{
   seq: {
     apiKey: string | undefined;
     url: string | undefined;
+  };
+  jwt: {
+    secretKey: string;
   };
 }>;
 
@@ -26,6 +30,9 @@ export function createAppConfig(
     seq: {
       apiKey: environmentVariables.SEQ_API_KEY,
       url: environmentVariables.SEQ_URL,
+    },
+    jwt: {
+      secretKey: environmentVariables.JWT_SECRET_KEY,
     },
   };
 }
