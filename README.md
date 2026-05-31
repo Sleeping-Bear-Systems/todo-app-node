@@ -50,6 +50,12 @@ Run Playwright tests:
 npm run playwright:test
 ```
 
+Run the application without file watching (used by Playwright webServer):
+
+```pwsh
+npm run dev:e2e
+```
+
 Run Playwright tests in headed mode:
 
 ```pwsh

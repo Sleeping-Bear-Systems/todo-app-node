@@ -29,6 +29,7 @@
     "build": "tsc -b",
     "build:force": "tsc -b --force",
     "dev": "tsx watch --tsconfig tsconfig.app.json src/index.ts",
+    "dev:e2e": "tsx --tsconfig tsconfig.app.json src/index.ts",
     "playwright:install": "playwright install",
     "playwright:test": "playwright test",
     "playwright:test:headed": "playwright test --headed",
