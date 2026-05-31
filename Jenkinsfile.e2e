@@ -16,6 +16,12 @@ pipeline {
                     sh 'npm run playwright:test'
                 }
             }
+            post {
+                always {
+                    archiveArtifacts artifacts: 'playwright-report/**', allowEmptyArchive: true
+                    deleteDir()
+                }
+            }
         }
     }
 }
