@@ -5,15 +5,20 @@ const environmentVariablesSchema = z.object({
   NODE_ENV: z.string().optional().default("development"),
   SEQ_API_KEY: z.string().optional(),
   SEQ_URL: z.url().optional(),
+  JWT_SECRET_KEY: z.string().min(64),
 });
 
 export type AppConfig = Readonly<{
   port: number;
   environment: string;
-  seq: {
+  seq: Readonly<{
     apiKey: string | undefined;
     url: string | undefined;
-  };
+  }>;
+  jwt: Readonly<{
+    secretKey: string;
+    cookieName: string;
+  }>;
 }>;
 
 export function createAppConfig(
@@ -26,6 +31,10 @@ export function createAppConfig(
     seq: {
       apiKey: environmentVariables.SEQ_API_KEY,
       url: environmentVariables.SEQ_URL,
+    },
+    jwt: {
+      secretKey: environmentVariables.JWT_SECRET_KEY,
+      cookieName: "todo-app-node",
     },
   };
 }

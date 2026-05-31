@@ -5,6 +5,8 @@ import { cors } from "hono/cors";
 import { csrf } from "hono/csrf";
 import { secureHeaders } from "hono/secure-headers";
 import { aboutPage } from "#features/about/aboutPage.js";
+import { loginApi } from "#features/login/loginApi.js";
+import { getOrCreateUser } from "#features/login/user.js";
 import { pingApi } from "#features/ping/pingApi.js";
 import { createAppConfig } from "#shared/appConfig.js";
 import type { AppVariables } from "#shared/appVariables.js";
@@ -14,10 +16,12 @@ import { createStructuredLogger } from "#shared/structuredLogger.js";
 const appConfig = createAppConfig(process.env);
 const logger = createStructuredLogger(appConfig);
 
-const apiRoutes = new Hono<{ Variables: AppVariables }>().route(
-  "/ping",
-  pingApi,
-);
+// create mock admin user
+getOrCreateUser("admin", "password1234", "admin");
+
+const apiRoutes = new Hono<{ Variables: AppVariables }>()
+  .route("/ping", pingApi)
+  .route("/login", loginApi);
 
 const pageRoutes = new Hono<{ Variables: AppVariables }>().route(
   "/about",

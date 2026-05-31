@@ -10,6 +10,10 @@ const baseConfig: AppConfig = {
     apiKey: undefined,
     url: undefined,
   },
+  jwt: {
+    secretKey: "fake_jwt_secret_key",
+    cookieName: "todo-app-node",
+  },
 };
 
 describe("createStructuredLogger", () => {
