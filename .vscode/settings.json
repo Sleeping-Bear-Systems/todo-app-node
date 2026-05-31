@@ -43,5 +43,9 @@
     ".vscode-insiders",
     ".env",
     ".env.*"
-  ]
+  ],
+  "files.associations": {
+    "Jenkinsfile": "groovy",
+    "Jenkinsfile.*": "groovy"
+  }
 }
