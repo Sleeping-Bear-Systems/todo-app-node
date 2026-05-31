@@ -14,13 +14,14 @@ pipeline {
                 script {
                     sh 'npm ci'
                     sh 'npm run playwright:test'
-                    archiveArtifacts artifacts: 'playwright-report/**', allowEmptyArchive: true
                 }
             }
             post {
                 always {
+                    archiveArtifacts artifacts: 'playwright-report/**', allowEmptyArchive: true
                     deleteDir()
                 }
+            }
             }
         }
     }
