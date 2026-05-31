@@ -1,5 +1,8 @@
 pipeline {
     agent none
+    environment {
+        CI = 'true'
+    }
     stages {
         stage('Playwright E2E') {
             agent {
