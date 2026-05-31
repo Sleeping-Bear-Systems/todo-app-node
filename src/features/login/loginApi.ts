@@ -5,7 +5,7 @@ import { setCookie } from "hono/cookie";
 import { sign } from "hono/jwt";
 import z from "zod";
 import type { AppVariables } from "#shared/appVariables.js";
-import { verifyUser } from "./user.ts";
+import { verifyUser } from "./user.js";
 
 const loginRequestSchema = z.object({
   username: z.string().min(3),
