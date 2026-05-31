@@ -1,6 +1,7 @@
 import { serve } from "@hono/node-server";
 import { serveStatic } from "@hono/node-server/serve-static";
 import { Hono } from "hono";
+import { cors } from "hono/cors";
 import { aboutPage } from "#features/about/aboutPage.js";
 import { pingApi } from "#features/ping/pingApi.js";
 import { createAppConfig } from "#shared/appConfig.js";
@@ -24,6 +25,7 @@ const pageRoutes = new Hono<{ Variables: AppVariables }>().route(
 const app = new Hono<{ Variables: AppVariables }>();
 
 // add services
+app.use("/api/*", cors()); // TODO: add allowlist
 app.use("*", async (c, next) => {
   c.set("appConfig", appConfig);
   c.set("logger", logger);
