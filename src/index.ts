@@ -28,8 +28,8 @@ const app = new Hono<{ Variables: AppVariables }>();
 
 // add services
 app.use(secureHeaders());
-app.use(csrf());
 app.use("/api/*", cors()); // TODO: add allowlist
+app.use(csrf());
 app.use("*", async (c, next) => {
   c.set("appConfig", appConfig);
   c.set("logger", logger);
