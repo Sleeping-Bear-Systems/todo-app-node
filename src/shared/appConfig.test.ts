@@ -2,7 +2,8 @@ import assert from "node:assert/strict";
 import { describe, test } from "node:test";
 import { createAppConfig } from "./appConfig.js";
 
-const validJwtSecretKey = "12345678901234567890123456789012";
+const validJwtSecretKey =
+  "1234567890123456789012345678901234567890123456789012345678901234";
 
 function createEnv(overrides: Record<string, string | undefined> = {}) {
   return {
@@ -73,8 +74,14 @@ describe("createAppConfig", () => {
     );
   });
 
-  test("throws when JWT_SECRET_KEY is shorter than 32 characters", () => {
-    assert.throws(() => createAppConfig(createEnv({ JWT_SECRET_KEY: "1234" })));
+  test("throws when JWT_SECRET_KEY is shorter than 64 characters", () => {
+    assert.throws(() =>
+      createAppConfig({
+        ...createEnv(),
+        JWT_SECRET_KEY:
+          "123456789012345678901234567890123456789012345678901234567890123",
+      }),
+    );
   });
 
   test("throws on invalid port below range", () => {

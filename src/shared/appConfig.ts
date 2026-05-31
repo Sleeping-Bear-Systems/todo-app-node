@@ -5,7 +5,7 @@ const environmentVariablesSchema = z.object({
   NODE_ENV: z.string().optional().default("development"),
   SEQ_API_KEY: z.string().optional(),
   SEQ_URL: z.url().optional(),
-  JWT_SECRET_KEY: z.string().min(32),
+  JWT_SECRET_KEY: z.string().min(64),
 });
 
 export type AppConfig = Readonly<{
