@@ -7,6 +7,7 @@ import { secureHeaders } from "hono/secure-headers";
 import { aboutPage } from "#features/about/aboutPage.js";
 import { loginApi } from "#features/login/loginApi.js";
 import { getOrCreateUser } from "#features/login/user.js";
+import { logoutApi } from "#features/logout/logoutApi.js";
 import { pingApi } from "#features/ping/pingApi.js";
 import { createAppConfig } from "#shared/appConfig.js";
 import type { AppVariables } from "#shared/appVariables.js";
@@ -19,15 +20,19 @@ const logger = createStructuredLogger(appConfig);
 // create mock admin user
 getOrCreateUser("admin", "password1234", "admin");
 
+// map API routes
 const apiRoutes = new Hono<{ Variables: AppVariables }>()
   .route("/ping", pingApi)
-  .route("/login", loginApi);
+  .route("/login", loginApi)
+  .route("/logout", logoutApi);
 
+// map page routes
 const pageRoutes = new Hono<{ Variables: AppVariables }>().route(
   "/about",
   aboutPage,
 );
 
+// create application
 const app = new Hono<{ Variables: AppVariables }>();
 
 // add services
