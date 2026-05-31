@@ -2,6 +2,7 @@ pipeline {
     agent none
     environment {
         CI = 'true'
+        JWT_SECRET_KEY = 'jdAy8zhJJ8eTJem1uYyyqQdxcgQGBbs3wZUnhQgyh3JuMefBQzjs5CT5XckEZjoe'
     }
     stages {
         stage('Playwright E2E') {
