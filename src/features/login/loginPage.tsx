@@ -8,6 +8,31 @@ export const loginPage = new Hono<{ Variables: AppVariables }>().get(
     return c.html(
       <Page title="Login">
         <h1>Login</h1>
+        <form method="post" action="/api/login">
+          <div>
+            <label htmlFor="username">Username</label>
+            <input
+              id="username"
+              name="username"
+              type="text"
+              required
+              minLength={3}
+              autoComplete="username"
+            />
+          </div>
+          <div>
+            <label htmlFor="password">Password</label>
+            <input
+              id="password"
+              name="password"
+              type="password"
+              required
+              minLength={8}
+              autoComplete="current-password"
+            />
+          </div>
+          <button type="submit">Sign in</button>
+        </form>
       </Page>,
     );
   },
