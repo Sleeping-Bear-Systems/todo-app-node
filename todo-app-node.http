@@ -15,3 +15,7 @@ Content-Type: application/x-www-form-urlencoded
 
 username=admin&password=wrong-password
 
+### Logout
+POST {{baseUrl}}/api/logout
+Origin: {{origin}}
+
