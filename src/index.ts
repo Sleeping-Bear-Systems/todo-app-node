@@ -46,7 +46,7 @@ const pageRoutes = new Hono<{ Variables: AppVariables }>()
 const authenticatedPageRoutes = new Hono<{
   Variables: AuthenticatedAppVariables;
 }>()
-  .use("/auth/*", async (c, next) => {
+  .use("/*", async (c, next) => {
     try {
       await appJwt(c, async () => {});
     } catch {
