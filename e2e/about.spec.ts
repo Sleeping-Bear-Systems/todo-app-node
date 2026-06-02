@@ -10,11 +10,11 @@ test("GET /about renders about content", async ({ page }) => {
   await expect(page.getByText(/Sleeping Bear Systems/)).toBeVisible();
 });
 
-test("GET / redirects to /about", async ({ page }) => {
+test("GET / redirects to /auth/home", async ({ page }) => {
   await page.goto("/");
 
-  await expect(page).toHaveURL(/\/about$/);
+  await expect(page).toHaveURL(/\/auth\/home$/);
   await expect(
-    page.getByRole("heading", { level: 1, name: "About" }),
+    page.getByRole("heading", { level: 1, name: "Home" }),
   ).toBeVisible();
 });
