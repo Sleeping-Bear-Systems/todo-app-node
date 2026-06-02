@@ -22,7 +22,7 @@ describe("loginApi", () => {
     },
   } as const;
 
-  const fixedNow = new Date("2026-05-31T12:00:00Z");
+  const fixedNow = new Date();
 
   function createApp() {
     const app = new Hono<{ Variables: AppVariables }>();
@@ -36,7 +36,7 @@ describe("loginApi", () => {
     return app;
   }
 
-  test("returns 200 and sets a signed auth cookie for valid credentials", async () => {
+  test("returns 302 redirect and sets a signed auth cookie for valid credentials", async () => {
     const app = createApp();
     const createdUser = getOrCreateUser("Alice", "password1234", "admin");
 
@@ -48,8 +48,8 @@ describe("loginApi", () => {
       }),
     });
 
-    assert.equal(response.status, 200);
-    assert.deepEqual(await response.json(), {});
+    assert.equal(response.status, 302);
+    assert.equal(response.headers.get("location"), "/auth/home");
 
     const setCookieHeader = response.headers.get("set-cookie");
     assert.notEqual(setCookieHeader, null);

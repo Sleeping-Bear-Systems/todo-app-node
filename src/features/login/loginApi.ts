@@ -40,6 +40,6 @@ export const loginApi = new Hono<{ Variables: AppVariables }>().post(
       secure: false, // TODO: set flag based on environment,
       expires: addDays(now, 1),
     });
-    return c.json({}, 200);
+    return c.redirect("/auth/home");
   },
 );
