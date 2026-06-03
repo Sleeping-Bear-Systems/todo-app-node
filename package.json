@@ -34,6 +34,7 @@
     "dev:e2e": "tsx --tsconfig tsconfig.app.json src/index.ts",
     "playwright:install": "playwright install",
     "playwright:test": "playwright test",
+    "playwright:test:non-blocking": "playwright test --reporter=line",
     "playwright:test:headed": "playwright test --headed",
     "playwright:test:ui": "playwright test --ui",
     "playwright:report": "playwright show-report",

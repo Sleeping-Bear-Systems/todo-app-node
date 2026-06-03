@@ -30,6 +30,12 @@ npm run biome:check
 npm run biome:fix
 ```
 
+Run the CI-focused Biome checks (for use by the CI build server):
+
+```pwsh
+npm run biome:ci
+```
+
 ## Testing the application
 
 ```pwsh
@@ -48,6 +54,12 @@ Run Playwright tests:
 
 ```pwsh
 npm run playwright:test
+```
+
+Run Playwright tests with a non-blocking line reporter:
+
+```pwsh
+npm run playwright:test:non-blocking
 ```
 
 Run the application without file watching (used by Playwright webServer):
