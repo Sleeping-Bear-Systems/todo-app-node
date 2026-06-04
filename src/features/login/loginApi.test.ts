@@ -73,7 +73,7 @@ describe("loginApi", () => {
     );
   });
 
-  test("returns 401 for invalid credentials", async () => {
+  test("redirects to /login-error for invalid credentials", async () => {
     const app = createApp();
 
     const response = await app.request("/login", {
@@ -84,8 +84,8 @@ describe("loginApi", () => {
       }),
     });
 
-    assert.equal(response.status, 401);
-    assert.deepEqual(await response.json(), { message: "Invalid credentials" });
+    assert.equal(response.status, 302);
+    assert.equal(response.headers.get("location"), "/login-error");
     assert.equal(response.headers.get("set-cookie"), null);
   });
 

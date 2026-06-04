@@ -2,7 +2,7 @@ import type { Child } from "hono/jsx";
 
 type PageProps = Readonly<{
   title: string;
-  children: Child;
+  children?: Child;
   language?: string;
   description?: string;
 }>;

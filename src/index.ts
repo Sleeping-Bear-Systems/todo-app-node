@@ -8,6 +8,7 @@ import { secureHeaders } from "hono/secure-headers";
 import { aboutPage } from "#features/about/aboutPage.js";
 import { homePage } from "#features/home/homePage.js";
 import { loginApi } from "#features/login/loginApi.js";
+import { loginErrorPage } from "#features/login/loginErrorPage.js";
 import { loginPage } from "#features/login/loginPage.js";
 import { logoutApi } from "#features/login/logoutApi.js";
 import { getOrCreateUser } from "#features/login/user.js";
@@ -41,7 +42,8 @@ const apiRoutes = new Hono<{ Variables: AppVariables }>()
 // map page routes
 const pageRoutes = new Hono<{ Variables: AppVariables }>()
   .route("/about", aboutPage)
-  .route("/login", loginPage);
+  .route("/login", loginPage)
+  .route("/login-error", loginErrorPage);
 
 const authenticatedPageRoutes = new Hono<{
   Variables: AuthenticatedAppVariables;
