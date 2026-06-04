@@ -1,13 +1,24 @@
 /** biome-ignore-all lint/complexity/useLiteralKeys: noPropertyAccessFromIndexSignature = true */
 import assert from "node:assert/strict";
-import { describe, test } from "node:test";
+import { afterEach, beforeEach, describe, mock, test } from "node:test";
 import { Hono } from "hono";
 import { verify } from "hono/jwt";
 import type { AppVariables } from "#shared/appVariables.js";
+import { systemClock } from "#shared/clock.js";
 import { loginApi } from "./loginApi.js";
 import { getOrCreateUser } from "./user.js";
 
 describe("loginApi", () => {
+  beforeEach(() => {
+    mock.timers.enable({
+      apis: ["Date"],
+      now: new Date("2026-06-04T05:43:44.000Z"),
+    });
+  });
+  afterEach(() => {
+    mock.timers.reset();
+  });
+
   const appConfig = {
     port: 3000,
     environment: "test",
@@ -22,13 +33,11 @@ describe("loginApi", () => {
     },
   } as const;
 
-  const fixedNow = new Date();
-
   function createApp() {
     const app = new Hono<{ Variables: AppVariables }>();
     app.use("*", async (c, next) => {
       c.set("appConfig", appConfig);
-      c.set("clock", { now: () => fixedNow });
+      c.set("clock", systemClock);
       c.set("logger", {} as never);
       await next();
     });
@@ -37,6 +46,7 @@ describe("loginApi", () => {
   }
 
   test("returns 302 redirect and sets a signed auth cookie for valid credentials", async () => {
+    console.log(systemClock.now());
     const app = createApp();
     const createdUser = getOrCreateUser("Alice", "password1234", "admin");
 
@@ -61,15 +71,16 @@ describe("loginApi", () => {
     assert.notEqual(token, undefined);
 
     const payload = await verify(token ?? "", appConfig.jwt.secretKey, "HS256");
+    const now = systemClock.now();
 
     assert.equal(payload["sub"], createdUser.id);
     assert.equal(payload["preferred_username"], createdUser.username);
     assert.equal(payload["role"], createdUser.role);
     assert.equal(payload["iss"], "todo-app-node");
-    assert.equal(payload["iat"], Math.floor(fixedNow.getTime() / 1000));
+    assert.equal(payload["iat"], Math.floor(now.getTime() / 1000));
     assert.equal(
       payload["exp"],
-      Math.floor(fixedNow.getTime() / 1000) + 60 * 60 * 24,
+      Math.floor(now.getTime() / 1000) + 60 * 60 * 24,
     );
   });
 
