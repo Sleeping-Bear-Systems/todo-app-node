@@ -46,7 +46,6 @@ describe("loginApi", () => {
   }
 
   test("returns 302 redirect and sets a signed auth cookie for valid credentials", async () => {
-    console.log(systemClock.now());
     const app = createApp();
     const createdUser = getOrCreateUser("Alice", "password1234", "admin");
 
