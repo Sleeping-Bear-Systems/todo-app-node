@@ -20,6 +20,7 @@ import type {
   AuthenticatedAppVariables,
 } from "#shared/appVariables.js";
 import { systemClock } from "#shared/clock.js";
+import { routes } from "#shared/routes.js";
 import { createStructuredLogger } from "#shared/structuredLogger.js";
 
 const appConfig = createAppConfig(process.env);
@@ -63,7 +64,7 @@ const authenticatedPageRoutes = new Hono<{
         username: jwtPayload.preferred_username,
       });
     } catch {
-      return c.redirect("/login");
+      return c.redirect(routes.LOGIN_PAGE);
     }
     await next();
     return;
@@ -94,7 +95,7 @@ app.route("/api", apiRoutes);
 app.route("/", pageRoutes);
 app.route("/auth", authenticatedPageRoutes);
 app.get("/", (c) => {
-  return c.redirect("/auth/home");
+  return c.redirect(routes.HOME_PAGE);
 });
 
 // run application

@@ -1,6 +1,7 @@
 import { Hono } from "hono";
 import type { AppVariables } from "#shared/appVariables.js";
 import { Page } from "#shared/page.js";
+import { routes } from "#shared/routes.js";
 
 export const loginErrorPage = new Hono<{ Variables: AppVariables }>().get(
   "/",
@@ -8,7 +9,7 @@ export const loginErrorPage = new Hono<{ Variables: AppVariables }>().get(
     return c.html(
       <Page type="unauthenticated" title="Login Error" path={c.req.path}>
         <div>Invalid credentials.</div>
-        <a href="/login">Back to Login</a>
+        <a href={routes.LOGIN_PAGE}>Back to Login</a>
       </Page>,
     );
   },
