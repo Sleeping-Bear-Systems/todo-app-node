@@ -5,6 +5,7 @@ import { cors } from "hono/cors";
 import { csrf } from "hono/csrf";
 import { jwt } from "hono/jwt";
 import { secureHeaders } from "hono/secure-headers";
+import z from "zod";
 import { aboutPage } from "#features/about/aboutPage.js";
 import { homePage } from "#features/home/homePage.js";
 import { loginApi } from "#features/login/loginApi.js";
@@ -45,12 +46,22 @@ const pageRoutes = new Hono<{ Variables: AppVariables }>()
   .route("/login", loginPage)
   .route("/login-error", loginErrorPage);
 
+const jwtPayloadSchema = z.object({
+  sub: z.string(),
+  preferred_username: z.string(),
+});
+
 const authenticatedPageRoutes = new Hono<{
   Variables: AuthenticatedAppVariables;
 }>()
   .use("/*", async (c, next) => {
     try {
       await appJwt(c, async () => {});
+      const jwtPayload = jwtPayloadSchema.parse(c.var.jwtPayload);
+      c.set("account", {
+        userId: jwtPayload.sub,
+        username: jwtPayload.preferred_username,
+      });
     } catch {
       return c.redirect("/login");
     }
