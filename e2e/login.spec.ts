@@ -19,7 +19,7 @@ test("POST /api/login with invalid credentials redirects to login error", async 
   await page.goto("/login");
 
   await page.getByLabel("Username").fill("admin");
-  await page.getByLabel("Password").fill("wrongpass");
+  await page.getByLabel("Password").fill("wrong-pass");
   await page.getByRole("button", { name: "Sign in" }).click();
 
   await expect(page).toHaveURL(/\/login-error$/);
