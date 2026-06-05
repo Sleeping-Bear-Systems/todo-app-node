@@ -5,6 +5,7 @@ async function signInAsAdmin(page: Page) {
   await page.getByLabel("Username").fill("admin");
   await page.getByLabel("Password").fill("password1234");
   await page.getByRole("button", { name: "Sign in" }).click();
+  await expect(page).toHaveURL(/\/auth\/home$/);
 }
 
 test("GET /auth/about redirects unauthenticated users to /login", async ({
@@ -28,4 +29,13 @@ test("Authenticated user can view the about page", async ({ page }) => {
     page.getByRole("heading", { level: 1, name: "About" }),
   ).toBeVisible();
   await expect(page.getByText(/Sleeping Bear Systems/)).toBeVisible();
+});
+
+test("GET /images/sleeping_bear_logo.svg returns svg asset", async ({
+  request,
+}) => {
+  const response = await request.get("/images/sleeping_bear_logo.svg");
+
+  expect(response.status()).toBe(200);
+  expect(response.headers()["content-type"]).toContain("image/svg+xml");
 });
