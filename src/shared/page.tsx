@@ -1,15 +1,18 @@
 import type { Child } from "hono/jsx";
+import { NavigationBar } from "./navigationBar.tsx";
 
 type SharedPageProps = Readonly<{
   title: string;
   children?: Child;
   language?: string;
   description?: string;
+  path: string;
 }>;
 
 type AuthenticatedPageProps = SharedPageProps &
   Readonly<{
     type: "authenticated";
+    username: string;
   }>;
 
 type UnauthenticatedPageProps = SharedPageProps &
@@ -32,7 +35,12 @@ export function Page(props: PageProps) {
         ) : null}
         <title>{props.title}</title>
       </head>
-      <body>{props.children}</body>
+      <body>
+        {props.type === "authenticated" ? (
+          <NavigationBar username={props.username} path={props.path} />
+        ) : null}
+        {props.children}
+      </body>
     </html>
   );
 }
