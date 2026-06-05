@@ -6,7 +6,6 @@ type NavigationBarProps = Readonly<{
 }>;
 
 export function NavigationBar(props: NavigationBarProps) {
-  console.log(props.path);
   return (
     <nav aria-label="Main navigation">
       {props.path === routes.HOME_PAGE ? null : (
