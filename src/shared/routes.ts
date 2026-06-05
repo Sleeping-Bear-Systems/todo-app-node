@@ -1,6 +1,6 @@
 export const routes = {
   // page routes
-  ABOUT_PAGE: "/about",
+  ABOUT_PAGE: "/auth/about",
   HOME_PAGE: "/auth/home",
   LOGIN_PAGE: "/login",
   LOGIN_ERROR_PAGE: "/login-error",

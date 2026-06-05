@@ -43,7 +43,6 @@ const apiRoutes = new Hono<{ Variables: AppVariables }>()
 
 // map page routes
 const pageRoutes = new Hono<{ Variables: AppVariables }>()
-  .route("/about", aboutPage)
   .route("/login", loginPage)
   .route("/login-error", loginErrorPage);
 
@@ -69,6 +68,7 @@ const authenticatedPageRoutes = new Hono<{
     await next();
     return;
   })
+  .route("/about", aboutPage)
   .route("/home", homePage);
 
 // create application
