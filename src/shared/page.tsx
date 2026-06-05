@@ -1,11 +1,23 @@
 import type { Child } from "hono/jsx";
 
-type PageProps = Readonly<{
+type SharedPageProps = Readonly<{
   title: string;
   children?: Child;
   language?: string;
   description?: string;
 }>;
+
+type AuthenticatedPageProps = SharedPageProps &
+  Readonly<{
+    type: "authenticated";
+  }>;
+
+type UnauthenticatedPageProps = SharedPageProps &
+  Readonly<{
+    type: "unauthenticated";
+  }>;
+
+type PageProps = AuthenticatedPageProps | UnauthenticatedPageProps;
 
 export function Page(props: PageProps) {
   const language = props.language ?? "en";

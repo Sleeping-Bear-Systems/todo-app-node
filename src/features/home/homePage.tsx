@@ -7,7 +7,7 @@ export const homePage = new Hono<{
 }>().get("/", (c) => {
   const username = c.var.account.username;
   return c.html(
-    <Page title="Home">
+    <Page type="authenticated" title="Home">
       <h1>Home</h1>
       <h2>{username}</h2>
       <form method="post" action="/api/logout">

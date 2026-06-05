@@ -6,7 +6,7 @@ export const loginPage = new Hono<{ Variables: AppVariables }>().get(
   "/",
   (c) => {
     return c.html(
-      <Page title="Login">
+      <Page type="unauthenticated" title="Login">
         <h1>Login</h1>
         <form method="post" action="/api/login">
           <div>
