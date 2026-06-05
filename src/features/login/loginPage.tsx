@@ -1,14 +1,15 @@
 import { Hono } from "hono";
 import type { AppVariables } from "#shared/appVariables.js";
 import { Page } from "#shared/page.js";
+import { routes } from "#shared/routes.js";
 
 export const loginPage = new Hono<{ Variables: AppVariables }>().get(
   "/",
   (c) => {
     return c.html(
-      <Page type="unauthenticated" title="Login">
+      <Page type="unauthenticated" title="Login" path={c.req.path}>
         <h1>Login</h1>
-        <form method="post" action="/api/login">
+        <form method="post" action={routes.LOGIN_API}>
           <div>
             <label htmlFor="username">Username</label>
             <input

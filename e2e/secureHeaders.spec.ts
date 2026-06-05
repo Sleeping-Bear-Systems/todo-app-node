@@ -14,11 +14,17 @@ function expectSecureHeaders(headers: Record<string, string>) {
   expect(headers["x-xss-protection"]).toBe("0");
 }
 
-test("GET /about includes secure headers", async ({ request }) => {
-  const response = await request.get("/about");
+test("GET /auth/about includes secure headers", async ({ page }) => {
+  await page.goto("/login");
+  await page.getByLabel("Username").fill("admin");
+  await page.getByLabel("Password").fill("password1234");
+  await page.getByRole("button", { name: "Sign in" }).click();
 
-  expect(response.status()).toBe(200);
-  expectSecureHeaders(response.headers());
+  const response = await page.goto("/auth/about");
+
+  expect(response).not.toBeNull();
+  expect(response?.status()).toBe(200);
+  expectSecureHeaders(response?.headers() ?? {});
 });
 
 test("GET /api/ping includes secure headers", async ({ request }) => {

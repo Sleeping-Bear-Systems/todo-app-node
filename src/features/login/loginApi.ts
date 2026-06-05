@@ -5,6 +5,7 @@ import { setCookie } from "hono/cookie";
 import { sign } from "hono/jwt";
 import z from "zod";
 import type { AppVariables } from "#shared/appVariables.js";
+import { routes } from "#shared/routes.js";
 import { verifyUser } from "./user.js";
 
 const loginRequestSchema = z.object({
@@ -23,7 +24,7 @@ export const loginApi = new Hono<{ Variables: AppVariables }>().post(
     const { username, password } = c.req.valid("form");
     const user = verifyUser(username, password);
     if (user === undefined) {
-      return c.redirect("/login-error");
+      return c.redirect(routes.LOGIN_ERROR_PAGE);
     }
     const payload = {
       sub: user.id,
@@ -40,6 +41,6 @@ export const loginApi = new Hono<{ Variables: AppVariables }>().post(
       secure: false, // TODO: set flag based on environment,
       expires: addDays(now, 1),
     });
-    return c.redirect("/auth/home");
+    return c.redirect(routes.HOME_PAGE);
   },
 );
