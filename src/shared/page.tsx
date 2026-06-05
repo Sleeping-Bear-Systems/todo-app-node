@@ -1,5 +1,5 @@
 import type { Child } from "hono/jsx";
-import { NavigationBar } from "./navigationBar.tsx";
+import { NavigationBar } from "./navigationBar.js";
 
 type SharedPageProps = Readonly<{
   title: string;
