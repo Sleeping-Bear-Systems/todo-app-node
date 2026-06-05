@@ -10,7 +10,7 @@ export const aboutPage = new Hono<{ Variables: AppVariables }>().get(
     const copyrightYears = currentYear > 2026 ? `2026-${currentYear}` : "2026";
 
     return c.html(
-      <Page title="About">
+      <Page type="unauthenticated" title="About">
         <h1>About</h1>
         <img
           src="/images/sleeping_bear_logo.svg"

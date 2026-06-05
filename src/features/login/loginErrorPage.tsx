@@ -6,7 +6,7 @@ export const loginErrorPage = new Hono<{ Variables: AppVariables }>().get(
   "/",
   (c) => {
     return c.html(
-      <Page title="Login Error">
+      <Page type="unauthenticated" title="Login Error">
         <div>Invalid credentials.</div>
         <a href="/login">Back to Login</a>
       </Page>,
