@@ -34,6 +34,7 @@ export function Page(props: PageProps) {
           <meta name="description" content={props.description} />
         ) : null}
         <title>{props.title}</title>
+        <script src="/scripts/datastar.js" defer type="module" />
       </head>
       <body>
         {props.type === "authenticated" ? (
