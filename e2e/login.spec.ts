@@ -33,6 +33,57 @@ test("Invalid credentials render inline login error", async ({ page }) => {
   await expect(page.locator("#errors")).toContainText("Invalid Credentials");
 });
 
+test("Valid credentials sign in from login form and redirect to home", async ({
+  page,
+}) => {
+  await page.goto("/login");
+
+  await page.getByLabel("Username").fill("admin");
+  await page.getByLabel("Password").fill("password1234");
+  await page.getByRole("button", { name: "Sign in" }).click();
+
+  await expect(page).toHaveURL(/\/auth\/home$/);
+  await expect(
+    page.getByRole("heading", { level: 1, name: "Home" }),
+  ).toBeVisible();
+});
+
+test("Invalid login does not authenticate user", async ({ page }) => {
+  await page.goto("/login");
+
+  await page.getByLabel("Username").fill("admin");
+  await page.getByLabel("Password").fill("wrong-pass");
+  await page.getByRole("button", { name: "Sign in" }).click();
+
+  await expect(page).toHaveURL(/\/login$/);
+  await expect(page.locator("#errors")).toContainText("Invalid Credentials");
+
+  await page.goto("/auth/home");
+  await expect(page).toHaveURL(/\/login$/);
+  await expect(
+    page.getByRole("heading", { level: 1, name: "Login" }),
+  ).toBeVisible();
+});
+
+test("Repeated invalid login attempts keep a single inline error container", async ({
+  page,
+}) => {
+  await page.goto("/login");
+
+  await page.getByLabel("Username").fill("admin");
+  await page.getByLabel("Password").fill("wrong-pass");
+  await page.getByRole("button", { name: "Sign in" }).click();
+
+  await expect(page.locator("#errors")).toContainText("Invalid Credentials");
+
+  await page.getByLabel("Password").fill("still-wrong");
+  await page.getByRole("button", { name: "Sign in" }).click();
+
+  const errors = page.locator("#errors");
+  await expect(errors).toHaveCount(1);
+  await expect(errors).toContainText("Invalid Credentials");
+});
+
 test("POST /api/login rejects username shorter than 3", async ({ request }) => {
   const response = await request.fetch("/api/login", {
     method: "POST",
