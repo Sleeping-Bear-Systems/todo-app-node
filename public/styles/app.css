@@ -1,0 +1,70 @@
+:root {
+  color-scheme: light;
+  --text: #1f2937;
+  --muted: #6b7280;
+  --surface: #f8fafc;
+  --line: #e5e7eb;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 1rem;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  color: var(--text);
+  background: var(--surface);
+}
+
+nav[aria-label="Main navigation"] {
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+  margin-bottom: 1rem;
+  padding: 0.75rem;
+  border: 1px solid var(--line);
+  border-radius: 0.5rem;
+  background: #fff;
+}
+
+a {
+  color: #0f4c81;
+}
+
+h1 {
+  margin-top: 0;
+}
+
+form {
+  display: grid;
+  gap: 0.75rem;
+  max-width: 24rem;
+}
+
+label {
+  display: block;
+  margin-bottom: 0.25rem;
+  color: var(--muted);
+}
+
+input,
+button {
+  font: inherit;
+}
+
+input {
+  width: 100%;
+  padding: 0.5rem 0.625rem;
+  border: 1px solid var(--line);
+  border-radius: 0.375rem;
+}
+
+button {
+  padding: 0.5rem 0.75rem;
+  border: 1px solid var(--line);
+  border-radius: 0.375rem;
+  background: #fff;
+  cursor: pointer;
+}
