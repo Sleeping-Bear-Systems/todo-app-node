@@ -26,6 +26,9 @@ test("GET /login renders the login form", async ({ page }) => {
   await expect(
     page.getByRole("heading", { level: 1, name: "Login" }),
   ).toBeVisible();
+  await expect(
+    page.locator('link[rel="stylesheet"][href="/styles/app.css"]'),
+  ).toHaveCount(1);
 
   await expect(page.getByLabel("Username")).toBeVisible();
   await expect(page.getByLabel("Password")).toBeVisible();
