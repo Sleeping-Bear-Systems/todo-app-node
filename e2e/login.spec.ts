@@ -1,4 +1,17 @@
-import { expect, test } from "@playwright/test";
+import { expect, type Page, test } from "@playwright/test";
+
+async function signInAsAdmin(page: Page) {
+  await page.goto("/login");
+  await page.getByLabel("Username").fill("admin");
+  await page.getByLabel("Password").fill("password1234");
+  await page.getByRole("button", { name: "Sign in" }).click();
+}
+
+async function attemptSignIn(page: Page, username: string, password: string) {
+  await page.getByLabel("Username").fill(username);
+  await page.getByLabel("Password").fill(password);
+  await page.getByRole("button", { name: "Sign in" }).click();
+}
 
 function getOriginFromBaseUrl() {
   const baseURL = test.info().project.use.baseURL;
@@ -24,10 +37,7 @@ test("GET /login renders the login form", async ({ page }) => {
 
 test("Invalid credentials render inline login error", async ({ page }) => {
   await page.goto("/login");
-
-  await page.getByLabel("Username").fill("admin");
-  await page.getByLabel("Password").fill("wrong-pass");
-  await page.getByRole("button", { name: "Sign in" }).click();
+  await attemptSignIn(page, "admin", "wrong-pass");
 
   await expect(page).toHaveURL(/\/login$/);
   await expect(page.locator("#errors")).toContainText("Invalid Credentials");
@@ -36,11 +46,7 @@ test("Invalid credentials render inline login error", async ({ page }) => {
 test("Valid credentials sign in from login form and redirect to home", async ({
   page,
 }) => {
-  await page.goto("/login");
-
-  await page.getByLabel("Username").fill("admin");
-  await page.getByLabel("Password").fill("password1234");
-  await page.getByRole("button", { name: "Sign in" }).click();
+  await signInAsAdmin(page);
 
   await expect(page).toHaveURL(/\/auth\/home$/);
   await expect(
@@ -50,10 +56,7 @@ test("Valid credentials sign in from login form and redirect to home", async ({
 
 test("Invalid login does not authenticate user", async ({ page }) => {
   await page.goto("/login");
-
-  await page.getByLabel("Username").fill("admin");
-  await page.getByLabel("Password").fill("wrong-pass");
-  await page.getByRole("button", { name: "Sign in" }).click();
+  await attemptSignIn(page, "admin", "wrong-pass");
 
   await expect(page).toHaveURL(/\/login$/);
   await expect(page.locator("#errors")).toContainText("Invalid Credentials");
@@ -69,15 +72,11 @@ test("Repeated invalid login attempts keep a single inline error container", asy
   page,
 }) => {
   await page.goto("/login");
-
-  await page.getByLabel("Username").fill("admin");
-  await page.getByLabel("Password").fill("wrong-pass");
-  await page.getByRole("button", { name: "Sign in" }).click();
+  await attemptSignIn(page, "admin", "wrong-pass");
 
   await expect(page.locator("#errors")).toContainText("Invalid Credentials");
 
-  await page.getByLabel("Password").fill("still-wrong");
-  await page.getByRole("button", { name: "Sign in" }).click();
+  await attemptSignIn(page, "admin", "still-wrong");
 
   const errors = page.locator("#errors");
   await expect(errors).toHaveCount(1);
