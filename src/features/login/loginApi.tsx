@@ -24,7 +24,7 @@ export const loginApi = new Hono<{ Variables: AppVariables }>().post(
     const { username, password } = c.req.valid("form");
     const user = verifyUser(username, password);
     if (user === undefined) {
-      return c.redirect(routes.LOGIN_ERROR_PAGE);
+      return c.html(<div id="errors">Invalid Credentials</div>);
     }
     const payload = {
       sub: user.id,

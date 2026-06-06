@@ -9,7 +9,10 @@ export const loginPage = new Hono<{ Variables: AppVariables }>().get(
     return c.html(
       <Page type="unauthenticated" title="Login" path={c.req.path}>
         <h1>Login</h1>
-        <form method="post" action={routes.LOGIN_API}>
+        <form
+          id="login-form"
+          data-on:submit={`@post('${routes.LOGIN_API}', {contentType: 'form'})`}
+        >
           <div>
             <label htmlFor="username">Username</label>
             <input
@@ -34,6 +37,7 @@ export const loginPage = new Hono<{ Variables: AppVariables }>().get(
           </div>
           <button type="submit">Sign in</button>
         </form>
+        <div id="errors"></div>
       </Page>,
     );
   },
