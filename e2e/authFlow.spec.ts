@@ -30,7 +30,7 @@ test("GET / redirects authenticated users to /auth/home", async ({ page }) => {
   ).toBeVisible();
 });
 
-test("POST /api/login with valid credentials sets auth cookie and redirects", async ({
+test("POST /api/login with valid credentials sets auth cookie and returns redirect stream", async ({
   request,
 }) => {
   const baseURL = test.info().project.use.baseURL;
@@ -49,8 +49,11 @@ test("POST /api/login with valid credentials sets auth cookie and redirects", as
     maxRedirects: 0,
   });
 
-  expect(response.status()).toBe(302);
-  expect(response.headers()["location"]).toBe("/auth/home");
+  expect(response.status()).toBe(200);
+  expect(response.headers()["content-type"]).toContain("text/event-stream");
+  await expect(response.text()).resolves.toContain(
+    'window.location.href="/auth/home"',
+  );
 
   const setCookie = response.headers()["set-cookie"];
   expect(setCookie).toContain(`${authCookieName}=`);

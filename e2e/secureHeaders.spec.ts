@@ -19,12 +19,11 @@ test("GET /auth/about includes secure headers", async ({ page }) => {
   await page.getByLabel("Username").fill("admin");
   await page.getByLabel("Password").fill("password1234");
   await page.getByRole("button", { name: "Sign in" }).click();
+  await expect(page).toHaveURL(/\/auth\/home$/);
 
-  const response = await page.goto("/auth/about");
-
-  expect(response).not.toBeNull();
-  expect(response?.status()).toBe(200);
-  expectSecureHeaders(response?.headers() ?? {});
+  const response = await page.request.get("/auth/about");
+  expect(response.status()).toBe(200);
+  expectSecureHeaders(response.headers());
 });
 
 test("GET /api/ping includes secure headers", async ({ request }) => {
