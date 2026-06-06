@@ -5,6 +5,7 @@ import { setCookie } from "hono/cookie";
 import { sign } from "hono/jwt";
 import z from "zod";
 import type { AppVariables } from "#shared/appVariables.js";
+import { sseRedirect } from "#shared/datastar.js";
 import { routes } from "#shared/routes.js";
 import { verifyUser } from "./user.js";
 
@@ -41,6 +42,6 @@ export const loginApi = new Hono<{ Variables: AppVariables }>().post(
       secure: false, // TODO: set flag based on environment,
       expires: addDays(now, 1),
     });
-    return c.redirect(routes.HOME_PAGE);
+    return await sseRedirect(c, routes.HOME_PAGE);
   },
 );
