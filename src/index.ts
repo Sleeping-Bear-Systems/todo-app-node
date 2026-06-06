@@ -9,7 +9,6 @@ import z from "zod";
 import { aboutPage } from "#features/about/aboutPage.js";
 import { homePage } from "#features/home/homePage.js";
 import { loginApi } from "#features/login/loginApi.js";
-import { loginErrorPage } from "#features/login/loginErrorPage.js";
 import { loginPage } from "#features/login/loginPage.js";
 import { logoutApi } from "#features/login/logoutApi.js";
 import { getOrCreateUser } from "#features/login/user.js";
@@ -42,9 +41,10 @@ const apiRoutes = new Hono<{ Variables: AppVariables }>()
   .route("/logout", logoutApi);
 
 // map page routes
-const pageRoutes = new Hono<{ Variables: AppVariables }>()
-  .route("/login", loginPage)
-  .route("/login-error", loginErrorPage);
+const pageRoutes = new Hono<{ Variables: AppVariables }>().route(
+  "/login",
+  loginPage,
+);
 
 const jwtPayloadSchema = z.object({
   sub: z.string(),
