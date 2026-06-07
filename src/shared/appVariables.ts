@@ -1,5 +1,5 @@
 import type { Logger } from "winston";
-import type { Account } from "./account.ts";
+import type { Account } from "./account.js";
 import type { AppConfig } from "./appConfig.js";
 import type { Clock } from "./clock.js";
 
