@@ -11,7 +11,7 @@ import { homePage } from "#features/home/homePage.js";
 import { loginApi } from "#features/login/loginApi.js";
 import { loginPage } from "#features/login/loginPage.js";
 import { logoutApi } from "#features/login/logoutApi.js";
-import { getOrCreateUser } from "#features/login/user.js";
+import { createMockUsers } from "#features/login/user.js";
 import { pingApi } from "#features/ping/pingApi.js";
 import { createAppConfig } from "#shared/appConfig.js";
 import type {
@@ -31,8 +31,8 @@ const appJwt = jwt({
   cookie: appConfig.jwt.cookieName,
 });
 
-// create mock admin user
-getOrCreateUser("admin", "password1234", "admin");
+// create mock users
+createMockUsers();
 
 // map API routes
 const apiRoutes = new Hono<{ Variables: AppVariables }>()
