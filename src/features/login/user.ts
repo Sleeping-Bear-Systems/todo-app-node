@@ -17,6 +17,12 @@ export function createMockUsers() {
     "admin",
     "9599c9f5-2df4-45b2-99c7-4e8a80f0867b",
   );
+  getOrCreateUser(
+    "johndoe",
+    "password1357",
+    "user",
+    "64a0f114-538f-4de8-8cb6-fb757380732e",
+  );
 }
 
 function getOrCreateUser(
@@ -31,9 +37,9 @@ function getOrCreateUser(
     return existing;
   }
   const passwordHash = createHash("sha256").update(password).digest("hex");
-  const validUserId = userId ?? randomUUID();
+  const resolvedUserId = userId ?? randomUUID();
   const user: User = {
-    id: validUserId,
+    id: resolvedUserId,
     username: normalizedUsername,
     passwordHash,
     role,
