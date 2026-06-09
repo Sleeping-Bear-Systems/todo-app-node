@@ -68,7 +68,6 @@ export function evolve(state: TaskState, event: TaskEvent): TaskState {
       }
       break;
     case "RemovedTask":
-      break;
     case "CompletedTask":
       break;
     default: {
