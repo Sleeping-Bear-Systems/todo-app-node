@@ -265,7 +265,7 @@ describe("RemoveTask", () => {
       );
   });
 
-  test("RemovedTask state returns no events", () => {
+  test("RemovedTask state throws IllegalStateError", () => {
     spec([
       event<TaskEvent>(
         "TaskAdded",
@@ -365,7 +365,7 @@ describe("CompleteTask", () => {
       );
   });
 
-  test("UnknownTask state returns no events", () => {
+  test("UnknownTask state throws IllegalStateError", () => {
     spec([])
       .when(completeTaskCommand)
       .thenThrows(
@@ -374,7 +374,7 @@ describe("CompleteTask", () => {
       );
   });
 
-  test("CompletedTask state returns no events", () => {
+  test("CompletedTask state throws IllegalStateError", () => {
     spec([
       event<TaskEvent>(
         "TaskAdded",
@@ -404,7 +404,7 @@ describe("CompleteTask", () => {
       );
   });
 
-  test("RemovedTask state returns no events", () => {
+  test("RemovedTask state throws IllegalStateError", () => {
     spec([
       event<TaskEvent>(
         "TaskAdded",
