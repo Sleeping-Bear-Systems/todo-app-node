@@ -75,7 +75,7 @@ describe("AddTask", () => {
       );
   });
 
-  test("AddedTask state returns no events", () => {
+  test("AddedTask state throws IllegalStateError", () => {
     spec([
       event<TaskEvent>(
         "TaskAdded",
