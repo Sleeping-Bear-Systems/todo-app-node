@@ -226,7 +226,7 @@ describe("RemoveTask", () => {
       );
   });
 
-  test("UnknownTask state returns no events", () => {
+  test("UnknownTask state throws IllegalStateError", () => {
     spec([])
       .when(removeTaskCommand)
       .thenThrows(
