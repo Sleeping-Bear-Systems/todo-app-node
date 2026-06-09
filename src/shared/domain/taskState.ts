@@ -32,36 +32,37 @@ export function initialState(): TaskState {
 }
 
 export function evolve(state: TaskState, event: TaskEvent): TaskState {
+  const { type, data } = event;
   switch (state.status) {
     case "UnknownTask":
       {
-        if (event.type === "TaskAdded") {
+        if (type === "TaskAdded") {
           return {
             status: "AddedTask",
-            taskId: event.data.taskId,
-            title: event.data.title,
-            description: event.data.description,
-            addedOn: event.data.addedOn,
-            userId: event.data.userId,
+            taskId: data.taskId,
+            title: data.title,
+            description: data.description,
+            addedOn: data.addedOn,
+            userId: data.userId,
           };
         }
       }
       break;
     case "AddedTask":
       {
-        if (event.type === "TaskRemoved") {
+        if (type === "TaskRemoved") {
           return {
             status: "RemovedTask",
-            taskId: event.data.taskId,
-            removedOn: event.data.removedOn,
-            userId: event.data.userId,
+            taskId: data.taskId,
+            removedOn: data.removedOn,
+            userId: data.userId,
           };
-        } else if (event.type === "TaskCompleted") {
+        } else if (type === "TaskCompleted") {
           return {
             status: "CompletedTask",
-            taskId: event.data.taskId,
-            completedOn: event.data.completedOn,
-            userId: event.data.userId,
+            taskId: data.taskId,
+            completedOn: data.completedOn,
+            userId: data.userId,
           };
         }
       }

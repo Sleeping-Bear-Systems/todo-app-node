@@ -1,12 +1,12 @@
-import type { Command, Decider } from "@event-driven-io/emmett";
+import { type Command, type Decider, event } from "@event-driven-io/emmett";
 import type { TaskEvent } from "./taskEvent.js";
 import { evolve, initialState, type TaskState } from "./taskState.js";
 
-export type CommandMetadata = {
+export type CommandMetadata = Readonly<{
   correlationId: string;
   now: Date;
   userId: string;
-};
+}>;
 
 export type TaskCommand =
   | Command<
@@ -37,21 +37,27 @@ export type TaskCommand =
     >;
 
 export function decide(command: TaskCommand, state: TaskState): TaskEvent[] {
-  switch (command.type) {
+  const { type, data, metadata } = command;
+  switch (type) {
     case "AddTask":
       {
         if (state.status === "UnknownTask") {
           return [
-            {
-              type: "TaskAdded",
-              data: {
-                taskId: command.data.taskId,
-                title: command.data.title,
-                description: command.data.description,
-                addedOn: command.data.addedOn,
-                userId: command.metadata.userId,
+            event<TaskEvent>(
+              "TaskAdded",
+              {
+                taskId: data.taskId,
+                title: data.title,
+                description: data.description,
+                addedOn: data.addedOn,
+                userId: metadata.userId,
               },
-            },
+              {
+                userId: metadata.userId,
+                correlationId: metadata.correlationId,
+                now: metadata.now,
+              },
+            ),
           ];
         }
       }
@@ -60,14 +66,19 @@ export function decide(command: TaskCommand, state: TaskState): TaskEvent[] {
       {
         if (state.status === "AddedTask") {
           return [
-            {
-              type: "TaskRemoved",
-              data: {
-                taskId: command.data.taskId,
-                removedOn: command.data.removedOn,
-                userId: command.metadata.userId,
+            event<TaskEvent>(
+              "TaskRemoved",
+              {
+                taskId: data.taskId,
+                removedOn: data.removedOn,
+                userId: metadata.userId,
               },
-            },
+              {
+                userId: metadata.userId,
+                correlationId: metadata.correlationId,
+                now: metadata.now,
+              },
+            ),
           ];
         }
       }
@@ -76,14 +87,19 @@ export function decide(command: TaskCommand, state: TaskState): TaskEvent[] {
       {
         if (state.status === "AddedTask") {
           return [
-            {
-              type: "TaskCompleted",
-              data: {
-                taskId: command.data.taskId,
-                completedOn: command.data.completedOn,
-                userId: command.metadata.userId,
+            event<TaskEvent>(
+              "TaskCompleted",
+              {
+                taskId: data.taskId,
+                completedOn: data.completedOn,
+                userId: metadata.userId,
               },
-            },
+              {
+                userId: metadata.userId,
+                correlationId: metadata.correlationId,
+                now: metadata.now,
+              },
+            ),
           ];
         }
       }
