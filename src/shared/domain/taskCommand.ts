@@ -20,7 +20,7 @@ export type TaskCommand =
         taskId: string;
         title: string;
         description: string;
-        addedOn: Date;
+        addedOn?: Date;
       },
       CommandMetadata
     >
@@ -28,7 +28,7 @@ export type TaskCommand =
       "RemoveTask",
       {
         taskId: string;
-        removedOn: Date;
+        removedOn?: Date;
       },
       CommandMetadata
     >
@@ -36,7 +36,7 @@ export type TaskCommand =
       "CompleteTask",
       {
         taskId: string;
-        completedOn: Date;
+        completedOn?: Date;
       },
       CommandMetadata
     >;
@@ -55,7 +55,7 @@ export function decide(command: TaskCommand, state: TaskState): TaskEvent[] {
             taskId: data.taskId,
             title: data.title,
             description: data.description,
-            addedOn: data.addedOn,
+            addedOn: data.addedOn ?? metadata.now,
             userId: metadata.userId,
           },
           {
@@ -75,7 +75,7 @@ export function decide(command: TaskCommand, state: TaskState): TaskEvent[] {
           "TaskRemoved",
           {
             taskId: data.taskId,
-            removedOn: data.removedOn,
+            removedOn: data.removedOn ?? metadata.now,
             userId: metadata.userId,
           },
           {
@@ -95,7 +95,7 @@ export function decide(command: TaskCommand, state: TaskState): TaskEvent[] {
           "TaskCompleted",
           {
             taskId: data.taskId,
-            completedOn: data.completedOn,
+            completedOn: data.completedOn ?? metadata.now,
             userId: metadata.userId,
           },
           {
