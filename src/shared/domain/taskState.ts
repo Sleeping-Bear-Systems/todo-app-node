@@ -70,8 +70,6 @@ export function evolve(state: TaskState, event: TaskEvent): TaskState {
     case "RemovedTask":
       break;
     case "CompletedTask":
-      {
-      }
       break;
     default: {
       const _unknownState: never = state;
