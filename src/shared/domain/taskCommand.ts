@@ -1,4 +1,9 @@
-import { type Command, type Decider, event } from "@event-driven-io/emmett";
+import {
+  type Command,
+  type Decider,
+  event,
+  IllegalStateError,
+} from "@event-driven-io/emmett";
 import type { TaskEvent } from "./taskEvent.js";
 import { evolve, initialState, type TaskState } from "./taskState.js";
 
@@ -39,77 +44,73 @@ export type TaskCommand =
 export function decide(command: TaskCommand, state: TaskState): TaskEvent[] {
   const { type, data, metadata } = command;
   switch (type) {
-    case "AddTask":
-      {
-        if (state.status === "UnknownTask") {
-          return [
-            event<TaskEvent>(
-              "TaskAdded",
-              {
-                taskId: data.taskId,
-                title: data.title,
-                description: data.description,
-                addedOn: data.addedOn,
-                userId: metadata.userId,
-              },
-              {
-                userId: metadata.userId,
-                correlationId: metadata.correlationId,
-                now: metadata.now,
-              },
-            ),
-          ];
-        }
+    case "AddTask": {
+      if (state.status !== "UnknownTask") {
+        throw new IllegalStateError("State is not UnknownTask");
       }
-      break;
-    case "RemoveTask":
-      {
-        if (state.status === "AddedTask") {
-          return [
-            event<TaskEvent>(
-              "TaskRemoved",
-              {
-                taskId: data.taskId,
-                removedOn: data.removedOn,
-                userId: metadata.userId,
-              },
-              {
-                userId: metadata.userId,
-                correlationId: metadata.correlationId,
-                now: metadata.now,
-              },
-            ),
-          ];
-        }
+      return [
+        event<TaskEvent>(
+          "TaskAdded",
+          {
+            taskId: data.taskId,
+            title: data.title,
+            description: data.description,
+            addedOn: data.addedOn,
+            userId: metadata.userId,
+          },
+          {
+            userId: metadata.userId,
+            correlationId: metadata.correlationId,
+            now: metadata.now,
+          },
+        ),
+      ];
+    }
+    case "RemoveTask": {
+      if (state.status !== "AddedTask") {
+        throw new IllegalStateError("State is not AddedTask");
       }
-      break;
-    case "CompleteTask":
-      {
-        if (state.status === "AddedTask") {
-          return [
-            event<TaskEvent>(
-              "TaskCompleted",
-              {
-                taskId: data.taskId,
-                completedOn: data.completedOn,
-                userId: metadata.userId,
-              },
-              {
-                userId: metadata.userId,
-                correlationId: metadata.correlationId,
-                now: metadata.now,
-              },
-            ),
-          ];
-        }
+      return [
+        event<TaskEvent>(
+          "TaskRemoved",
+          {
+            taskId: data.taskId,
+            removedOn: data.removedOn,
+            userId: metadata.userId,
+          },
+          {
+            userId: metadata.userId,
+            correlationId: metadata.correlationId,
+            now: metadata.now,
+          },
+        ),
+      ];
+    }
+    case "CompleteTask": {
+      if (state.status !== "AddedTask") {
+        throw new IllegalStateError("State is not AddedTask");
       }
-      break;
+      return [
+        event<TaskEvent>(
+          "TaskCompleted",
+          {
+            taskId: data.taskId,
+            completedOn: data.completedOn,
+            userId: metadata.userId,
+          },
+          {
+            userId: metadata.userId,
+            correlationId: metadata.correlationId,
+            now: metadata.now,
+          },
+        ),
+      ];
+    }
     default: {
       const _unknownCommand: never = command;
       return _unknownCommand;
     }
   }
-  return [];
 }
 
 export const taskDecider: Decider<TaskState, TaskCommand, TaskEvent> = {

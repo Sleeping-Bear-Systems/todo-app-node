@@ -1,5 +1,10 @@
 import { describe, test } from "node:test";
-import { command, DeciderSpecification, event } from "@event-driven-io/emmett";
+import {
+  command,
+  DeciderSpecification,
+  event,
+  IllegalStateError,
+} from "@event-driven-io/emmett";
 import { addDays } from "date-fns";
 import { decide, type TaskCommand } from "./taskCommand.js";
 import type { TaskEvent } from "./taskEvent.js";
@@ -61,7 +66,10 @@ describe("AddTask", () => {
       ),
     ])
       .when(addTaskCommand)
-      .then([]);
+      .thenThrows(
+        IllegalStateError,
+        (error) => error.message === "State is not UnknownTask",
+      );
   });
 
   test("CompletedTask state returns no events", () => {
@@ -88,7 +96,10 @@ describe("AddTask", () => {
       ),
     ])
       .when(addTaskCommand)
-      .then([]);
+      .thenThrows(
+        IllegalStateError,
+        (error) => error.message === "State is not UnknownTask",
+      );
   });
 
   test("RemovedTask state returns no events", () => {
@@ -115,6 +126,9 @@ describe("AddTask", () => {
       ),
     ])
       .when(addTaskCommand)
-      .then([]);
+      .thenThrows(
+        IllegalStateError,
+        (error) => error.message === "State is not UnknownTask",
+      );
   });
 });
