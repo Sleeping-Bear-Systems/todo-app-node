@@ -235,7 +235,7 @@ describe("RemoveTask", () => {
       );
   });
 
-  test("CompletedTask state returns no events", () => {
+  test("CompletedTask state throws IllegalStateError", () => {
     spec([
       event<TaskEvent>(
         "TaskAdded",
