@@ -11,22 +11,20 @@ const addTaskRequestSchema = z.object({
   description: z.string().optional().default(""),
 });
 
-export type addTaskRequest = z.infer<typeof addTaskRequestSchema>;
-
 export const addTaskApi = new Hono<{
   Variables: AuthenticatedAppVariables;
 }>().post("/", zValidator("form", addTaskRequestSchema), (c) => {
   const requestId = c.var.requestId;
   const userId = c.var.account.userId;
   const now = c.var.clock.now();
-  const request = c.req.valid("form");
+  const { title, description } = c.req.valid("form");
 
   var command: TaskCommand = {
     type: "AddTask",
     data: {
       taskId: randomUUID(),
-      title: request.title,
-      description: request.description,
+      title: title,
+      description: description,
     },
     metadata: {
       now,
