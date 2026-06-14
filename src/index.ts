@@ -61,7 +61,11 @@ const authenticatedApiRoutes = new Hono<{
   Variables: AuthenticatedAppVariables;
 }>()
   .use("/*", async (c, next) => {
-    await validateJwt(c);
+    try {
+      await validateJwt(c);
+    } catch {
+      return c.json("message: Unauthorized", 401);
+    }
     await next();
     return;
   })
