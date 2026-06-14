@@ -19,3 +19,8 @@ username=admin&password=wrong-password
 POST {{baseUrl}}/api/logout
 Origin: {{origin}}
 
+### Add Task
+POST {{baseUrl}}/api/auth/add-task
+Origin: {{origin}}
+
+
