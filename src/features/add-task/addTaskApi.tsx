@@ -13,5 +13,6 @@ export type addTaskRequest = z.infer<typeof addTaskRequestSchema>;
 export const addTaskApi = new Hono<{
   Variables: AuthenticatedAppVariables;
 }>().post("/", zValidator("form", addTaskRequestSchema), (c) => {
-  return c.json({}, 200);
+  const requestId = c.var.requestId;
+  return c.json({ requestId }, 200);
 });

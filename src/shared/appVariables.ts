@@ -1,3 +1,4 @@
+import type { RequestIdVariables } from "hono/request-id";
 import type { Logger } from "winston";
 import type { Account } from "./account.js";
 import type { AppConfig } from "./appConfig.js";
@@ -7,7 +8,8 @@ export type AppVariables = Readonly<{
   appConfig: AppConfig;
   clock: Clock;
   logger: Logger;
-}>;
+}> &
+  RequestIdVariables;
 
 export type AuthenticatedAppVariables = AppVariables &
   Readonly<{

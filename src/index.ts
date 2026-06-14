@@ -4,6 +4,7 @@ import { type Context, Hono } from "hono";
 import { cors } from "hono/cors";
 import { csrf } from "hono/csrf";
 import { jwt } from "hono/jwt";
+import { requestId } from "hono/request-id";
 import { secureHeaders } from "hono/secure-headers";
 import z from "zod";
 import { aboutPage } from "#features/about/aboutPage.js";
@@ -95,6 +96,9 @@ const app = new Hono<{ Variables: AppVariables }>();
 app.use(secureHeaders());
 app.use("/api/*", cors()); // TODO: add allowlist
 app.use(csrf());
+
+// add request ID middleware
+app.use(requestId());
 
 // add services
 app.use("*", async (c, next) => {
