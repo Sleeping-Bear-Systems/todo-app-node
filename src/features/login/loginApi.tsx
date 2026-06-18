@@ -14,8 +14,6 @@ const loginRequestSchema = z.object({
   password: z.string().min(8),
 });
 
-export type LoginRequest = z.infer<typeof loginRequestSchema>;
-
 export const loginApi = new Hono<{ Variables: AppVariables }>().post(
   "/",
   zValidator("form", loginRequestSchema),
