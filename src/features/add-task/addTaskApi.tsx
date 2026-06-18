@@ -19,7 +19,7 @@ export const addTaskApi = new Hono<{
   const now = c.var.clock.now();
   const { title, description } = c.req.valid("form");
 
-  var command: TaskCommand = {
+  const command: TaskCommand = {
     type: "AddTask",
     data: {
       taskId: randomUUID(),
