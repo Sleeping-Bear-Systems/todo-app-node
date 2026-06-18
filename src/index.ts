@@ -60,15 +60,15 @@ const apiRoutes = new Hono<{ Variables: AppVariables }>()
 const authenticatedApiRoutes = new Hono<{
   Variables: AuthenticatedAppVariables;
 }>()
-.use("/*", async (c, next) => {
-  try {
-    await validateJwt(c);
-  } catch {
-    return c.json({ message: "Unauthorized" }, 401);
-  }
-  await next();
-  return;
-})
+  .use("/*", async (c, next) => {
+    try {
+      await validateJwt(c);
+    } catch {
+      return c.json({ message: "Unauthorized" }, 401);
+    }
+    await next();
+    return;
+  })
   .route("/add-task", addTaskApi);
 
 // map page routes
