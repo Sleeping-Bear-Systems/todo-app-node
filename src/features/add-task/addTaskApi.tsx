@@ -33,6 +33,6 @@ export const addTaskApi = new Hono<{
     },
   };
   const state = initialState();
-  var events = decide(command, state);
+  const events = decide(command, state);
   return c.json({ requestId, events }, 200);
 });
