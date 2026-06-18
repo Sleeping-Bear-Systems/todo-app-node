@@ -67,6 +67,7 @@ const authenticatedApiRoutes = new Hono<{
     return c.json({ message: "Unauthorized" }, 401);
   }
   await next();
+  return;
 })
   .route("/add-task", addTaskApi);
 
