@@ -38,7 +38,9 @@ const jwtPayloadSchema = z.object({
   preferred_username: z.string(),
 });
 
-async function validateJwt(c: Context<{Variables: AuthenticatedAppVariables}>) {
+async function validateJwt(
+  c: Context<{ Variables: AuthenticatedAppVariables }>,
+) {
   await appJwt(c, async () => {});
   const jwtPayload = jwtPayloadSchema.parse(c.var.jwtPayload);
   c.set("account", {
