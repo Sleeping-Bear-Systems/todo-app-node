@@ -7,8 +7,8 @@ import { decide, type TaskCommand } from "#shared/domain/taskCommand.js";
 import { initialState } from "#shared/domain/taskState.js";
 
 const addTaskRequestSchema = z.object({
-  title: z.string(),
-  description: z.string().optional().default(""),
+  title: z.string().min(1),
+  description: z.string().default(""),
 });
 
 export const addTaskApi = new Hono<{
