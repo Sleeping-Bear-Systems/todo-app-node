@@ -19,3 +19,16 @@ username=admin&password=wrong-password
 POST {{baseUrl}}/api/logout
 Origin: {{origin}}
 
+### Add Task
+POST {{baseUrl}}/api/auth/add-task
+Origin: {{origin}}
+Content-Type: application/x-www-form-urlencoded
+
+title=Task+1&description=My+first+task
+
+### Add Task (default description)
+POST {{baseUrl}}/api/auth/add-task
+Origin: {{origin}}
+Content-Type: application/x-www-form-urlencoded
+
+title=Task+no+description
