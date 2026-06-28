@@ -22,30 +22,7 @@ export const homePage = new Hono<{
             src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.19/index.global.min.js"
             defer
           />
-          <script
-            dangerouslySetInnerHTML={{
-              __html: `
-                document.addEventListener("DOMContentLoaded", () => {
-                  const calendarHost = document.getElementById("home-calendar");
-                  if (!calendarHost || typeof FullCalendar === "undefined") {
-                    return;
-                  }
-
-                  const calendar = new FullCalendar.Calendar(calendarHost, {
-                    initialView: "dayGridMonth",
-                    height: "auto",
-                    headerToolbar: {
-                      left: "prev,next today",
-                      center: "title",
-                      right: "dayGridMonth,timeGridWeek,timeGridDay",
-                    },
-                  });
-
-                  calendar.render();
-                });
-              `,
-            }}
-          />
+          <script src="/scripts/homeCalendar.js" defer />
         </>
       }
     >
