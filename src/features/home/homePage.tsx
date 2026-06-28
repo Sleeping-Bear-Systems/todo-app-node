@@ -14,15 +14,8 @@ export const homePage = new Hono<{
       username={username}
       headContent={
         <>
-          <link
-            rel="stylesheet"
-            href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.19/index.global.min.css"
-          />
-          <script
-            src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.19/index.global.min.js"
-            defer
-          />
-          <script src="/scripts/homeCalendar.js" defer />
+          <script src="/scripts/full-calendar/index.global.min.js" defer />
+          <script src="/scripts/full-calendar/home-calendar.js" defer />
         </>
       }
     >
