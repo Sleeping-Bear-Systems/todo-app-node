@@ -27,6 +27,7 @@ test("Authenticated user can view the home page", async ({ page }) => {
     page.getByRole("heading", { level: 1, name: "Home" }),
   ).toBeVisible();
   await expect(page.locator("#home-calendar")).toBeVisible();
+  await expect(page.locator("#home-calendar")).toHaveClass(/\bfc\b/);
   await expect(page.getByRole("button", { name: "Sign out" })).toBeVisible();
 });
 
