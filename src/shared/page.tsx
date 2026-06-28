@@ -3,6 +3,7 @@ import { NavigationBar } from "./navigationBar.js";
 
 type SharedPageProps = Readonly<{
   title: string;
+  headContent?: Child;
   children?: Child;
   language?: string;
   description?: string;
@@ -36,6 +37,7 @@ export function Page(props: PageProps) {
         <title>{props.title}</title>
         <link rel="stylesheet" href="/styles/app.css" />
         <script src="/scripts/datastar.js" defer type="module" />
+        {props.headContent}
       </head>
       <body>
         {props.type === "authenticated" ? (
