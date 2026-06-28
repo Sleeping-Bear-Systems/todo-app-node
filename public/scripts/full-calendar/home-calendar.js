@@ -1,3 +1,6 @@
+/*
+FullCalendar integration script for the HomePage component.
+*/
 document.addEventListener("DOMContentLoaded", () => {
   const calendarHost = document.getElementById("home-calendar");
 
