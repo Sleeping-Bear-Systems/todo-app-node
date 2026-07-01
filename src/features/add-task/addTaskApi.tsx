@@ -74,11 +74,10 @@ export const addTaskApi = new Hono<{
   const eventStore = c.var.eventStore;
   const { title, description } = c.req.valid("form");
 
-  const taskId = randomUUID();
   const command: AddTaskCommand = {
     type: "AddTask",
     data: {
-      taskId,
+      taskId: randomUUID(),
       title: title,
       description: description,
     },
@@ -88,8 +87,13 @@ export const addTaskApi = new Hono<{
       correlationId: requestId,
     },
   };
-  await handle(eventStore, taskId, (state) => addTask(command, state), {
-    expectedStreamVersion: "no_stream",
-  });
+  await handle(
+    eventStore,
+    command.data.taskId,
+    (state) => addTask(command, state),
+    {
+      expectedStreamVersion: "no_stream",
+    },
+  );
   return c.json({ requestId }, 200);
 });
