@@ -5,6 +5,8 @@ import {
   type Decider,
   event,
   IllegalStateError,
+  message,
+  STREAM_DOES_NOT_EXIST,
 } from "@event-driven-io/emmett";
 import { zValidator } from "@hono/zod-validator";
 import { Hono } from "hono";
@@ -90,13 +92,20 @@ export const addTaskApi = new Hono<{
       correlationId: requestId,
     },
   };
-  await handle(
-    eventStore,
-    command.data.taskId,
-    (state) => decide(command, state),
-    {
-      expectedStreamVersion: "no_stream",
-    },
-  );
-  return c.json({ requestId, taskId: command.data.taskId }, 200);
+  try {
+    await handle(
+      eventStore,
+      command.data.taskId,
+      (state) => decide(command, state),
+      {
+        expectedStreamVersion: STREAM_DOES_NOT_EXIST,
+      },
+    );
+    return c.json({ requestId, taskId: command.data.taskId }, 200);
+  } catch (error) {
+    if (error instanceof IllegalStateError) {
+      return c.json({ message: error.message }, 400);
+    }
+    return c.json({}, 400);
+  }
 });
