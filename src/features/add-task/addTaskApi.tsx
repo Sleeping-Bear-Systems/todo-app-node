@@ -2,6 +2,7 @@ import { randomUUID } from "node:crypto";
 import {
   type Command,
   CommandHandler,
+  type Decider,
   event,
   IllegalStateError,
 } from "@event-driven-io/emmett";
@@ -17,12 +18,6 @@ import {
   type TaskState,
 } from "#shared/domain/taskState.js";
 
-const handle = CommandHandler({
-  evolve,
-  initialState,
-  mapToStreamId: (id) => `task-${id}`,
-});
-
 export type AddTaskCommand = Command<
   "AddTask",
   {
@@ -34,10 +29,7 @@ export type AddTaskCommand = Command<
   CommandMetadata
 >;
 
-export function addTask(
-  command: AddTaskCommand,
-  state: TaskState,
-): TaskEvent[] {
+export function decide(command: AddTaskCommand, state: TaskState): TaskEvent[] {
   if (state.status !== "UnknownTask") {
     throw new IllegalStateError("State is not UnknownTask");
   }
@@ -59,6 +51,17 @@ export function addTask(
     ),
   ];
 }
+
+const decider: Decider<TaskState, AddTaskCommand, TaskEvent> = {
+  evolve,
+  initialState,
+  decide,
+};
+
+const handle = CommandHandler({
+  ...decider,
+  mapToStreamId: (id) => `task-${id}`,
+});
 
 const addTaskRequestSchema = z.object({
   title: z.string().min(1),
@@ -90,7 +93,7 @@ export const addTaskApi = new Hono<{
   await handle(
     eventStore,
     command.data.taskId,
-    (state) => addTask(command, state),
+    (state) => decide(command, state),
     {
       expectedStreamVersion: "no_stream",
     },

@@ -8,10 +8,10 @@ import {
 import { addDays } from "date-fns";
 import type { TaskEvent } from "#shared/domain/taskEvent.js";
 import { evolve, initialState } from "#shared/domain/taskState.js";
-import { type AddTaskCommand, addTask } from "./addTaskApi.js";
+import { type AddTaskCommand, decide } from "./addTaskApi.js";
 
 const spec = DeciderSpecification.for({
-  decide: addTask,
+  decide: decide,
   evolve,
   initialState,
 });
