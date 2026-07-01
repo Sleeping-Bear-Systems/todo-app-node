@@ -5,7 +5,6 @@ import {
   type Decider,
   event,
   IllegalStateError,
-  message,
   STREAM_DOES_NOT_EXIST,
 } from "@event-driven-io/emmett";
 import { zValidator } from "@hono/zod-validator";
