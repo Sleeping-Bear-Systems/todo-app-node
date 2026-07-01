@@ -88,6 +88,8 @@ export const addTaskApi = new Hono<{
       correlationId: requestId,
     },
   };
-  await handle(eventStore, taskId, (state) => addTask(command, state));
+  await handle(eventStore, taskId, (state) => addTask(command, state), {
+    expectedStreamVersion: "no_stream",
+  });
   return c.json({ requestId }, 200);
 });
