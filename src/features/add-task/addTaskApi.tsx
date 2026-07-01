@@ -95,5 +95,5 @@ export const addTaskApi = new Hono<{
       expectedStreamVersion: "no_stream",
     },
   );
-  return c.json({ requestId }, 200);
+  return c.json({ requestId, taskId: command.data.taskId }, 200);
 });
