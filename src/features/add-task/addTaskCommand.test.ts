@@ -8,7 +8,7 @@ import {
 import { addDays } from "date-fns";
 import type { TaskEvent } from "#shared/domain/taskEvent.js";
 import { evolve, initialState } from "#shared/domain/taskState.js";
-import { type AddTaskCommand, decide } from "./addTaskApi.js";
+import { type AddTaskCommand, decide } from "./addTaskCommand.js";
 
 const spec = DeciderSpecification.for({
   decide: decide,
@@ -26,7 +26,7 @@ const eventMetadata = {
   now,
 };
 
-describe("AddTask", () => {
+describe("AddTaskCommand", () => {
   const addTaskCommand = command<AddTaskCommand>(
     "AddTask",
     { taskId, title: "title", description: "description", addedOn: now },
