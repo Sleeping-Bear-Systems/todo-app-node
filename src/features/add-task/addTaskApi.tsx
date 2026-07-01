@@ -52,14 +52,14 @@ export function decide(command: AddTaskCommand, state: TaskState): TaskEvent[] {
   ];
 }
 
-const decider: Decider<TaskState, AddTaskCommand, TaskEvent> = {
+const addTaskDecider: Decider<TaskState, AddTaskCommand, TaskEvent> = {
   evolve,
   initialState,
   decide,
 };
 
 const handle = CommandHandler({
-  ...decider,
+  ...addTaskDecider,
   mapToStreamId: (id) => `task-${id}`,
 });
 
