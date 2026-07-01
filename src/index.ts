@@ -1,3 +1,4 @@
+import { getInMemoryEventStore } from "@event-driven-io/emmett";
 import { serve } from "@hono/node-server";
 import { serveStatic } from "@hono/node-server/serve-static";
 import { type Context, Hono } from "hono";
@@ -51,6 +52,9 @@ async function validateJwt(
 
 // create mock users
 createMockUsers();
+
+// create event store
+const eventStore = getInMemoryEventStore();
 
 // map API routes
 const apiRoutes = new Hono<{ Variables: AppVariables }>()
@@ -111,6 +115,7 @@ app.use("*", async (c, next) => {
   c.set("appConfig", appConfig);
   c.set("logger", logger);
   c.set("clock", systemClock);
+  c.set("eventStore", eventStore);
   await next();
 });
 
