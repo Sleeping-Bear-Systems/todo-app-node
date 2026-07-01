@@ -105,6 +105,6 @@ export const addTaskApi = new Hono<{
     if (error instanceof IllegalStateError) {
       return c.json({ message: error.message }, 400);
     }
-    return c.json({}, 400);
+    return c.json({ message: "Internal Server Error" }, 500);
   }
 });
