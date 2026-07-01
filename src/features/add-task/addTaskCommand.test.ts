@@ -11,7 +11,7 @@ import { evolve, initialState } from "#shared/domain/taskState.js";
 import { type AddTaskCommand, decide } from "./addTaskCommand.js";
 
 const spec = DeciderSpecification.for({
-  decide: decide,
+  decide,
   evolve,
   initialState,
 });
