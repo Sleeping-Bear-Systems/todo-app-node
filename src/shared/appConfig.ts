@@ -6,11 +6,15 @@ const environmentVariablesSchema = z.object({
   SEQ_API_KEY: z.string().optional(),
   SEQ_URL: z.url().optional(),
   JWT_SECRET_KEY: z.string().min(64),
+  SQLITE_PATH: z.string().min(1).optional().default("./todo-app.db"),
 });
 
 export type AppConfig = Readonly<{
   port: number;
   environment: string;
+  sqlite: Readonly<{
+    path: string;
+  }>;
   seq: Readonly<{
     apiKey: string | undefined;
     url: string | undefined;
@@ -28,6 +32,9 @@ export function createAppConfig(
   return {
     port: environmentVariables.PORT,
     environment: environmentVariables.NODE_ENV,
+    sqlite: {
+      path: environmentVariables.SQLITE_PATH,
+    },
     seq: {
       apiKey: environmentVariables.SEQ_API_KEY,
       url: environmentVariables.SEQ_URL,

@@ -15,6 +15,9 @@ describe("logoutApi", () => {
           apiKey: undefined,
           url: undefined,
         },
+        sqlite: {
+          path: "./todo-app.db",
+        },
         jwt: {
           secretKey:
             "fake_jwt_secret_key_only_used_for_testing_the_logout_api_0123456",

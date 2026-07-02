@@ -10,6 +10,9 @@ const baseConfig: AppConfig = {
     apiKey: undefined,
     url: undefined,
   },
+  sqlite: {
+    path: "./todo-app.db",
+  },
   jwt: {
     secretKey: "fake_jwt_secret_key",
     cookieName: "todo-app-node",

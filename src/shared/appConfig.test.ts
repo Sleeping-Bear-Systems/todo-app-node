@@ -34,6 +34,13 @@ describe("createAppConfig", () => {
     assert.equal(appConfig.environment, "production");
   });
 
+  test("sqlite path reflects SQLITE_PATH", () => {
+    const appConfig = createAppConfig(
+      createEnv({ SQLITE_PATH: "./data/todo-app.db" }),
+    );
+    assert.equal(appConfig.sqlite.path, "./data/todo-app.db");
+  });
+
   test("seq apiKey is undefined when not set", () => {
     const appConfig = createAppConfig(createEnv());
     assert.equal(appConfig.seq.apiKey, undefined);
@@ -72,6 +79,21 @@ describe("createAppConfig", () => {
     assert.throws(() =>
       createAppConfig(createEnv({ JWT_SECRET_KEY: undefined })),
     );
+  });
+
+  test("sqlite path defaults when SQLITE_PATH is missing", () => {
+    const env = createEnv();
+    const appConfig = createAppConfig(env);
+    assert.equal(appConfig.sqlite.path, "./todo-app.db");
+  });
+
+  test("sqlite path defaults when SQLITE_PATH is undefined", () => {
+    const appConfig = createAppConfig(createEnv({ SQLITE_PATH: undefined }));
+    assert.equal(appConfig.sqlite.path, "./todo-app.db");
+  });
+
+  test("throws when SQLITE_PATH is empty", () => {
+    assert.throws(() => createAppConfig(createEnv({ SQLITE_PATH: "" })));
   });
 
   test("throws when JWT_SECRET_KEY is shorter than 64 characters", () => {
