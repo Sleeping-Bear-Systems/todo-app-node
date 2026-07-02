@@ -39,7 +39,7 @@
     "playwright:test:headed": "playwright test --headed",
     "playwright:test:ui": "playwright test --ui",
     "playwright:report": "playwright show-report",
-    "start": "node dist/index.ts",
+    "start": "tsx --tsconfig tsconfig.app.json ./src/index.ts",
     "test": "node --test ./src/**/*.test.ts"
   },
   "type": "module"
