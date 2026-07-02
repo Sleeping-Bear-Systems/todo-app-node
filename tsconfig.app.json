@@ -1,7 +1,7 @@
 {
   "$schema": "https://json.schemastore.org/tsconfig",
   "compilerOptions": {
-    "noEmit": true
+    "emitDeclarationOnly": true
   },
   "exclude": ["./src/**/*.test.ts"],
   "extends": "./tsconfig.src.json",
