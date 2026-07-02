@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import { describe, test } from "node:test";
 import { Hono } from "hono";
-import { pingApi } from "./pingApi.js";
+import { pingApi } from "./pingApi.ts";
 
 describe("pingApi", () => {
   test("GET responds with ok message", async () => {

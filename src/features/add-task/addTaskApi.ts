@@ -6,8 +6,8 @@ import {
 import { zValidator } from "@hono/zod-validator";
 import { Hono } from "hono";
 import z from "zod";
-import type { AuthenticatedAppVariables } from "#shared/appVariables.js";
-import { type AddTaskCommand, decide, handle } from "./addTaskCommand.js";
+import type { AuthenticatedAppVariables } from "#shared/appVariables.ts";
+import { type AddTaskCommand, decide, handle } from "./addTaskCommand.ts";
 
 const addTaskRequestSchema = z.object({
   title: z.string().min(1),

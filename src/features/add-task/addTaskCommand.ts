@@ -5,13 +5,13 @@ import {
   event,
   IllegalStateError,
 } from "@event-driven-io/emmett";
-import type { CommandMetadata } from "#shared/domain/taskCommand.js";
-import type { TaskEvent } from "#shared/domain/taskEvent.js";
+import type { CommandMetadata } from "#shared/domain/taskCommand.ts";
+import type { TaskEvent } from "#shared/domain/taskEvent.ts";
 import {
   evolve,
   initialState,
   type TaskState,
-} from "#shared/domain/taskState.js";
+} from "#shared/domain/taskState.ts";
 
 export type AddTaskCommand = Command<
   "AddTask",

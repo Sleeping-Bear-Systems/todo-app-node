@@ -1,7 +1,7 @@
 import { Hono } from "hono";
 import { deleteCookie } from "hono/cookie";
-import type { AppVariables } from "#shared/appVariables.js";
-import { routes } from "#shared/routes.js";
+import type { AppVariables } from "#shared/appVariables.ts";
+import { routes } from "#shared/routes.ts";
 
 export const logoutApi = new Hono<{ Variables: AppVariables }>().post(
   "/",

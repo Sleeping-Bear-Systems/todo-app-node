@@ -1,8 +1,8 @@
 import { Hono } from "hono";
 import { html } from "hono/html";
-import type { AppVariables } from "#shared/appVariables.js";
-import { Page } from "#shared/page.js";
-import { routes } from "#shared/routes.js";
+import type { AppVariables } from "#shared/appVariables.ts";
+import { Page } from "#shared/page.ts";
+import { routes } from "#shared/routes.ts";
 
 export const loginPage = new Hono<{ Variables: AppVariables }>().get(
   "/",

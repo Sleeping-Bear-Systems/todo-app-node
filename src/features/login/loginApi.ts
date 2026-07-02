@@ -5,10 +5,10 @@ import { setCookie } from "hono/cookie";
 import { html } from "hono/html";
 import { sign } from "hono/jwt";
 import z from "zod";
-import type { AppVariables } from "#shared/appVariables.js";
-import { sseRedirect } from "#shared/datastar.js";
-import { routes } from "#shared/routes.js";
-import { verifyUser } from "./user.js";
+import type { AppVariables } from "#shared/appVariables.ts";
+import { sseRedirect } from "#shared/datastar.ts";
+import { routes } from "#shared/routes.ts";
+import { verifyUser } from "./user.ts";
 
 const loginRequestSchema = z.object({
   username: z.string().min(3),

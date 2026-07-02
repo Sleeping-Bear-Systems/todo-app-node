@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import { describe, test } from "node:test";
-import type { AppConfig } from "./appConfig.js";
-import { createStructuredLogger } from "./structuredLogger.js";
+import type { AppConfig } from "./appConfig.ts";
+import { createStructuredLogger } from "./structuredLogger.ts";
 
 const baseConfig: AppConfig = {
   port: 3000,

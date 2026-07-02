@@ -1,7 +1,7 @@
 import { Hono } from "hono";
 import { html } from "hono/html";
-import type { AuthenticatedAppVariables } from "#shared/appVariables.js";
-import { Page } from "#shared/page.js";
+import type { AuthenticatedAppVariables } from "#shared/appVariables.ts";
+import { Page } from "#shared/page.ts";
 
 export const homePage = new Hono<{
   Variables: AuthenticatedAppVariables;

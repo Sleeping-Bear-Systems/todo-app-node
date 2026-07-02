@@ -3,8 +3,8 @@ import {
   event,
   IllegalStateError,
 } from "@event-driven-io/emmett";
-import type { TaskEvent } from "./taskEvent.js";
-import type { TaskState } from "./taskState.js";
+import type { TaskEvent } from "./taskEvent.ts";
+import type { TaskState } from "./taskState.ts";
 
 export type CommandMetadata = Readonly<{
   correlationId: string;

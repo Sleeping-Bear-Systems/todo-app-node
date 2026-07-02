@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { describe, test } from "node:test";
-import { createAppConfig } from "./appConfig.js";
+import { createAppConfig } from "./appConfig.ts";
 
 const validJwtSecretKey =
   "1234567890123456789012345678901234567890123456789012345678901234";

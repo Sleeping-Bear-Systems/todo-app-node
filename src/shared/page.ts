@@ -1,5 +1,5 @@
 import { html } from "hono/html";
-import { NavigationBar } from "./navigationBar.js";
+import { NavigationBar } from "./navigationBar.ts";
 
 type HtmlContent = ReturnType<typeof html>;
 

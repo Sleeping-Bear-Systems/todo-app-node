@@ -1,5 +1,5 @@
 import { html } from "hono/html";
-import { routes } from "./routes.js";
+import { routes } from "./routes.ts";
 
 type NavigationBarProps = Readonly<{
   username: string;

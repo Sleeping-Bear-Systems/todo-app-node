@@ -8,22 +8,22 @@ import { jwt } from "hono/jwt";
 import { requestId } from "hono/request-id";
 import { secureHeaders } from "hono/secure-headers";
 import z from "zod";
-import { aboutPage } from "#features/about/aboutPage.js";
-import { addTaskApi } from "#features/add-task/addTaskApi.js";
-import { homePage } from "#features/home/homePage.js";
-import { loginApi } from "#features/login/loginApi.js";
-import { loginPage } from "#features/login/loginPage.js";
-import { logoutApi } from "#features/login/logoutApi.js";
-import { createMockUsers } from "#features/login/user.js";
-import { pingApi } from "#features/ping/pingApi.js";
-import { createAppConfig } from "#shared/appConfig.js";
+import { aboutPage } from "#features/about/aboutPage.ts";
+import { addTaskApi } from "#features/add-task/addTaskApi.ts";
+import { homePage } from "#features/home/homePage.ts";
+import { loginApi } from "#features/login/loginApi.ts";
+import { loginPage } from "#features/login/loginPage.ts";
+import { logoutApi } from "#features/login/logoutApi.ts";
+import { createMockUsers } from "#features/login/user.ts";
+import { pingApi } from "#features/ping/pingApi.ts";
+import { createAppConfig } from "#shared/appConfig.ts";
 import type {
   AppVariables,
   AuthenticatedAppVariables,
-} from "#shared/appVariables.js";
-import { systemClock } from "#shared/clock.js";
-import { routes } from "#shared/routes.js";
-import { createStructuredLogger } from "#shared/structuredLogger.js";
+} from "#shared/appVariables.ts";
+import { systemClock } from "#shared/clock.ts";
+import { routes } from "#shared/routes.ts";
+import { createStructuredLogger } from "#shared/structuredLogger.ts";
 
 const appConfig = createAppConfig(process.env);
 const logger = createStructuredLogger(appConfig);
