@@ -1,11 +1,6 @@
 module.exports = () => ({
   autoDetect: ["node:test"],
-  files: [
-    "src/**/*.ts",
-    "src/**/*.tsx",
-    "!src/**/*.test.ts",
-    "!src/**/*.test.tsx",
-  ],
-  tests: ["src/**/*.test.ts", "src/**/*.test.tsx"],
+  files: ["src/**/*.ts", "!src/**/*.test.ts"],
+  tests: ["src/**/*.test.ts"],
   restart: false,
 });

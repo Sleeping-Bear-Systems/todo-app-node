@@ -3,7 +3,7 @@
   "compilerOptions": {
     "outDir": "./dist"
   },
-  "exclude": ["./src/**/*.test.ts", "./src/**/*.test.tsx"],
+  "exclude": ["./src/**/*.test.ts"],
   "extends": "./tsconfig.src.json",
-  "include": ["./src/**/*.ts", "./src/**/*.tsx"]
+  "include": ["./src/**/*.ts"]
 }

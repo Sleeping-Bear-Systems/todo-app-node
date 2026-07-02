@@ -1,10 +1,12 @@
-import type { Child } from "hono/jsx";
+import { html } from "hono/html";
 import { NavigationBar } from "./navigationBar.js";
+
+type HtmlContent = ReturnType<typeof html>;
 
 type SharedPageProps = Readonly<{
   title: string;
-  headContent?: Child;
-  children?: Child;
+  headContent?: HtmlContent;
+  children?: HtmlContent;
   language?: string;
   description?: string;
   path: string;
@@ -25,26 +27,30 @@ type PageProps = AuthenticatedPageProps | UnauthenticatedPageProps;
 
 export function Page(props: PageProps) {
   const language = props.language ?? "en";
+  const description =
+    props.description === undefined
+      ? html``
+      : html`<meta name="description" content="${props.description}" />`;
+  const navigation =
+    props.type === "authenticated"
+      ? NavigationBar({ username: props.username, path: props.path })
+      : html``;
 
-  return (
-    <html lang={language}>
+  return html`
+    <html lang="${language}">
       <head>
-        <meta charSet="utf-8" />
+        <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        {props.description !== undefined ? (
-          <meta name="description" content={props.description} />
-        ) : null}
-        <title>{props.title}</title>
+        ${description}
+        <title>${props.title}</title>
         <link rel="stylesheet" href="/styles/app.css" />
-        <script src="/scripts/datastar.js" defer type="module" />
-        {props.headContent}
+        <script src="/scripts/datastar.js" defer type="module"></script>
+        ${props.headContent ?? html``}
       </head>
       <body>
-        {props.type === "authenticated" ? (
-          <NavigationBar username={props.username} path={props.path} />
-        ) : null}
-        {props.children}
+        ${navigation}
+        ${props.children ?? html``}
       </body>
     </html>
-  );
+  `;
 }
