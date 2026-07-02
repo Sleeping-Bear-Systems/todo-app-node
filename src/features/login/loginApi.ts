@@ -2,12 +2,13 @@ import { zValidator } from "@hono/zod-validator";
 import { addDays } from "date-fns";
 import { Hono } from "hono";
 import { setCookie } from "hono/cookie";
+import { html } from "hono/html";
 import { sign } from "hono/jwt";
 import z from "zod";
-import type { AppVariables } from "#shared/appVariables.js";
-import { sseRedirect } from "#shared/datastar.js";
-import { routes } from "#shared/routes.js";
-import { verifyUser } from "./user.js";
+import type { AppVariables } from "#shared/appVariables.ts";
+import { sseRedirect } from "#shared/datastar.ts";
+import { routes } from "#shared/routes.ts";
+import { verifyUser } from "./user.ts";
 
 const loginRequestSchema = z.object({
   username: z.string().min(3),
@@ -23,7 +24,7 @@ export const loginApi = new Hono<{ Variables: AppVariables }>().post(
     const { username, password } = c.req.valid("form");
     const user = verifyUser(username, password);
     if (user === undefined) {
-      return c.html(<div id="errors">Invalid Credentials</div>);
+      return c.html(html`<div id="errors">Invalid Credentials</div>`);
     }
     const payload = {
       sub: user.id,

@@ -2,8 +2,7 @@
   "$schema": "https://json.schemastore.org/tsconfig",
   "compilerOptions": {
     "composite": true,
-    "jsx": "react-jsx",
-    "jsxImportSource": "hono/jsx",
+    "outDir": "./dist",
     "paths": {
       "#features/*": ["./src/features/*"],
       "#shared/*": ["./src/shared/*"]

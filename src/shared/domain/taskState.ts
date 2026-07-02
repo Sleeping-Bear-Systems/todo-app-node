@@ -1,4 +1,4 @@
-import type { TaskEvent } from "./taskEvent.js";
+import type { TaskEvent } from "./taskEvent.ts";
 
 export type TaskState =
   | {

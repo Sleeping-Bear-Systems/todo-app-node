@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { describe, test } from "node:test";
-import { createFixedClock } from "./clock.js";
+import { createFixedClock } from "./clock.ts";
 
 describe("createFixedClock", () => {
   test("now returns the fixed date", () => {

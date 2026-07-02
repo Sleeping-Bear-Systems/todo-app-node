@@ -6,9 +6,9 @@ import {
   IllegalStateError,
 } from "@event-driven-io/emmett";
 import { addDays } from "date-fns";
-import { decide, type TaskCommand } from "./taskCommand.js";
-import type { TaskEvent } from "./taskEvent.js";
-import { evolve, initialState } from "./taskState.js";
+import { decide, type TaskCommand } from "./taskCommand.ts";
+import type { TaskEvent } from "./taskEvent.ts";
+import { evolve, initialState } from "./taskState.ts";
 
 const spec = DeciderSpecification.for({
   decide,

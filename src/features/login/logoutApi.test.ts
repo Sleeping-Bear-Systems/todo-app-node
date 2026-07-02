@@ -1,8 +1,8 @@
 import assert from "node:assert/strict";
 import { describe, test } from "node:test";
 import { Hono } from "hono";
-import type { AppVariables } from "#shared/appVariables.js";
-import { logoutApi } from "./logoutApi.js";
+import type { AppVariables } from "#shared/appVariables.ts";
+import { logoutApi } from "./logoutApi.ts";
 
 describe("logoutApi", () => {
   function createApp(cookieName = "todo-app-node") {

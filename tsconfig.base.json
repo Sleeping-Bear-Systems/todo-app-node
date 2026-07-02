@@ -1,10 +1,11 @@
 {
   "$schema": "https://json.schemastore.org/tsconfig",
   "compilerOptions": {
+    "allowImportingTsExtensions": true,
     "erasableSyntaxOnly": true,
-    "rewriteRelativeImportExtensions": true,
+    "rewriteRelativeImportExtensions": false,
     "types": ["node"],
     "verbatimModuleSyntax": true
   },
-  "extends": ["@tsconfig/node24", "@tsconfig/strictest"]
+  "extends": ["@tsconfig/node26", "@tsconfig/strictest"]
 }

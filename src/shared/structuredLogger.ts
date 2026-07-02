@@ -6,7 +6,7 @@ import {
   type transport,
   transports,
 } from "winston";
-import type { AppConfig } from "./appConfig.js";
+import type { AppConfig } from "./appConfig.ts";
 
 export function createStructuredLogger(appConfig: AppConfig): Logger {
   // add console logging
