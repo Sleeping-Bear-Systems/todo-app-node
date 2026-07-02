@@ -2,6 +2,7 @@
   "$schema": "https://json.schemastore.org/tsconfig",
   "compilerOptions": {
     "composite": true,
+    "outDir": "./dist",
     "paths": {
       "#features/*": ["./src/features/*"],
       "#shared/*": ["./src/shared/*"]
