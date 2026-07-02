@@ -32,7 +32,14 @@
   "[javascriptreact]": {
     "editor.defaultFormatter": "biomejs.biome"
   },
-  "cSpell.words": ["datalust", "datastar", "noopen", "nosniff", "sameorigin"],
+  "cSpell.words": [
+    "datalust",
+    "datastar",
+    "groovylint",
+    "noopen",
+    "nosniff",
+    "sameorigin"
+  ],
   "cSpell.ignorePaths": [
     "package-lock.json",
     "node_modules",
