@@ -9,6 +9,11 @@
 .idea/usage.statistics.xml
 .idea/shelf
 
+# databases
+*.db
+*.db-shm
+*.db-wal
+
 # deps
 node_modules/
 
