@@ -10,7 +10,7 @@ import type { AuthenticatedAppVariables } from "#shared/appVariables.ts";
 import { type AddTaskCommand, decide, handle } from "./addTaskCommand.ts";
 
 const addTaskRequestSchema = z.object({
-  title: z.string().min(1),
+  title: z.string().nonempty(),
   description: z.string().default(""),
 });
 
