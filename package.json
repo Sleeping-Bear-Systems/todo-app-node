@@ -6,7 +6,6 @@
     "@event-driven-io/emmett-sqlite": "^0.42.3",
     "@hono/node-server": "^2.0.4",
     "@hono/zod-validator": "^0.8.0",
-    "better-sqlite3": "^12.11.1",
     "date-fns": "^4.4.0",
     "hono": "^4.12.23",
     "winston": "^3.19.0",
@@ -17,7 +16,6 @@
     "@playwright/test": "^1.60.0",
     "@tsconfig/node26": "^26.0.0",
     "@tsconfig/strictest": "^2.0.8",
-    "@types/better-sqlite3": "^7.6.13",
     "@types/node": "^25.9.1",
     "tsx": "^4.7.1",
     "typescript": "^6.0.3"
@@ -47,7 +45,6 @@
   },
   "type": "module",
   "allowScripts": {
-    "better-sqlite3@12.11.1": true,
     "esbuild@0.28.1": true,
     "sqlite3@5.1.7": true
   }
