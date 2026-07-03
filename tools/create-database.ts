@@ -18,10 +18,7 @@ const config: ParseArgsConfig = {
 const { values } = parseArgs(config);
 
 const commandLineArgumentsSchema = z.object({
-  uri: z
-    .string()
-    .optional()
-    .default(environmentVariables.POSTGRES_URI),
+  uri: z.string().optional().default(environmentVariables.POSTGRES_URI),
 });
 
 const parameters = commandLineArgumentsSchema.parse(values);
