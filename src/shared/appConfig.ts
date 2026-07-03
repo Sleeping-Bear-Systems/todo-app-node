@@ -6,7 +6,7 @@ const environmentVariablesSchema = z.object({
   SEQ_API_KEY: z.string().optional(),
   SEQ_URL: z.url().optional(),
   JWT_SECRET_KEY: z.string().min(64),
-  SQLITE_PATH: z.string().min(1).optional().default("./todo-app.db"),
+  SQLITE_PATH: z.string().nonempty().optional().default("./todo-app.db"),
 });
 
 export type AppConfig = Readonly<{
