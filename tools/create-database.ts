@@ -1,25 +1,29 @@
-import { existsSync } from "node:fs";
 import { type ParseArgsConfig, parseArgs } from "node:util";
 import z from "zod";
 
+// get environment variables
+const environmentVariablesSchema = z.object({
+  POSTGRES_URI: z.string().optional().default(""),
+});
+
+const environmentVariables = environmentVariablesSchema.parse(process.env);
+
+// get command lines arguments
 const config: ParseArgsConfig = {
   options: {
-    path: { type: "string", short: "p" },
+    uri: { type: "string", short: "u" },
   },
 };
 
 const { values } = parseArgs(config);
 
-const createDatabaseSchema = z.object({
-  path: z.string().nonempty().optional().default("./todo-app.db"),
+const commandLineArgumentsSchema = z.object({
+  uri: z
+    .string()
+    .optional()
+    .default(environmentVariables.POSTGRES_URI),
 });
 
-const parameters = createDatabaseSchema.parse(values);
+const parameters = commandLineArgumentsSchema.parse(values);
 
-const now = Date.now().toString();
-console.log(now);
-
-if (existsSync(parameters.path)) {
-}
-
-console.log(parameters.path);
+console.log(parameters.uri);
