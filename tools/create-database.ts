@@ -3,12 +3,12 @@ import z from "zod";
 
 // get environment variables
 const environmentVariablesSchema = z.object({
-  POSTGRES_URI: z.string().optional().default(""),
+  POSTGRES_URI: z.string().optional(),
 });
 
 const environmentVariables = environmentVariablesSchema.parse(process.env);
 
-// get command lines arguments
+// get command line arguments
 const config: ParseArgsConfig = {
   options: {
     uri: { type: "string", short: "u" },
@@ -18,9 +18,18 @@ const config: ParseArgsConfig = {
 const { values } = parseArgs(config);
 
 const commandLineArgumentsSchema = z.object({
-  uri: z.string().optional().default(environmentVariables.POSTGRES_URI),
+  uri: z.string().optional(),
 });
 
-const parameters = commandLineArgumentsSchema.parse(values);
+const commandLineArguments = commandLineArgumentsSchema.parse(values);
 
-console.log(parameters.uri);
+// get database URI
+const postgresUri =
+  environmentVariables.POSTGRES_URI ?? commandLineArguments.uri;
+if (!postgresUri) {
+  console.error("POSTGRES_URI (env) or --uri/-u is required.");
+  process.exit(1);
+}
+
+// TODO: implement Postgres database creation
+console.log(postgresUri);
