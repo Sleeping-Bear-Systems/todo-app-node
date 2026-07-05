@@ -31,5 +31,5 @@ if (!postgresUri) {
   process.exit(1);
 }
 
-// TODO: implement Postgres database creation
-console.log(postgresUri);
+console.error("Not implemented: database creation is not wired up yet.");
+process.exit(1);
