@@ -14,6 +14,9 @@ const baseConfig: AppConfig = {
     secretKey: "fake_jwt_secret_key",
     cookieName: "todo-app-node",
   },
+  postgres: {
+    uri: "postgresql://user:password@host:5432/database",
+  },
 };
 
 describe("createStructuredLogger", () => {
