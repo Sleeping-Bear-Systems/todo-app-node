@@ -8,6 +8,7 @@ const validJwtSecretKey =
 function createEnv(overrides: Record<string, string | undefined> = {}) {
   return {
     JWT_SECRET_KEY: validJwtSecretKey,
+    POSTGRES_URI: "postgres://postgres:password@localhost:5432/todo-app",
     ...overrides,
   };
 }
@@ -68,9 +69,37 @@ describe("createAppConfig", () => {
     assert.equal(appConfig.jwt.cookieName, "todo-app-node");
   });
 
+  test("postgres uri reflects POSTGRES_URI", () => {
+    const appConfig = createAppConfig(
+      createEnv({ POSTGRES_URI: "postgresql://localhost:5432/todo-app" }),
+    );
+    assert.equal(
+      appConfig.postgres.uri,
+      "postgresql://localhost:5432/todo-app",
+    );
+  });
+
   test("throws when JWT_SECRET_KEY is missing", () => {
     assert.throws(() =>
       createAppConfig(createEnv({ JWT_SECRET_KEY: undefined })),
+    );
+  });
+
+  test("throws when POSTGRES_URI is missing", () => {
+    assert.throws(() =>
+      createAppConfig(createEnv({ POSTGRES_URI: undefined })),
+    );
+  });
+
+  test("throws when POSTGRES_URI is not a url", () => {
+    assert.throws(() =>
+      createAppConfig(createEnv({ POSTGRES_URI: "not-a-url" })),
+    );
+  });
+
+  test("throws when POSTGRES_URI protocol is not postgres", () => {
+    assert.throws(() =>
+      createAppConfig(createEnv({ POSTGRES_URI: "https://example.com/db" })),
     );
   });
 
