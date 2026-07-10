@@ -8,6 +8,7 @@
     "date-fns": "^4.4.0",
     "hono": "^4.12.23",
     "pg": "^8.22.0",
+    "pg-connection-string": "^2.14.0",
     "winston": "^3.19.0",
     "zod": "^4.4.3"
   },
