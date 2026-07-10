@@ -39,7 +39,6 @@
     "groovylint",
     "noopen",
     "nosniff",
-    "postresql",
     "sameorigin"
   ],
   "cSpell.ignorePaths": [
