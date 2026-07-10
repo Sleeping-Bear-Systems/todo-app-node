@@ -112,7 +112,7 @@ Create the database with an explicit URI:
 node --import tsx ./tools/create-database.ts --uri postgres://localhost:5432/todo_app
 ```
 
-ℹ️ If the database name isn't specified in the Postgres URI, the script will use `todo-app`.
+ℹ️ If the database name isn't specified in the Postgres URI, the script will use `todo_app`.
 
 Force drop and recreate if it already exists:
 

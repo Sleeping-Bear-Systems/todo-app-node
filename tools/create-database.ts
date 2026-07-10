@@ -37,7 +37,7 @@ try {
     process.exit(1);
   }
   const clientConfig: ClientConfig = parseIntoClientConfig(postgresUri);
-  const database = clientConfig.database ?? "todo-app-node";
+  const database = clientConfig.database ?? "todo_app";
   // Use an administrative database
   clientConfig.database = "postgres";
 
