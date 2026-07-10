@@ -6,5 +6,10 @@
     "types": ["node"]
   },
   "extends": "./tsconfig.base.json",
-  "include": ["./tools"]
+  "include": ["./tools"],
+  "references": [
+    {
+      "path": "./tsconfig.app.json"
+    }
+  ]
 }
