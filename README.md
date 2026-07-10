@@ -98,6 +98,28 @@ Run the built application:
 npm run start
 ```
 
+## Creating the Postgres database
+
+Create the database from `POSTGRES_URI` environment variable:
+
+```pwsh
+node --import tsx ./tools/create-database.ts
+```
+
+Create the database with an explicit URI:
+
+```pwsh
+node --import tsx ./tools/create-database.ts --uri postgres://localhost:5432/todo_app
+```
+
+ℹ️ If the database name isn't specified in the Postgres URI, the script will use `todo-app`.
+
+Force drop and recreate if it already exists:
+
+```pwsh
+node --import tsx ./tools/create-database.ts --uri postgres://localhost:5432/todo_app --force
+```
+
 ## Jenkins CI setup
 
 This repository includes two Jenkins pipeline definitions:

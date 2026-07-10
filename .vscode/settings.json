@@ -35,9 +35,11 @@
   "cSpell.words": [
     "datalust",
     "datastar",
+    "datname",
     "groovylint",
     "noopen",
     "nosniff",
+    "postresql",
     "sameorigin"
   ],
   "cSpell.ignorePaths": [
