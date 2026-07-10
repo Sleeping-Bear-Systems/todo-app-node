@@ -3,6 +3,13 @@ import { Client, type ClientConfig } from "pg";
 import { parseIntoClientConfig } from "pg-connection-string";
 import z from "zod";
 
+process.on("uncaughtException", (error) => {
+  if (error instanceof Error) {
+    console.error(error.message);
+  }
+  process.exit(1);
+});
+
 // get environment variables
 const environmentVariablesSchema = z.object({
   POSTGRES_URI: z.string().optional(),
@@ -63,13 +70,7 @@ try {
   console.log(`Creating database "${database}"`);
   await client.query(`CREATE DATABASE "${database}"`);
   console.log("Success!");
-
-  process.exit(0);
-} catch (error) {
-  if (error instanceof Error) {
-    console.error(error.message);
-  }
-  process.exit(1);
 } finally {
+  // dispose Postgres client
   await client?.end();
 }
