@@ -3,24 +3,24 @@
   "dependencies": {
     "@datalust/winston-seq": "^3.0.1",
     "@event-driven-io/emmett": "^0.42.3",
-    "@hono/node-server": "^2.0.4",
+    "@hono/node-server": "^2.0.8",
     "@hono/zod-validator": "^0.8.0",
     "date-fns": "^4.4.0",
-    "hono": "^4.12.23",
+    "hono": "^4.12.29",
     "pg": "^8.22.0",
     "pg-connection-string": "^2.14.0",
     "winston": "^3.19.0",
     "zod": "^4.4.3"
   },
   "devDependencies": {
-    "@biomejs/biome": "^2.4.16",
-    "@playwright/test": "^1.60.0",
+    "@biomejs/biome": "^2.5.3",
+    "@playwright/test": "^1.61.1",
     "@tsconfig/node26": "^26.0.0",
     "@tsconfig/strictest": "^2.0.8",
-    "@types/node": "^25.9.1",
+    "@types/node": "^26.1.1",
     "@types/pg": "^8.20.0",
-    "tsx": "^4.7.1",
-    "typescript": "^6.0.3"
+    "tsx": "^4.23.0",
+    "typescript": "^7.0.2"
   },
   "imports": {
     "#features/*": "./src/features/*",
