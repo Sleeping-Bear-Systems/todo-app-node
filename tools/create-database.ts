@@ -56,7 +56,7 @@ try {
   }
   const clientConfig: ClientConfig = parseIntoClientConfig(postgresUri);
   const database = clientConfig.database ?? "todo_app";
-  // Use an administrative database
+  // use an administrative database
   clientConfig.database = "postgres";
 
   // create client
