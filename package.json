@@ -50,5 +50,8 @@
   "type": "module",
   "allowScripts": {
     "esbuild@0.28.1": true
+  },
+  "engines": {
+    "node": "26.x"
   }
 }
