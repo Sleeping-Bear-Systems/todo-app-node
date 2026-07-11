@@ -3,10 +3,21 @@ import { Client, type ClientConfig } from "pg";
 import { parseIntoClientConfig } from "pg-connection-string";
 import z from "zod";
 
-process.on("uncaughtException", (error) => {
+function logFatalError(error: unknown) {
   if (error instanceof Error) {
-    console.error(error.message);
+    console.error(error.stack ?? error.message);
+    return;
   }
+  console.error(error);
+}
+
+process.on("uncaughtException", (error) => {
+  logFatalError(error);
+  process.exit(1);
+});
+
+process.on("unhandledRejection", (reason) => {
+  logFatalError(reason);
   process.exit(1);
 });
 
