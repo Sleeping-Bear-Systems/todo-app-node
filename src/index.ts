@@ -1,4 +1,4 @@
-import { getInMemoryEventStore } from "@event-driven-io/emmett";
+import { getPostgreSQLEventStore } from "@event-driven-io/emmett-postgresql";
 import { serve } from "@hono/node-server";
 import { serveStatic } from "@hono/node-server/serve-static";
 import { type Context, Hono } from "hono";
@@ -54,7 +54,7 @@ async function validateJwt(
 createMockUsers();
 
 // create event store
-const eventStore = getInMemoryEventStore();
+const eventStore = getPostgreSQLEventStore(appConfig.postgres.uri);
 
 // map API routes
 const apiRoutes = new Hono<{ Variables: AppVariables }>()
