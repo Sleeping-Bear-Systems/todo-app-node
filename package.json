@@ -1,8 +1,13 @@
 {
   "$schema": "https://json.schemastore.org/package.json",
+  "allowScripts": {
+    "esbuild@0.28.1": true
+  },
   "dependencies": {
     "@datalust/winston-seq": "^3.0.1",
-    "@event-driven-io/emmett": "^0.42.3",
+    "@event-driven-io/emmett": "0.42.3",
+    "@event-driven-io/emmett-postgresql": "0.42.3",
+    "@event-driven-io/pongo": "0.16.11",
     "@hono/node-server": "^2.0.8",
     "@hono/zod-validator": "^0.8.0",
     "date-fns": "^4.4.0",
@@ -22,6 +27,9 @@
     "tsx": "^4.23.0",
     "typescript": "^7.0.2"
   },
+  "engines": {
+    "node": "26.x"
+  },
   "imports": {
     "#features/*": "./src/features/*",
     "#shared/*": "./src/shared/*"
@@ -37,16 +45,13 @@
     "dev": "tsx watch --tsconfig tsconfig.app.json ./src/index.ts",
     "dev:e2e": "tsx --tsconfig tsconfig.app.json ./src/index.ts",
     "playwright:install": "playwright install",
-    "playwright:test": "playwright test",
-    "playwright:test:non-blocking": "playwright test --reporter=line",
-    "playwright:test:headed": "playwright test --headed",
-    "playwright:test:ui": "playwright test --ui",
     "playwright:report": "playwright show-report",
+    "playwright:test": "playwright test",
+    "playwright:test:headed": "playwright test --headed",
+    "playwright:test:non-blocking": "playwright test --reporter=line",
+    "playwright:test:ui": "playwright test --ui",
     "start": "tsx --tsconfig tsconfig.app.json ./src/index.ts",
     "test": "node --import tsx --test ./src/**/*.test.ts"
   },
-  "type": "module",
-  "allowScripts": {
-    "esbuild@0.28.1": true
-  }
+  "type": "module"
 }
