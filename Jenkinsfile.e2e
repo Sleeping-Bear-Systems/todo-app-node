@@ -3,7 +3,11 @@ pipeline {
     agent none
     environment {
         CI = 'true'
-        JWT_SECRET_KEY = credentials('e2e-jwt-secret-key')
+        OP_CLI_PATH = '/usr/local/bin/'
+        SEQ_API_KEY = 'op://SleepingBearSystems/kbh3ujcwvtikg5x2u72ymxfycq/credential'
+        SEQ_URL = 'op://SleepingBearSystems/kbh3ujcwvtikg5x2u72ymxfycq/url'
+        JWT_SECRET_KEY = 'op://SleepingBearSystems/sewpai64oo4a6n5vawgv5rohte/credential'
+        POSTGRES_URI = 'op://SleepingBearSystems/a5i3avqunfzw5gttbtedbii7mi/uri'
     }
     stages {
         stage('Playwright E2E') {
@@ -13,15 +17,16 @@ pipeline {
                 }
             }
             steps {
-                script {
+                withSecrets() {
                     sh 'npm ci'
+                    sh 'node --import tsx ./tools/create-database.ts --force'
                     sh 'npm run playwright:test'
                 }
             }
             post {
                 always {
                     archiveArtifacts artifacts: 'playwright-report/**', allowEmptyArchive: true
-                    deleteDir()
+                    cleanWs()
                 }
             }
         }

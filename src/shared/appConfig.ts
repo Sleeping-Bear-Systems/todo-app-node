@@ -6,6 +6,10 @@ const environmentVariablesSchema = z.object({
   SEQ_API_KEY: z.string().optional(),
   SEQ_URL: z.url().optional(),
   JWT_SECRET_KEY: z.string().min(64),
+  POSTGRES_URI: z.url().refine((value) => {
+    const protocol = new URL(value).protocol;
+    return protocol === "postgres:" || protocol === "postgresql:";
+  }, "POSTGRES_URI must use postgres:// or postgresql://"),
 });
 
 export type AppConfig = Readonly<{
@@ -18,6 +22,9 @@ export type AppConfig = Readonly<{
   jwt: Readonly<{
     secretKey: string;
     cookieName: string;
+  }>;
+  postgres: Readonly<{
+    uri: string;
   }>;
 }>;
 
@@ -35,6 +42,9 @@ export function createAppConfig(
     jwt: {
       secretKey: environmentVariables.JWT_SECRET_KEY,
       cookieName: "todo-app-node",
+    },
+    postgres: {
+      uri: environmentVariables.POSTGRES_URI,
     },
   };
 }

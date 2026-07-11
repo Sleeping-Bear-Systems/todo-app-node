@@ -20,6 +20,9 @@ describe("logoutApi", () => {
             "fake_jwt_secret_key_only_used_for_testing_the_logout_api_0123456",
           cookieName,
         },
+        postgres: {
+          uri: "postgresql://user:password@host:5432/database",
+        },
       });
       c.set("clock", { now: () => new Date("2026-05-31T12:00:00Z") });
       c.set("logger", {} as never);

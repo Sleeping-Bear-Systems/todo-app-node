@@ -9,16 +9,14 @@ pipeline {
                 }
             }
             steps {
-                script {
-                    sh 'npm ci'
-                    sh 'npm run build'
-                    sh 'npm run biome:ci'
-                    sh 'npm run test'
-                }
+                sh 'npm ci'
+                sh 'npm run build'
+                sh 'npm run biome:ci'
+                sh 'npm run test'
             }
             post {
                 always {
-                    deleteDir()
+                    cleanWs()
                 }
             }
         }
