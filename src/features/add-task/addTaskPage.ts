@@ -22,9 +22,7 @@ export const addTaskPage = new Hono<{
         name="title"
         type="text"
         required
-        autoComplete="Title"
-      >
-      </input>
+      />
     </div>
     <div>
       <label for="description">Description</label>
@@ -32,8 +30,7 @@ export const addTaskPage = new Hono<{
         id="description"
         name="description"
         type="text"
-      >
-      </input>
+      />
     </div>
     <button type="submit">Add</button>
   </form>
