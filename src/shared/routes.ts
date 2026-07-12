@@ -3,6 +3,7 @@ export const routes = {
   ABOUT_PAGE: "/auth/about",
   HOME_PAGE: "/auth/home",
   LOGIN_PAGE: "/login",
+  ADD_TASK_PAGE: "/auth/add-task",
 
   // API routes
   LOGIN_API: "/api/login",
