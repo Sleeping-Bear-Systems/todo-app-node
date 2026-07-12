@@ -7,6 +7,8 @@ import { zValidator } from "@hono/zod-validator";
 import { Hono } from "hono";
 import z from "zod";
 import type { AuthenticatedAppVariables } from "#shared/appVariables.ts";
+import { sseRedirect } from "#shared/datastar.ts";
+import { routes } from "#shared/routes.ts";
 import { type AddTaskCommand, decide, handle } from "./addTaskCommand.ts";
 
 const addTaskRequestSchema = z.object({
@@ -45,11 +47,14 @@ export const addTaskApi = new Hono<{
         expectedStreamVersion: STREAM_DOES_NOT_EXIST,
       },
     );
-    return c.json({ requestId, taskId: command.data.taskId }, 200);
+    return sseRedirect(c, routes.HOME_PAGE);
   } catch (error) {
+    let errorMessage = "";
     if (error instanceof IllegalStateError) {
-      return c.json({ message: error.message }, 400);
+      errorMessage = error.message;
+    } else {
+      errorMessage = "Internal Server Error";
     }
-    return c.json({ message: "Internal Server Error" }, 500);
+    return c.html(`<div id="errors">${errorMessage}</div>`);
   }
 });
