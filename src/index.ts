@@ -59,9 +59,9 @@ const eventStore = getPostgreSQLEventStore(appConfig.postgres.uri);
 
 // map API routes
 const apiRoutes = new Hono<{ Variables: AppVariables }>()
-  .route("/ping", pingApi)
   .route("/login", loginApi)
-  .route("/logout", logoutApi);
+  .route("/logout", logoutApi)
+  .route("/ping", pingApi);
 
 // map authenticated API route
 const authenticatedApiRoutes = new Hono<{
@@ -98,8 +98,8 @@ const authenticatedPageRoutes = new Hono<{
     return;
   })
   .route("/about", aboutPage)
-  .route("/home", homePage)
-  .route("/add-task", addTaskPage);
+  .route("/add-task", addTaskPage)
+  .route("/home", homePage);
 
 // create application
 const app = new Hono<{ Variables: AppVariables }>();
