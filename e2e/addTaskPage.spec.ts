@@ -53,5 +53,8 @@ test("Authenticated user can submit add-task form", async ({ page }) => {
   ]);
 
   expect(response.status()).toBe(200);
-  await expect(page.locator("#errors")).toBeEmpty();
+  await expect(page).toHaveURL(/\/auth\/home$/);
+  await expect(
+    page.getByRole("heading", { level: 1, name: "Home" }),
+  ).toBeVisible();
 });

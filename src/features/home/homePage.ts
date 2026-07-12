@@ -2,6 +2,7 @@ import { Hono } from "hono";
 import { html } from "hono/html";
 import type { AuthenticatedAppVariables } from "#shared/appVariables.ts";
 import { Page } from "#shared/page.ts";
+import { routes } from "#shared/routes.ts";
 
 export const homePage = new Hono<{
   Variables: AuthenticatedAppVariables;
@@ -13,6 +14,7 @@ export const homePage = new Hono<{
   `;
   const content = html`
     <h1>Home</h1>
+    <a class="button-link" href="${routes.ADD_TASK_PAGE}">Add Task</a>
     <div id="home-calendar"></div>
   `;
 

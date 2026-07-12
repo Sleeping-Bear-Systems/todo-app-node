@@ -47,15 +47,11 @@ test("POST /api/auth/add-task creates a task for authenticated users", async ({
 
   expect(response.status()).toBe(200);
   expect(response.headers()["content-type"] ?? "").toContain(
-    "application/json",
+    "text/event-stream",
   );
 
-  const body = await response.json();
-  expect(body.requestId).toMatch(
-    /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i,
-  );
-  expect(body.taskId).toMatch(
-    /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i,
+  await expect(response.text()).resolves.toContain(
+    `window.location.href="/auth/home"`,
   );
 });
 
@@ -78,15 +74,11 @@ test("POST /api/auth/add-task allows description to be omitted", async ({
 
   expect(response.status()).toBe(200);
   expect(response.headers()["content-type"] ?? "").toContain(
-    "application/json",
+    "text/event-stream",
   );
 
-  const body = await response.json();
-  expect(body.requestId).toMatch(
-    /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i,
-  );
-  expect(body.taskId).toMatch(
-    /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i,
+  await expect(response.text()).resolves.toContain(
+    `window.location.href="/auth/home"`,
   );
 });
 
