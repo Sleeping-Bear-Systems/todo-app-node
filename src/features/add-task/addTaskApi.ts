@@ -10,6 +10,7 @@ import type { AuthenticatedAppVariables } from "#shared/appVariables.ts";
 import { sseRedirect } from "#shared/datastar.ts";
 import { routes } from "#shared/routes.ts";
 import { type AddTaskCommand, decide, handle } from "./addTaskCommand.ts";
+import { html } from "hono/html";
 
 const addTaskRequestSchema = z.object({
   title: z.string().nonempty(),
@@ -55,6 +56,6 @@ export const addTaskApi = new Hono<{
     } else {
       errorMessage = "Internal Server Error";
     }
-    return c.html(`<div id="errors">${errorMessage}</div>`);
+    return c.html(html`<div id="errors">${errorMessage}</div>`);
   }
 });
