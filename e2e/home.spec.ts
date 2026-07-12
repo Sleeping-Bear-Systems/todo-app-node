@@ -28,7 +28,23 @@ test("Authenticated user can view the home page", async ({ page }) => {
   ).toBeVisible();
   await expect(page.locator("#home-calendar")).toBeVisible();
   await expect(page.locator("#home-calendar")).toHaveClass(/\bfc\b/);
+  await expect(page.getByRole("link", { name: "Add Task" })).toBeVisible();
+  await expect(page.getByRole("link", { name: "Add Task" })).toHaveAttribute(
+    "href",
+    "/auth/add-task",
+  );
   await expect(page.getByRole("button", { name: "Sign out" })).toBeVisible();
+});
+
+test("User can navigate to add-task page from home page", async ({ page }) => {
+  await signInAsAdmin(page);
+
+  await page.getByRole("link", { name: "Add Task" }).click();
+
+  await expect(page).toHaveURL(/\/auth\/add-task$/);
+  await expect(
+    page.getByRole("heading", { level: 1, name: "Add Task" }),
+  ).toBeVisible();
 });
 
 test("User can sign out from home page", async ({ page }) => {
