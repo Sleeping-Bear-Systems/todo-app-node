@@ -5,12 +5,12 @@ import {
 } from "@event-driven-io/emmett";
 import { zValidator } from "@hono/zod-validator";
 import { Hono } from "hono";
+import { html } from "hono/html";
 import z from "zod";
 import type { AuthenticatedAppVariables } from "#shared/appVariables.ts";
 import { sseRedirect } from "#shared/datastar.ts";
 import { routes } from "#shared/routes.ts";
 import { type AddTaskCommand, decide, handle } from "./addTaskCommand.ts";
-import { html } from "hono/html";
 
 const addTaskRequestSchema = z.object({
   title: z.string().nonempty(),
