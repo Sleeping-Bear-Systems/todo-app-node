@@ -145,6 +145,30 @@ test("POST /api/login returns success JSON and auth cookie for valid credentials
   );
 });
 
+test("POST /api/login sets secure cookie attributes for valid credentials", async ({
+  request,
+}) => {
+  const response = await request.fetch("/api/login", {
+    method: "POST",
+    form: {
+      username: "admin",
+      password: "password1234",
+    },
+    headers: {
+      origin: getOriginFromBaseUrl(),
+    },
+    maxRedirects: 0,
+  });
+
+  expect(response.status()).toBe(200);
+  const setCookie = response.headers()["set-cookie"] ?? "";
+
+  expect(setCookie).toContain(`${authCookieName}=`);
+  expect(setCookie).toContain("HttpOnly");
+  expect(setCookie).toContain("SameSite=Strict");
+  expect(setCookie).toContain("Expires=");
+});
+
 test("POST /api/login returns Datastar SSE redirect for valid Datastar requests", async ({
   request,
 }) => {
@@ -189,6 +213,9 @@ test("POST /api/login rejects invalid credentials for non-Datastar requests", as
   await expect(response.json()).resolves.toEqual({
     message: "Invalid credentials",
   });
+  expect(response.headers()["set-cookie"] ?? "").not.toContain(
+    `${authCookieName}=`,
+  );
 });
 
 test("POST /api/login rejects invalid credentials for Datastar requests", async ({
@@ -210,4 +237,30 @@ test("POST /api/login rejects invalid credentials for Datastar requests", async 
   expect(response.status()).toBe(200);
   expect(response.headers()["content-type"] ?? "").toContain("text/html");
   await expect(response.text()).resolves.toContain("Invalid Credentials");
+  expect(response.headers()["set-cookie"] ?? "").not.toContain(
+    `${authCookieName}=`,
+  );
+});
+
+test("POST /api/login treats Datastar-Request header value false as non-Datastar", async ({
+  request,
+}) => {
+  const response = await request.fetch("/api/login", {
+    method: "POST",
+    form: {
+      username: "admin",
+      password: "password1234",
+    },
+    headers: {
+      "Datastar-Request": "false",
+      origin: getOriginFromBaseUrl(),
+    },
+    maxRedirects: 0,
+  });
+
+  expect(response.status()).toBe(200);
+  expect(response.headers()["content-type"] ?? "").toContain(
+    "application/json",
+  );
+  await expect(response.json()).resolves.toEqual({ message: "Success" });
 });
