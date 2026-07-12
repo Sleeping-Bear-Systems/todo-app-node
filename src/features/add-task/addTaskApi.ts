@@ -8,7 +8,7 @@ import { Hono } from "hono";
 import { html } from "hono/html";
 import z from "zod";
 import type { AuthenticatedAppVariables } from "#shared/appVariables.ts";
-import { sseRedirect } from "#shared/datastar.ts";
+import { isDatastarRequest, sseRedirect } from "#shared/datastar.ts";
 import { routes } from "#shared/routes.ts";
 import { type AddTaskCommand, decide, handle } from "./addTaskCommand.ts";
 
@@ -48,7 +48,10 @@ export const addTaskApi = new Hono<{
         expectedStreamVersion: STREAM_DOES_NOT_EXIST,
       },
     );
-    return sseRedirect(c, routes.HOME_PAGE);
+    if (isDatastarRequest(c)) {
+      return sseRedirect(c, routes.HOME_PAGE);
+    }
+    return c.json({ requestId, taskId: command.data.taskId });
   } catch (error) {
     let errorMessage = "";
     if (error instanceof IllegalStateError) {
@@ -56,6 +59,9 @@ export const addTaskApi = new Hono<{
     } else {
       errorMessage = "Internal Server Error";
     }
-    return c.html(html`<div id="errors">${errorMessage}</div>`);
+    if (isDatastarRequest(c)) {
+      return c.html(html`<div id="errors">${errorMessage}</div>`);
+    }
+    return c.json({ message: errorMessage }, 500);
   }
 });
