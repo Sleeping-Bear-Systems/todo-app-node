@@ -53,14 +53,17 @@ export const addTaskApi = new Hono<{
     }
     return c.json({ requestId, taskId: command.data.taskId });
   } catch (error) {
-    let errorMessage = "";
+    let errorMessage = "Internal Server Error";
     if (error instanceof IllegalStateError) {
       errorMessage = error.message;
-    } else {
-      errorMessage = "Internal Server Error";
+    } else if (error instanceof Error) {
+      errorMessage = error.message;
     }
     if (isDatastarRequest(c)) {
       return c.html(html`<div id="errors">${errorMessage}</div>`);
+    }
+    if (error instanceof IllegalStateError) {
+      return c.json({ message: errorMessage }, 400);
     }
     return c.json({ message: errorMessage }, 500);
   }
