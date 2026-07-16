@@ -145,7 +145,7 @@ test("POST /api/login returns success JSON and auth cookie for valid credentials
   );
 });
 
-test("POST /api/login sets secure cookie attributes for valid credentials", async ({
+test("POST /api/login sets auth cookie attributes for valid credentials", async ({
   request,
 }) => {
   const response = await request.fetch("/api/login", {

@@ -31,7 +31,7 @@ describe("isDatastarRequest", () => {
     assert.equal(isDatastarRequest(context), false);
   });
 
-  test("returns false when Datastar-Request header casing does not match", () => {
+  test("returns false when Datastar-Request header value casing does not match", () => {
     const context = createContext("True");
 
     assert.equal(isDatastarRequest(context), false);
