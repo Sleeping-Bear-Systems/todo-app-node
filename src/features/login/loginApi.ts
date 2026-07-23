@@ -6,7 +6,7 @@ import { html } from "hono/html";
 import { sign } from "hono/jwt";
 import z from "zod";
 import type { AppVariables } from "#shared/appVariables.ts";
-import { sseRedirect } from "#shared/datastar.ts";
+import { isDatastarRequest, sseRedirect } from "#shared/datastar.ts";
 import { routes } from "#shared/routes.ts";
 import { verifyUser } from "./user.ts";
 
@@ -24,7 +24,10 @@ export const loginApi = new Hono<{ Variables: AppVariables }>().post(
     const { username, password } = c.req.valid("form");
     const user = verifyUser(username, password);
     if (user === undefined) {
-      return c.html(html`<div id="errors">Invalid Credentials</div>`);
+      if (isDatastarRequest(c)) {
+        return c.html(html`<div id="errors">Invalid Credentials</div>`);
+      }
+      return c.json({ message: "Invalid credentials" }, 401);
     }
     const payload = {
       sub: user.id,
@@ -41,6 +44,9 @@ export const loginApi = new Hono<{ Variables: AppVariables }>().post(
       secure: false, // TODO: set flag based on environment,
       expires: addDays(now, 1),
     });
-    return await sseRedirect(c, routes.HOME_PAGE);
+    if (isDatastarRequest(c)) {
+      return await sseRedirect(c, routes.HOME_PAGE);
+    }
+    return c.json({ message: "Success" }, 200);
   },
 );

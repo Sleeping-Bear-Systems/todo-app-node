@@ -47,6 +47,34 @@ test("POST /api/auth/add-task creates a task for authenticated users", async ({
 
   expect(response.status()).toBe(200);
   expect(response.headers()["content-type"] ?? "").toContain(
+    "application/json",
+  );
+
+  const payload = await response.json();
+  expect(payload.requestId).toBeTruthy();
+  expect(payload.taskId).toBeTruthy();
+});
+
+test("POST /api/auth/add-task returns Datastar redirect for Datastar requests", async ({
+  request,
+}) => {
+  const authCookie = await signInAndGetAuthCookie(request);
+
+  const response = await request.fetch("/api/auth/add-task", {
+    method: "POST",
+    form: {
+      title: "Buy milk",
+    },
+    headers: {
+      Cookie: authCookie,
+      "Datastar-Request": "true",
+      origin: getOriginFromBaseUrl(),
+    },
+    maxRedirects: 0,
+  });
+
+  expect(response.status()).toBe(200);
+  expect(response.headers()["content-type"] ?? "").toContain(
     "text/event-stream",
   );
 
@@ -73,13 +101,10 @@ test("POST /api/auth/add-task allows description to be omitted", async ({
   });
 
   expect(response.status()).toBe(200);
-  expect(response.headers()["content-type"] ?? "").toContain(
-    "text/event-stream",
-  );
 
-  await expect(response.text()).resolves.toContain(
-    `window.location.href="/auth/home"`,
-  );
+  const payload = await response.json();
+  expect(payload.requestId).toBeTruthy();
+  expect(payload.taskId).toBeTruthy();
 });
 
 test("POST /api/auth/add-task rejects unauthenticated users", async ({
