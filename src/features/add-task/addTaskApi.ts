@@ -56,8 +56,6 @@ export const addTaskApi = new Hono<{
     let errorMessage = "Internal Server Error";
     if (error instanceof IllegalStateError) {
       errorMessage = error.message;
-    } else if (error instanceof Error) {
-      errorMessage = error.message;
     }
     if (isDatastarRequest(c)) {
       return c.html(html`<div id="errors">${errorMessage}</div>`);
