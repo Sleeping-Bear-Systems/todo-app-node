@@ -7,5 +7,8 @@
     "types": ["node"],
     "verbatimModuleSyntax": true
   },
-  "extends": ["@tsconfig/node26", "@tsconfig/strictest"]
+  "extends": [
+    "@tsconfig/node26/tsconfig.json",
+    "@tsconfig/strictest/tsconfig.json"
+  ]
 }
