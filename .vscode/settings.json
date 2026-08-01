@@ -39,6 +39,7 @@
     "groovylint",
     "noopen",
     "nosniff",
+    "pongo",
     "sameorigin"
   ],
   "cSpell.ignorePaths": [
