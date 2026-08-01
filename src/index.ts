@@ -1,4 +1,8 @@
-import { getPostgreSQLEventStore } from "@event-driven-io/emmett-postgresql";
+import { inlineProjections } from "@event-driven-io/emmett";
+import {
+  getPostgreSQLEventStore,
+  type PostgresEventStoreOptions,
+} from "@event-driven-io/emmett-postgresql";
 import { serve } from "@hono/node-server";
 import { serveStatic } from "@hono/node-server/serve-static";
 import { type Context, Hono } from "hono";
@@ -17,6 +21,7 @@ import { loginPage } from "#features/login/loginPage.ts";
 import { logoutApi } from "#features/login/logoutApi.ts";
 import { createMockUsers } from "#features/login/user.ts";
 import { pingApi } from "#features/ping/pingApi.ts";
+import { taskProjection } from "#features/task-projection/taskProjection.ts";
 import { createAppConfig } from "#shared/appConfig.ts";
 import type {
   AppVariables,
@@ -55,7 +60,10 @@ async function validateJwt(
 createMockUsers();
 
 // create event store
-const eventStore = getPostgreSQLEventStore(appConfig.postgres.uri);
+const options: PostgresEventStoreOptions = {
+  projections: inlineProjections([taskProjection]),
+};
+const eventStore = getPostgreSQLEventStore(appConfig.postgres.uri, options);
 
 // map API routes
 const apiRoutes = new Hono<{ Variables: AppVariables }>()
