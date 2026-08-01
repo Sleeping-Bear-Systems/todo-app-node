@@ -71,8 +71,8 @@ export function evolve(state: TaskState, event: TaskEvent): TaskState {
     case "CompletedTask":
       break;
     default: {
-      const _unknownState: never = state;
-      return _unknownState;
+      const _exhaustive: never = state;
+      return _exhaustive;
     }
   }
   return state;
