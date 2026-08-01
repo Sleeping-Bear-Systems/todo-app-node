@@ -1,3 +1,4 @@
+import { inlineProjections } from "@event-driven-io/emmett";
 import {
   getPostgreSQLEventStore,
   type PostgresEventStoreOptions,
@@ -14,6 +15,7 @@ import z from "zod";
 import { aboutPage } from "#features/about/aboutPage.ts";
 import { addTaskApi } from "#features/add-task/addTaskApi.ts";
 import { addTaskPage } from "#features/add-task/addTaskPage.ts";
+import { taskProjection } from "#features/dashboard/taskProjection.ts";
 import { homePage } from "#features/home/homePage.ts";
 import { loginApi } from "#features/login/loginApi.ts";
 import { loginPage } from "#features/login/loginPage.ts";
@@ -58,7 +60,9 @@ async function validateJwt(
 createMockUsers();
 
 // create event store
-const options: PostgresEventStoreOptions = {};
+const options: PostgresEventStoreOptions = {
+  projections: inlineProjections([taskProjection]),
+};
 const eventStore = getPostgreSQLEventStore(appConfig.postgres.uri, options);
 
 // map API routes
