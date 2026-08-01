@@ -72,7 +72,7 @@ export function evolve(state: TaskState, event: TaskEvent): TaskState {
       break;
     default: {
       const _exhaustive: never = state;
-      throw new Error(`Unhandled TaskState status: ${_exhaustive}`);
+      return _exhaustive;
     }
   }
   return state;

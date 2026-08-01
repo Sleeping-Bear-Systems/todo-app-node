@@ -75,7 +75,7 @@ export function decide(command: TaskCommand, state: TaskState): TaskEvent[] {
     }
     default: {
       const _exhaustive: never = command;
-      throw new Error(`Unhandled TaskCommand type: ${_exhaustive}`);
+      return _exhaustive;
     }
   }
 }
