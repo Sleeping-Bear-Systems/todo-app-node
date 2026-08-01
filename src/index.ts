@@ -15,13 +15,13 @@ import z from "zod";
 import { aboutPage } from "#features/about/aboutPage.ts";
 import { addTaskApi } from "#features/add-task/addTaskApi.ts";
 import { addTaskPage } from "#features/add-task/addTaskPage.ts";
-import { taskProjection } from "#features/dashboard/taskProjection.ts";
 import { homePage } from "#features/home/homePage.ts";
 import { loginApi } from "#features/login/loginApi.ts";
 import { loginPage } from "#features/login/loginPage.ts";
 import { logoutApi } from "#features/login/logoutApi.ts";
 import { createMockUsers } from "#features/login/user.ts";
 import { pingApi } from "#features/ping/pingApi.ts";
+import { taskProjection } from "#features/task-projection/taskProjection.ts";
 import { createAppConfig } from "#shared/appConfig.ts";
 import type {
   AppVariables,
