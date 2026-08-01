@@ -44,6 +44,10 @@ export function evolve(document: TaskDocument, event: TaskEvent): TaskDocument {
       break;
     case "Removed":
       break;
+    default: {
+      const _exhaustive: never = document.status;
+      return _exhaustive;
+    }
   }
   return document;
 }
