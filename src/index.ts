@@ -14,6 +14,7 @@ import z from "zod";
 import { aboutPage } from "#features/about/aboutPage.ts";
 import { addTaskApi } from "#features/add-task/addTaskApi.ts";
 import { addTaskPage } from "#features/add-task/addTaskPage.ts";
+import { completeTaskApi } from "#features/complete-task/completeTaskApi.ts";
 import { homePage } from "#features/home/homePage.ts";
 import { loginApi } from "#features/login/loginApi.ts";
 import { loginPage } from "#features/login/loginPage.ts";
@@ -88,7 +89,8 @@ const authenticatedApiRoutes = new Hono<{
     await next();
     return;
   })
-  .route("/add-task", addTaskApi);
+  .route("/add-task", addTaskApi)
+  .route("/complete-task", completeTaskApi);
 
 // map page routes
 const pageRoutes = new Hono<{ Variables: AppVariables }>().route(

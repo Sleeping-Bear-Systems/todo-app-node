@@ -32,3 +32,7 @@ Origin: {{origin}}
 Content-Type: application/x-www-form-urlencoded
 
 title=Task+no+description
+
+### Complete Task
+POST {{baseUrl}}/api/auth/complete-task/efcffee8-abc6-4161-9ca3-d17cf2fafe68
+Origin: {{origin}}
