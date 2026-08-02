@@ -11,7 +11,7 @@ import { routes } from "#shared/routes.ts";
 export const homePage = new Hono<{
   Variables: AuthenticatedAppVariables;
 }>().get("/", async (c) => {
-  const username = c.var.account.username;
+  const { username, userId } = c.var.account;
   const headContent = html`
     <script src="/scripts/full-calendar/index.global.min.js" defer></script>
     <script src="/scripts/full-calendar/home-calendar.js" defer></script>
@@ -21,7 +21,7 @@ export const homePage = new Hono<{
   const tasks = await readStore
     .db()
     .collection<TaskDocument>(tasksCollectionName)
-    .find();
+    .find({ userId });
 
   const content = html`
     <h1>Home</h1>

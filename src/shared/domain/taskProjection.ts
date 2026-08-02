@@ -9,6 +9,7 @@ export type TaskDocument = {
   title: string;
   description: string;
   status: "Unknown" | "Active" | "Removed" | "Completed";
+  userId: string;
 };
 
 export function initialState(): TaskDocument {
@@ -17,6 +18,7 @@ export function initialState(): TaskDocument {
     title: "",
     description: "",
     status: "Unknown",
+    userId: "",
   };
 }
 
@@ -37,6 +39,7 @@ export function evolve(document: TaskDocument, event: TaskEvent): TaskDocument {
           title: data.title,
           description: data.description,
           status: "Active",
+          userId: data.userId,
         };
       }
       break;

@@ -17,6 +17,7 @@ const unknownDocument: TaskDocument = {
   title: "",
   description: "",
   status: "Unknown",
+  userId: "",
 };
 
 const activeDocument: TaskDocument = {
@@ -24,6 +25,7 @@ const activeDocument: TaskDocument = {
   title: "title",
   description: "description",
   status: "Active",
+  userId: eventMetadata.userId,
 };
 
 describe("evolve()", () => {
@@ -48,6 +50,7 @@ describe("evolve()", () => {
       title: "title",
       description: "description",
       status: "Active",
+      userId: eventMetadata.userId,
     });
   });
 
@@ -164,6 +167,7 @@ describe("initialState()", () => {
       title: "",
       description: "",
       status: "Unknown",
+      userId: "",
     });
   });
 });
