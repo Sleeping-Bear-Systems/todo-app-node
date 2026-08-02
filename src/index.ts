@@ -3,6 +3,8 @@ import {
   getPostgreSQLEventStore,
   type PostgresEventStoreOptions,
 } from "@event-driven-io/emmett-postgresql";
+import { pongoClient } from "@event-driven-io/pongo";
+import { pgDriver } from "@event-driven-io/pongo/pg";
 import { serve } from "@hono/node-server";
 import { serveStatic } from "@hono/node-server/serve-static";
 import { type Context, Hono } from "hono";
@@ -60,10 +62,20 @@ async function validateJwt(
 createMockUsers();
 
 // create event store
-const options: PostgresEventStoreOptions = {
+const eventStoreOptions: PostgresEventStoreOptions = {
   projections: inlineProjections([taskProjection]),
 };
-const eventStore = getPostgreSQLEventStore(appConfig.postgres.uri, options);
+const eventStore = getPostgreSQLEventStore(
+  appConfig.postgres.uri,
+  eventStoreOptions,
+);
+
+// create read store
+const pongoClientOptions = {
+  driver: pgDriver,
+  connectionString: appConfig.postgres.uri,
+};
+const readStore = pongoClient(pongoClientOptions);
 
 // map API routes
 const apiRoutes = new Hono<{ Variables: AppVariables }>()
@@ -126,6 +138,7 @@ app.use("*", async (c, next) => {
   c.set("logger", logger);
   c.set("clock", systemClock);
   c.set("eventStore", eventStore);
+  c.set("readStore", readStore);
   await next();
 });
 
