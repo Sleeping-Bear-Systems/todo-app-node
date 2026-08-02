@@ -1,4 +1,5 @@
 import type { EventStore } from "@event-driven-io/emmett";
+import type { PongoClient } from "@event-driven-io/pongo";
 import type { RequestIdVariables } from "hono/request-id";
 import type { Logger } from "winston";
 import type { Account } from "./account.ts";
@@ -10,6 +11,7 @@ export type AppVariables = Readonly<{
   clock: Clock;
   logger: Logger;
   eventStore: EventStore;
+  readStore: PongoClient;
 }> &
   RequestIdVariables;
 

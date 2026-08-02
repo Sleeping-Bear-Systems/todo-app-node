@@ -1,8 +1,7 @@
 import { inlineProjections } from "@event-driven-io/emmett";
-import {
-  getPostgreSQLEventStore,
-  type PostgresEventStoreOptions,
-} from "@event-driven-io/emmett-postgresql";
+import { getPostgreSQLEventStore } from "@event-driven-io/emmett-postgresql";
+import { pongoClient } from "@event-driven-io/pongo";
+import { pgDriver } from "@event-driven-io/pongo/pg";
 import { serve } from "@hono/node-server";
 import { serveStatic } from "@hono/node-server/serve-static";
 import { type Context, Hono } from "hono";
@@ -21,13 +20,13 @@ import { loginPage } from "#features/login/loginPage.ts";
 import { logoutApi } from "#features/login/logoutApi.ts";
 import { createMockUsers } from "#features/login/user.ts";
 import { pingApi } from "#features/ping/pingApi.ts";
-import { taskProjection } from "#features/task-projection/taskProjection.ts";
 import { createAppConfig } from "#shared/appConfig.ts";
 import type {
   AppVariables,
   AuthenticatedAppVariables,
 } from "#shared/appVariables.ts";
 import { systemClock } from "#shared/clock.ts";
+import { taskProjection } from "#shared/domain/taskProjection.ts";
 import { routes } from "#shared/routes.ts";
 import { createStructuredLogger } from "#shared/structuredLogger.ts";
 
@@ -60,10 +59,15 @@ async function validateJwt(
 createMockUsers();
 
 // create event store
-const options: PostgresEventStoreOptions = {
+const eventStore = getPostgreSQLEventStore(appConfig.postgres.uri, {
   projections: inlineProjections([taskProjection]),
-};
-const eventStore = getPostgreSQLEventStore(appConfig.postgres.uri, options);
+});
+
+// create read store
+const readStore = pongoClient({
+  driver: pgDriver,
+  connectionString: appConfig.postgres.uri,
+});
 
 // map API routes
 const apiRoutes = new Hono<{ Variables: AppVariables }>()
@@ -126,6 +130,7 @@ app.use("*", async (c, next) => {
   c.set("logger", logger);
   c.set("clock", systemClock);
   c.set("eventStore", eventStore);
+  c.set("readStore", readStore);
   await next();
 });
 
