@@ -52,8 +52,10 @@ export function evolve(document: TaskDocument, event: TaskEvent): TaskDocument {
   return document;
 }
 
+export const tasksCollectionName: string = "tasks";
+
 const options: PongoSingleStreamProjectionOptions<TaskDocument, TaskEvent> = {
-  collectionName: "tasks",
+  collectionName: tasksCollectionName,
   canHandle: ["TaskAdded", "TaskRemoved", "TaskCompleted"],
   getDocumentId: (event) => {
     return event.data.taskId;
