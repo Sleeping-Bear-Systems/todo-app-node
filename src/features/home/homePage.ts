@@ -23,8 +23,6 @@ export const homePage = new Hono<{
     .collection<TaskDocument>(tasksCollectionName)
     .find();
 
-  console.log(tasks);
-
   const content = html`
     <h1>Home</h1>
     <a class="button-link" href="${routes.ADD_TASK_PAGE}">Add Task</a>
