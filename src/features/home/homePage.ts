@@ -46,7 +46,7 @@ export const homePage = new Hono<{
 
     <div hidden>
       <div id="home-calendar"></div>
-    <div>
+    </div>
   `;
 
   return c.html(
