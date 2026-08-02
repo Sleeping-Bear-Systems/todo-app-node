@@ -23,13 +23,13 @@ import { loginPage } from "#features/login/loginPage.ts";
 import { logoutApi } from "#features/login/logoutApi.ts";
 import { createMockUsers } from "#features/login/user.ts";
 import { pingApi } from "#features/ping/pingApi.ts";
-import { taskProjection } from "#features/task-projection/taskProjection.ts";
 import { createAppConfig } from "#shared/appConfig.ts";
 import type {
   AppVariables,
   AuthenticatedAppVariables,
 } from "#shared/appVariables.ts";
 import { systemClock } from "#shared/clock.ts";
+import { taskProjection } from "#shared/domain/taskProjection.ts";
 import { routes } from "#shared/routes.ts";
 import { createStructuredLogger } from "#shared/structuredLogger.ts";
 

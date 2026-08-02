@@ -1,12 +1,10 @@
-import type { PongoCollection } from "@event-driven-io/pongo";
 import { Hono } from "hono";
 import { html } from "hono/html";
+import type { AuthenticatedAppVariables } from "#shared/appVariables.ts";
 import {
   type TaskDocument,
-  taskProjection,
   tasksCollectionName,
-} from "#features/task-projection/taskProjection.ts";
-import type { AuthenticatedAppVariables } from "#shared/appVariables.ts";
+} from "#shared/domain/taskProjection.ts";
 import { Page } from "#shared/page.ts";
 import { routes } from "#shared/routes.ts";
 
