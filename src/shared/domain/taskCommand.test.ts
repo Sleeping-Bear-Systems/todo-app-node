@@ -1,3 +1,4 @@
+import assert from "node:assert";
 import { describe, test } from "node:test";
 import {
   command,
@@ -9,7 +10,6 @@ import { addDays } from "date-fns";
 import { decide, mapToStreamId, type TaskCommand } from "./taskCommand.ts";
 import type { TaskEvent } from "./taskEvent.ts";
 import { evolve, initialState } from "./taskState.ts";
-import assert from "node:assert";
 
 const spec = DeciderSpecification.for({
   decide,
