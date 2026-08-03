@@ -5,7 +5,10 @@ import {
   event,
   IllegalStateError,
 } from "@event-driven-io/emmett";
-import type { CommandMetadata } from "#shared/domain/taskCommand.ts";
+import {
+  type CommandMetadata,
+  mapToStreamId,
+} from "#shared/domain/taskCommand.ts";
 import type { TaskEvent } from "#shared/domain/taskEvent.ts";
 import {
   evolve,
@@ -55,5 +58,5 @@ const addTaskDecider: Decider<TaskState, AddTaskCommand, TaskEvent> = {
 
 export const handle = CommandHandler({
   ...addTaskDecider,
-  mapToStreamId: (id) => `task-${id}`,
+  mapToStreamId,
 });
