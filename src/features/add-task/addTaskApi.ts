@@ -9,11 +9,7 @@ import { html } from "hono/html";
 import z from "zod";
 import type { AuthenticatedAppVariables } from "#shared/appVariables.ts";
 import { isDatastarRequest, sseRedirect } from "#shared/datastar.ts";
-import {
-  decide,
-  handle,
-  type TaskCommand,
-} from "#shared/domain/taskCommand.ts";
+import { handle, type TaskCommand } from "#shared/domain/taskCommand.ts";
 import { routes } from "#shared/routes.ts";
 
 const addTaskRequestSchema = z.object({
@@ -44,14 +40,9 @@ export const addTaskApi = new Hono<{
     },
   };
   try {
-    await handle(
-      eventStore,
-      command.data.taskId,
-      (state) => decide(command, state),
-      {
-        expectedStreamVersion: STREAM_DOES_NOT_EXIST,
-      },
-    );
+    await handle(eventStore, command.data.taskId, command, {
+      expectedStreamVersion: STREAM_DOES_NOT_EXIST,
+    });
     if (isDatastarRequest(c)) {
       return sseRedirect(c, routes.HOME_PAGE);
     }

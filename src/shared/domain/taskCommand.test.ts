@@ -1,4 +1,3 @@
-import assert from "node:assert";
 import { describe, test } from "node:test";
 import {
   command,
@@ -7,7 +6,7 @@ import {
   IllegalStateError,
 } from "@event-driven-io/emmett";
 import { addDays } from "date-fns";
-import { decide, mapToStreamId, type TaskCommand } from "./taskCommand.ts";
+import { decide, type TaskCommand } from "./taskCommand.ts";
 import type { TaskEvent } from "./taskEvent.ts";
 import { evolve, initialState } from "./taskState.ts";
 
@@ -433,21 +432,5 @@ describe("CompleteTask", () => {
         IllegalStateError,
         (error) => error.message === "State is not AddedTask",
       );
-  });
-});
-
-describe("mapToStreamId()", () => {
-  test("prefixes task id with task-", () => {
-    const taskId = "3d1b3bf1-33fb-44be-ad48-6850f2c74b20";
-
-    const streamId = mapToStreamId(taskId);
-
-    assert.equal(streamId, `task-${taskId}`);
-  });
-
-  test("returns task- for empty task id", () => {
-    const streamId = mapToStreamId("");
-
-    assert.equal(streamId, "task-");
   });
 });

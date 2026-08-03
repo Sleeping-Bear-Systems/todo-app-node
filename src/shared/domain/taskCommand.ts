@@ -1,7 +1,6 @@
 import {
   type Command,
-  CommandHandler,
-  type Decider,
+  DeciderCommandHandler,
   event,
   IllegalStateError,
 } from "@event-driven-io/emmett";
@@ -114,22 +113,14 @@ export function decide(command: TaskCommand, state: TaskState): TaskEvent[] {
   }
 }
 
-/**
- * Maps the Task ID to the Task stream ID.
- * @param id Task ID.
- * @returns Task stream ID.
- */
-export function mapToStreamId(id: string): string {
-  return `task-${id}`;
-}
-
-const taskDecider: Decider<TaskState, TaskCommand, TaskEvent> = {
+export const handle = DeciderCommandHandler<
+  TaskState,
+  TaskCommand,
+  TaskEvent,
+  TaskEvent
+>({
   evolve,
   initialState,
   decide,
-};
-
-export const handle = CommandHandler({
-  ...taskDecider,
-  mapToStreamId,
+  mapToStreamId: (id: string): string => `task-${id}`,
 });
