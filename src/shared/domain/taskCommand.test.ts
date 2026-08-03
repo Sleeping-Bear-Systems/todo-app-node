@@ -28,12 +28,6 @@ const eventMetadata = {
 };
 
 describe("AddTask", () => {
-  const spec = DeciderSpecification.for({
-    decide,
-    evolve,
-    initialState,
-  });
-
   const addTaskCommand = command<TaskCommand>(
     "AddTask",
     { taskId, title: "title", description: "description", addedOn: now },
