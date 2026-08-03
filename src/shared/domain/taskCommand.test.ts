@@ -27,6 +27,143 @@ const eventMetadata = {
   now,
 };
 
+describe("AddTask", () => {
+  const spec = DeciderSpecification.for({
+    decide,
+    evolve,
+    initialState,
+  });
+
+  const addTaskCommand = command<TaskCommand>(
+    "AddTask",
+    { taskId, title: "title", description: "description", addedOn: now },
+    { now, userId, correlationId },
+  );
+
+  test("UnknownTask state returns TaskAdded event", () => {
+    spec([])
+      .when(addTaskCommand)
+      .then(
+        event<TaskEvent>(
+          "TaskAdded",
+          {
+            taskId,
+            title: "title",
+            description: "description",
+            addedOn: now,
+            userId,
+          },
+          eventMetadata,
+        ),
+      );
+  });
+
+  test("UnknownTask state uses metadata.now when addedOn is omitted", () => {
+    spec([])
+      .when(
+        command<TaskCommand>(
+          "AddTask",
+          { taskId, title: "title", description: "description" },
+          { now, userId, correlationId },
+        ),
+      )
+      .then(
+        event<TaskEvent>(
+          "TaskAdded",
+          {
+            taskId,
+            title: "title",
+            description: "description",
+            addedOn: now,
+            userId,
+          },
+          eventMetadata,
+        ),
+      );
+  });
+
+  test("AddedTask state throws IllegalStateError", () => {
+    spec([
+      event<TaskEvent>(
+        "TaskAdded",
+        {
+          taskId,
+          title: "title",
+          description: "description",
+          userId,
+          addedOn: addDays(now, -1),
+        },
+        eventMetadata,
+      ),
+    ])
+      .when(addTaskCommand)
+      .thenThrows(
+        IllegalStateError,
+        (error) => error.message === "State is not UnknownTask",
+      );
+  });
+
+  test("CompletedTask state throws IllegalStateError", () => {
+    spec([
+      event<TaskEvent>(
+        "TaskAdded",
+        {
+          taskId,
+          title: "title",
+          description: "description",
+          userId,
+          addedOn: addDays(now, -2),
+        },
+        eventMetadata,
+      ),
+      event<TaskEvent>(
+        "TaskCompleted",
+        {
+          taskId,
+          completedOn: addDays(now, -1),
+          userId,
+        },
+        eventMetadata,
+      ),
+    ])
+      .when(addTaskCommand)
+      .thenThrows(
+        IllegalStateError,
+        (error) => error.message === "State is not UnknownTask",
+      );
+  });
+
+  test("RemovedTask state throws IllegalStateError", () => {
+    spec([
+      event<TaskEvent>(
+        "TaskAdded",
+        {
+          taskId,
+          title: "title",
+          description: "description",
+          userId,
+          addedOn: addDays(now, -2),
+        },
+        eventMetadata,
+      ),
+      event<TaskEvent>(
+        "TaskRemoved",
+        {
+          taskId,
+          removedOn: addDays(now, -1),
+          userId,
+        },
+        eventMetadata,
+      ),
+    ])
+      .when(addTaskCommand)
+      .thenThrows(
+        IllegalStateError,
+        (error) => error.message === "State is not UnknownTask",
+      );
+  });
+});
+
 describe("RemoveTask", () => {
   const removeTaskCommand = command<TaskCommand>(
     "RemoveTask",

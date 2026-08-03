@@ -9,8 +9,12 @@ import { html } from "hono/html";
 import z from "zod";
 import type { AuthenticatedAppVariables } from "#shared/appVariables.ts";
 import { isDatastarRequest, sseRedirect } from "#shared/datastar.ts";
+import {
+  decide,
+  handle,
+  type TaskCommand,
+} from "#shared/domain/taskCommand.ts";
 import { routes } from "#shared/routes.ts";
-import { type AddTaskCommand, decide, handle } from "./addTaskCommand.ts";
 
 const addTaskRequestSchema = z.object({
   title: z.string().nonempty(),
@@ -26,7 +30,7 @@ export const addTaskApi = new Hono<{
   const eventStore = c.var.eventStore;
   const { title, description } = c.req.valid("form");
 
-  const command: AddTaskCommand = {
+  const command: TaskCommand = {
     type: "AddTask",
     data: {
       taskId: randomUUID(),
