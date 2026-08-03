@@ -1,10 +1,12 @@
 import {
   type Command,
+  CommandHandler,
+  type Decider,
   event,
   IllegalStateError,
 } from "@event-driven-io/emmett";
 import type { TaskEvent } from "./taskEvent.ts";
-import type { TaskState } from "./taskState.ts";
+import { evolve, initialState, type TaskState } from "./taskState.ts";
 
 export type CommandMetadata = Readonly<{
   correlationId: string;
@@ -28,11 +30,43 @@ export type TaskCommand =
         completedOn?: Date;
       },
       CommandMetadata
+    >
+  | Command<
+      "AddTask",
+      {
+        taskId: string;
+        title: string;
+        description: string;
+        addedOn?: Date;
+      },
+      CommandMetadata
     >;
 
 export function decide(command: TaskCommand, state: TaskState): TaskEvent[] {
   const { type, data, metadata } = command;
   switch (type) {
+    case "AddTask": {
+      if (state.status !== "UnknownTask") {
+        throw new IllegalStateError("State is not UnknownTask");
+      }
+      return [
+        event<TaskEvent>(
+          "TaskAdded",
+          {
+            taskId: command.data.taskId,
+            title: command.data.title,
+            description: command.data.description,
+            addedOn: command.data.addedOn ?? command.metadata.now,
+            userId: command.metadata.userId,
+          },
+          {
+            userId: command.metadata.userId,
+            correlationId: command.metadata.correlationId,
+            now: command.metadata.now,
+          },
+        ),
+      ];
+    }
     case "RemoveTask": {
       if (state.status !== "AddedTask") {
         throw new IllegalStateError("State is not AddedTask");
@@ -88,3 +122,14 @@ export function decide(command: TaskCommand, state: TaskState): TaskEvent[] {
 export function mapToStreamId(id: string): string {
   return `task-${id}`;
 }
+
+const taskDecider: Decider<TaskState, TaskCommand, TaskEvent> = {
+  evolve,
+  initialState,
+  decide,
+};
+
+export const handle = CommandHandler({
+  ...taskDecider,
+  mapToStreamId,
+});
