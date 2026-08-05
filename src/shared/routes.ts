@@ -6,7 +6,6 @@ export const routes = {
   LOGIN_PAGE: "/login",
 
   // API routes
-  ADD_TASK_API: "/api/auth/add-task",
   LOGIN_API: "/api/login",
   LOGOUT_API: "/api/logout",
 } as const;

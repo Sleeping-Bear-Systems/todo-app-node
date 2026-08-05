@@ -12,7 +12,6 @@ import { requestId } from "hono/request-id";
 import { secureHeaders } from "hono/secure-headers";
 import z from "zod";
 import { aboutPage } from "#features/about/aboutPage.ts";
-import { addTaskApi } from "#features/add-task/addTaskApi.ts";
 import { addTaskPage } from "#features/add-task/addTaskPage.ts";
 import { homePage } from "#features/home/homePage.ts";
 import { loginApi } from "#features/login/loginApi.ts";
@@ -78,17 +77,15 @@ const apiRoutes = new Hono<{ Variables: AppVariables }>()
 // map authenticated API route
 const authenticatedApiRoutes = new Hono<{
   Variables: AuthenticatedAppVariables;
-}>()
-  .use("/*", async (c, next) => {
-    try {
-      await validateJwt(c);
-    } catch {
-      return c.json({ message: "Unauthorized" }, 401);
-    }
-    await next();
-    return;
-  })
-  .route("/add-task", addTaskApi);
+}>().use("/*", async (c, next) => {
+  try {
+    await validateJwt(c);
+  } catch {
+    return c.json({ message: "Unauthorized" }, 401);
+  }
+  await next();
+  return;
+});
 
 // map page routes
 const pageRoutes = new Hono<{ Variables: AppVariables }>().route(

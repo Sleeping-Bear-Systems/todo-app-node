@@ -46,7 +46,7 @@ test("Authenticated user can submit add-task form", async ({ page }) => {
   const [response] = await Promise.all([
     page.waitForResponse(
       (candidate) =>
-        candidate.url().endsWith("/api/auth/add-task") &&
+        candidate.url().endsWith("/auth/add-task") &&
         candidate.request().method() === "POST",
     ),
     page.getByRole("button", { name: "Add" }).click(),
