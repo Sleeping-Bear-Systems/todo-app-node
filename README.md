@@ -126,3 +126,11 @@ This repository includes two Jenkins pipeline definitions:
 
 - `Jenkinsfile`: fast CI (install, build, lint, unit tests)
 - `Jenkinsfile.e2e`: Playwright E2E tests
+
+## Upgrade Cadence
+
+To check for packages upgrades:
+
+```pwsh
+npx npm-check-updates
+```
