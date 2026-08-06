@@ -40,13 +40,16 @@ test("Authenticated user can submit add-task form", async ({ page }) => {
   await signInAsAdmin(page);
   await page.goto("/auth/add-task");
 
-  await page.getByLabel("Title").fill("Buy milk");
-  await page.getByLabel("Description").fill("2 liters");
+  const taskTitle = `Buy milk ${Date.now()}`;
+  const taskDescription = "2 liters";
+
+  await page.getByLabel("Title").fill(taskTitle);
+  await page.getByLabel("Description").fill(taskDescription);
 
   const [response] = await Promise.all([
     page.waitForResponse(
       (candidate) =>
-        candidate.url().endsWith("/api/auth/add-task") &&
+        candidate.url().endsWith("/auth/add-task") &&
         candidate.request().method() === "POST",
     ),
     page.getByRole("button", { name: "Add" }).click(),
@@ -57,4 +60,13 @@ test("Authenticated user can submit add-task form", async ({ page }) => {
   await expect(
     page.getByRole("heading", { level: 1, name: "Home" }),
   ).toBeVisible();
+  const taskRow = page.locator("tr", {
+    has: page.getByRole("cell", { name: taskTitle }),
+  });
+
+  await expect(taskRow).toBeVisible();
+  await expect(
+    taskRow.getByRole("cell", { name: taskDescription }),
+  ).toBeVisible();
+  await expect(taskRow.getByRole("cell", { name: "Active" })).toBeVisible();
 });
