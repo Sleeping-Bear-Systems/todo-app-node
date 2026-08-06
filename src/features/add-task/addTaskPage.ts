@@ -1,5 +1,5 @@
 import { randomUUID } from "node:crypto";
-import { STREAM_DOES_NOT_EXIST } from "@event-driven-io/emmett";
+import { command, STREAM_DOES_NOT_EXIST } from "@event-driven-io/emmett";
 import { zValidator } from "@hono/zod-validator";
 import { Hono } from "hono";
 import { html } from "hono/html";
@@ -59,6 +59,7 @@ export const addTaskPage = new Hono<{
     );
   })
   .post("/", zValidator("form", addTaskRequestSchema), async (c) => {
+    // check Datastar request
     if (!isDatastarRequest(c)) {
       return c.json({ message: "Datastar request required" }, 400);
     }
@@ -70,21 +71,21 @@ export const addTaskPage = new Hono<{
     const logger = c.var.logger;
     const { title, description } = c.req.valid("form");
 
-    const command: TaskCommand = {
-      type: "AddTask",
-      data: {
+    const addTaskCommand: TaskCommand = command<TaskCommand>(
+      "AddTask",
+      {
         taskId: randomUUID(),
         title: title,
         description: description,
       },
-      metadata: {
+      {
         now,
         userId,
         correlationId: requestId,
       },
-    };
+    );
     try {
-      await handle(eventStore, command.data.taskId, command, {
+      await handle(eventStore, addTaskCommand.data.taskId, addTaskCommand, {
         expectedStreamVersion: STREAM_DOES_NOT_EXIST,
       });
       return sseRedirect(c, routes.HOME_PAGE);
