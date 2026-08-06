@@ -129,7 +129,7 @@ This repository includes two Jenkins pipeline definitions:
 
 ## Upgrade Cadence
 
-To check for packages upgrades:
+To check for package upgrades:
 
 ```pwsh
 npx npm-check-updates
