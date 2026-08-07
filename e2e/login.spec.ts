@@ -40,6 +40,41 @@ test("Invalid credentials render inline login error", async ({ page }) => {
   await expect(page.locator("#errors")).toContainText("Invalid Credentials");
 });
 
+test("Authenticated users are redirected away from /login", async ({
+  page,
+}) => {
+  await signInAsAdmin(page);
+  await expect(page).toHaveURL(/\/auth\/home$/);
+  await page.goto("/login");
+  await expect(page).toHaveURL(/\/auth\/home$/);
+  await expect(
+    page.getByRole("heading", { level: 1, name: "Home" }),
+  ).toBeVisible();
+});
+
+test("Empty login submission is blocked before sending the request", async ({
+  page,
+}) => {
+  await page.goto("/login");
+  await page.getByRole("button", { name: "Sign in" }).click();
+
+  await expect(page).toHaveURL(/\/login$/);
+  await expect(page.getByLabel("Username")).toBeVisible();
+  await expect(page.getByLabel("Password")).toBeVisible();
+});
+
+test("Short usernames and passwords are blocked by client-side validation", async ({
+  page,
+}) => {
+  await page.goto("/login");
+  await page.getByLabel("Username").fill("ab");
+  await page.getByLabel("Password").fill("short");
+  await page.getByRole("button", { name: "Sign in" }).click();
+
+  await expect(page).toHaveURL(/\/login$/);
+  await expect(page.locator("#errors")).toHaveText("");
+});
+
 test("Valid credentials sign in from login form and redirect to home", async ({
   page,
 }) => {
