@@ -44,8 +44,8 @@ test("Authenticated users are redirected away from /login", async ({
   page,
 }) => {
   await signInAsAdmin(page);
+  await expect(page).toHaveURL(/\/auth\/home$/);
   await page.goto("/login");
-
   await expect(page).toHaveURL(/\/auth\/home$/);
   await expect(
     page.getByRole("heading", { level: 1, name: "Home" }),
