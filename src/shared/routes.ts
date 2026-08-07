@@ -6,6 +6,5 @@ export const routes = {
   LOGIN_PAGE: "/login",
 
   // API routes
-  LOGIN_API: "/api/login",
   LOGOUT_API: "/api/logout",
 } as const;

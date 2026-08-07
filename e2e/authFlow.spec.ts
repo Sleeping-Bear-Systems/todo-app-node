@@ -31,28 +31,20 @@ test("GET / redirects authenticated users to /auth/home", async ({ page }) => {
 });
 
 test("POST /api/logout clears auth cookie and redirects to /login", async ({
+  page,
   request,
 }) => {
   const baseURL = test.info().project.use.baseURL;
   expect(typeof baseURL).toBe("string");
   const origin = new URL(baseURL as string).origin;
 
-  const loginResponse = await request.fetch("/api/login", {
-    method: "POST",
-    form: {
-      username: "admin",
-      password: "password1234",
-    },
-    headers: {
-      origin,
-    },
-    maxRedirects: 0,
-  });
+  await signInAsAdmin(page);
 
-  const loginSetCookie = loginResponse.headers()["set-cookie"] ?? "";
-  expect(loginSetCookie).toContain(`${authCookieName}=`);
+  const cookies = await page.context().cookies();
+  const authCookie = cookies.find((cookie) => cookie.name === authCookieName);
+  expect(authCookie).toBeDefined();
+  const authCookiePair = `${authCookie!.name}=${authCookie!.value}`;
 
-  const authCookiePair = loginSetCookie.split(";")[0] ?? "";
   const logoutResponse = await request.fetch("/api/logout", {
     method: "POST",
     headers: {
