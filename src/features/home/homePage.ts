@@ -1,4 +1,4 @@
-import { command, type HandleOptions } from "@event-driven-io/emmett";
+import { command } from "@event-driven-io/emmett";
 import { Hono } from "hono";
 import { html } from "hono/html";
 import type { AuthenticatedAppVariables } from "#shared/appVariables.ts";
