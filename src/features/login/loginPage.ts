@@ -1,9 +1,9 @@
 import { zValidator } from "@hono/zod-validator";
 import { addDays } from "date-fns";
 import { Hono } from "hono";
-import { setCookie } from "hono/cookie";
+import { getCookie, setCookie } from "hono/cookie";
 import { html } from "hono/html";
-import { sign } from "hono/jwt";
+import { sign, verify } from "hono/jwt";
 import z from "zod";
 import type { AppVariables } from "#shared/appVariables.ts";
 import { isDatastarRequest, sseRedirect } from "#shared/datastar.ts";
@@ -17,7 +17,19 @@ const loginRequestSchema = z.object({
 });
 
 export const loginPage = new Hono<{ Variables: AppVariables }>()
-  .get("/", (c) => {
+  .get("/", async (c) => {
+    const appConfig = c.var.appConfig;
+    const token = getCookie(c, appConfig.jwt.cookieName);
+
+    if (token) {
+      try {
+        await verify(token, appConfig.jwt.secretKey, "HS256");
+        return c.redirect(routes.HOME_PAGE);
+      } catch {
+        // fall through to render the login form
+      }
+    }
+
     const content = html`
       <h1>Login</h1>
       <form
