@@ -43,7 +43,7 @@ test("POST /api/logout clears auth cookie and redirects to /login", async ({
   const cookies = await page.context().cookies();
   const authCookie = cookies.find((cookie) => cookie.name === authCookieName);
   expect(authCookie).toBeDefined();
-  const authCookiePair = `${authCookie!.name}=${authCookie!.value}`;
+  const authCookiePair = `${authCookie?.name ?? ""}=${authCookie?.value ?? ""}`;
 
   const logoutResponse = await request.fetch("/api/logout", {
     method: "POST",
