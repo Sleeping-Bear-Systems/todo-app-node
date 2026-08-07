@@ -44,7 +44,7 @@ export const homePage = new Hono<{
   })
   .get("/get-tasks", async (c) => {
     if (!isDatastarRequest(c)) {
-      return c.json("Datastar request required", 400);
+      return c.json({ message: "Datastar request required" }, 400);
     }
     const { userId } = c.var.account;
     const readStore = c.var.readStore;
