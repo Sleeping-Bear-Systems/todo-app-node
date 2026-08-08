@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
 import { describe, test } from "node:test";
 import { event } from "@event-driven-io/emmett";
+import { addDays } from "date-fns";
 import type { TaskEvent } from "#shared/domain/taskEvent.ts";
 import { evolve, initialState, type TaskDocument } from "./taskProjection.ts";
 
@@ -18,6 +19,7 @@ const unknownDocument: TaskDocument = {
   description: "",
   status: "Unknown",
   userId: "",
+  addedOn: new Date(0),
 };
 
 const activeDocument: TaskDocument = {
@@ -26,6 +28,7 @@ const activeDocument: TaskDocument = {
   description: "description",
   status: "Active",
   userId: eventMetadata.userId,
+  addedOn: now,
 };
 
 describe("evolve()", () => {
@@ -51,6 +54,7 @@ describe("evolve()", () => {
       description: "description",
       status: "Active",
       userId: eventMetadata.userId,
+      addedOn: now,
     });
   });
 
@@ -74,13 +78,14 @@ describe("evolve()", () => {
   });
 
   test("TaskRemoved transitions Active to Removed", () => {
+    const removedOn = addDays(now, 1);
     const result = evolve(
       activeDocument,
       event<TaskEvent>(
         "TaskRemoved",
         {
           taskId,
-          removedOn: now,
+          removedOn,
           userId: eventMetadata.userId,
         },
         eventMetadata,
@@ -90,13 +95,16 @@ describe("evolve()", () => {
     assert.deepEqual(result, {
       ...activeDocument,
       status: "Removed",
+      removedOn,
     });
   });
 
   test("TaskRemoved does not change non-Active state", () => {
+    const removedOn = addDays(now, 1);
     const removedDocument: TaskDocument = {
       ...activeDocument,
       status: "Removed",
+      removedOn,
     };
 
     const result = evolve(
@@ -105,7 +113,7 @@ describe("evolve()", () => {
         "TaskRemoved",
         {
           taskId,
-          removedOn: now,
+          removedOn,
           userId: eventMetadata.userId,
         },
         eventMetadata,
@@ -116,13 +124,14 @@ describe("evolve()", () => {
   });
 
   test("TaskCompleted transitions Active to Completed", () => {
+    const completedOn = addDays(now, 1);
     const result = evolve(
       activeDocument,
       event<TaskEvent>(
         "TaskCompleted",
         {
           taskId,
-          completedOn: now,
+          completedOn,
           userId: eventMetadata.userId,
         },
         eventMetadata,
@@ -132,13 +141,16 @@ describe("evolve()", () => {
     assert.deepEqual(result, {
       ...activeDocument,
       status: "Completed",
+      completedOn,
     });
   });
 
   test("TaskCompleted does not change non-Active state", () => {
+    const completedOn = addDays(now, 1);
     const completedDocument: TaskDocument = {
       ...activeDocument,
       status: "Completed",
+      completedOn,
     };
 
     const result = evolve(
@@ -147,7 +159,7 @@ describe("evolve()", () => {
         "TaskCompleted",
         {
           taskId,
-          completedOn: now,
+          completedOn,
           userId: eventMetadata.userId,
         },
         eventMetadata,
@@ -168,6 +180,7 @@ describe("initialState()", () => {
       description: "",
       status: "Unknown",
       userId: "",
+      addedOn: new Date(0),
     });
   });
 });
