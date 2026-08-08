@@ -3,22 +3,44 @@ import {
   DeciderCommandHandler,
   event,
   IllegalStateError,
+  skipOn,
 } from "@event-driven-io/emmett";
-import type { TaskEvent } from "./taskEvent.ts";
+import type { EventMetadata, TaskEvent } from "./taskEvent.ts";
 import { evolve, initialState, type TaskState } from "./taskState.ts";
 
+/**
+ * Command metadata.
+ */
 export type CommandMetadata = Readonly<{
   correlationId: string;
   now: Date;
   userId: string;
 }>;
 
+/**
+ * Converts a CommandMetadata instance into an EventMetadata instance.
+ * @param commandMetadata The command metadata to convert.
+ * @returns The event metadata derived from the command metadata.
+ */
+export function toEventMetadata(
+  commandMetadata: CommandMetadata,
+): EventMetadata {
+  return {
+    userId: commandMetadata.userId,
+    now: commandMetadata.now,
+    correlationId: commandMetadata.correlationId,
+  };
+}
+
+/**
+ * Task commands.
+ */
 export type TaskCommand =
   | Command<
       "RemoveTask",
       {
         taskId: string;
-        removedOn?: Date;
+        removedOn: Date;
       },
       CommandMetadata
     >
@@ -26,7 +48,7 @@ export type TaskCommand =
       "CompleteTask",
       {
         taskId: string;
-        completedOn?: Date;
+        completedOn: Date;
       },
       CommandMetadata
     >
@@ -43,6 +65,7 @@ export type TaskCommand =
 
 export function decide(command: TaskCommand, state: TaskState): TaskEvent[] {
   const { type, data, metadata } = command;
+  const eventMetadata = toEventMetadata(metadata);
   switch (type) {
     case "AddTask": {
       if (state.status !== "UnknownTask") {
@@ -52,57 +75,75 @@ export function decide(command: TaskCommand, state: TaskState): TaskEvent[] {
         event<TaskEvent>(
           "TaskAdded",
           {
-            taskId: command.data.taskId,
-            title: command.data.title,
-            description: command.data.description,
-            addedOn: command.data.addedOn ?? command.metadata.now,
-            userId: command.metadata.userId,
+            taskId: data.taskId,
+            title: data.title,
+            description: data.description,
+            addedOn: data.addedOn ?? metadata.now,
+            userId: metadata.userId,
           },
-          {
-            userId: command.metadata.userId,
-            correlationId: command.metadata.correlationId,
-            now: command.metadata.now,
-          },
+          eventMetadata,
         ),
       ];
     }
     case "RemoveTask": {
       if (state.status !== "AddedTask") {
-        throw new IllegalStateError("State is not AddedTask");
+        return [
+          event<TaskEvent>(
+            "TaskIsNotActive",
+            { taskId: data.taskId },
+            eventMetadata,
+          ),
+        ];
+      }
+      if (state.userId !== metadata.userId) {
+        return [
+          event<TaskEvent>(
+            "UserDoesNotOwnTask",
+            { taskId: data.taskId },
+            eventMetadata,
+          ),
+        ];
       }
       return [
         event<TaskEvent>(
           "TaskRemoved",
           {
             taskId: data.taskId,
-            removedOn: data.removedOn ?? metadata.now,
+            removedOn: data.removedOn,
             userId: metadata.userId,
           },
-          {
-            userId: metadata.userId,
-            correlationId: metadata.correlationId,
-            now: metadata.now,
-          },
+          eventMetadata,
         ),
       ];
     }
     case "CompleteTask": {
       if (state.status !== "AddedTask") {
-        throw new IllegalStateError("State is not AddedTask");
+        return [
+          event<TaskEvent>(
+            "TaskIsNotActive",
+            { taskId: data.taskId },
+            eventMetadata,
+          ),
+        ];
+      }
+      if (state.userId !== metadata.userId) {
+        return [
+          event<TaskEvent>(
+            "UserDoesNotOwnTask",
+            { taskId: data.taskId },
+            eventMetadata,
+          ),
+        ];
       }
       return [
         event<TaskEvent>(
           "TaskCompleted",
           {
             taskId: data.taskId,
-            completedOn: data.completedOn ?? metadata.now,
+            completedOn: data.completedOn,
             userId: metadata.userId,
           },
-          {
-            userId: metadata.userId,
-            correlationId: metadata.correlationId,
-            now: metadata.now,
-          },
+          eventMetadata,
         ),
       ];
     }
@@ -123,4 +164,10 @@ export const handle = DeciderCommandHandler<
   initialState,
   decide,
   mapToStreamId: (id: string): string => `task-${id}`,
+  middleware: [
+    skipOn(
+      (event) =>
+        event.type === "TaskIsNotActive" || event.type === "UserDoesNotOwnTask",
+    ),
+  ],
 });

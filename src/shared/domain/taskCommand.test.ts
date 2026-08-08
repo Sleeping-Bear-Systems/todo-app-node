@@ -1,3 +1,4 @@
+import assert from "node:assert/strict";
 import { describe, test } from "node:test";
 import {
   command,
@@ -6,7 +7,7 @@ import {
   IllegalStateError,
 } from "@event-driven-io/emmett";
 import { addDays } from "date-fns";
-import { decide, type TaskCommand } from "./taskCommand.ts";
+import { decide, type TaskCommand, toEventMetadata } from "./taskCommand.ts";
 import type { TaskEvent } from "./taskEvent.ts";
 import { evolve, initialState } from "./taskState.ts";
 
@@ -20,17 +21,38 @@ const taskId = "3d1b3bf1-33fb-44be-ad48-6850f2c74b20";
 const now = new Date("2026-06-09T00:27:19.000Z");
 const userId = "b8835ccf-58ca-4720-985e-a71168d4e5bc";
 const correlationId = "57c64c56-5034-4918-b9f1-2d56f438b276";
-const eventMetadata = {
+const commandMetadata = {
   userId,
   correlationId,
   now,
 };
+const eventMetadata = toEventMetadata(commandMetadata);
+
+describe("toEventMetadata", () => {
+  test("maps command metadata fields to event metadata", () => {
+    assert.deepEqual(toEventMetadata({ now, userId, correlationId }), {
+      now,
+      userId,
+      correlationId,
+    });
+  });
+
+  test("returns metadata containing only expected fields", () => {
+    const metadata = toEventMetadata({ now, userId, correlationId });
+
+    assert.deepEqual(Object.keys(metadata).sort(), [
+      "correlationId",
+      "now",
+      "userId",
+    ]);
+  });
+});
 
 describe("AddTask", () => {
   const addTaskCommand = command<TaskCommand>(
     "AddTask",
     { taskId, title: "title", description: "description", addedOn: now },
-    { now, userId, correlationId },
+    commandMetadata,
   );
 
   test("UnknownTask state returns TaskAdded event", () => {
@@ -57,7 +79,7 @@ describe("AddTask", () => {
         command<TaskCommand>(
           "AddTask",
           { taskId, title: "title", description: "description" },
-          { now, userId, correlationId },
+          commandMetadata,
         ),
       )
       .then(
@@ -161,7 +183,7 @@ describe("RemoveTask", () => {
   const removeTaskCommand = command<TaskCommand>(
     "RemoveTask",
     { taskId, removedOn: now },
-    { now, userId, correlationId },
+    commandMetadata,
   );
 
   test("AddedTask state returns TaskRemoved event", () => {
@@ -192,50 +214,19 @@ describe("RemoveTask", () => {
       );
   });
 
-  test("AddedTask state uses metadata.now when removedOn is omitted", () => {
-    spec([
-      event<TaskEvent>(
-        "TaskAdded",
-        {
-          taskId,
-          title: "title",
-          description: "description",
-          userId,
-          addedOn: addDays(now, -1),
-        },
-        eventMetadata,
-      ),
-    ])
-      .when(
-        command<TaskCommand>(
-          "RemoveTask",
-          { taskId },
-          { now, userId, correlationId },
-        ),
-      )
+  test("UnknownTask state returns TaskIsNotActive event", () => {
+    spec([])
+      .when(removeTaskCommand)
       .then(
         event<TaskEvent>(
-          "TaskRemoved",
-          {
-            taskId,
-            removedOn: now,
-            userId,
-          },
+          "TaskIsNotActive",
+          { taskId: removeTaskCommand.data.taskId },
           eventMetadata,
         ),
       );
   });
 
-  test("UnknownTask state throws IllegalStateError", () => {
-    spec([])
-      .when(removeTaskCommand)
-      .thenThrows(
-        IllegalStateError,
-        (error) => error.message === "State is not AddedTask",
-      );
-  });
-
-  test("CompletedTask state throws IllegalStateError", () => {
+  test("CompletedTask state returnsTaskIsNotActive event", () => {
     spec([
       event<TaskEvent>(
         "TaskAdded",
@@ -259,13 +250,16 @@ describe("RemoveTask", () => {
       ),
     ])
       .when(removeTaskCommand)
-      .thenThrows(
-        IllegalStateError,
-        (error) => error.message === "State is not AddedTask",
-      );
+      .then([
+        event<TaskEvent>(
+          "TaskIsNotActive",
+          { taskId: removeTaskCommand.data.taskId },
+          eventMetadata,
+        ),
+      ]);
   });
 
-  test("RemovedTask state throws IllegalStateError", () => {
+  test("RemovedTask state returns TaskIsNotActive event", () => {
     spec([
       event<TaskEvent>(
         "TaskAdded",
@@ -289,10 +283,13 @@ describe("RemoveTask", () => {
       ),
     ])
       .when(removeTaskCommand)
-      .thenThrows(
-        IllegalStateError,
-        (error) => error.message === "State is not AddedTask",
-      );
+      .then([
+        event<TaskEvent>(
+          "TaskIsNotActive",
+          { taskId: removeTaskCommand.data.taskId },
+          eventMetadata,
+        ),
+      ]);
   });
 });
 
@@ -331,50 +328,19 @@ describe("CompleteTask", () => {
       );
   });
 
-  test("AddedTask state uses metadata.now when completedOn is omitted", () => {
-    spec([
-      event<TaskEvent>(
-        "TaskAdded",
-        {
-          taskId,
-          title: "title",
-          description: "description",
-          userId,
-          addedOn: addDays(now, -1),
-        },
-        eventMetadata,
-      ),
-    ])
-      .when(
-        command<TaskCommand>(
-          "CompleteTask",
-          { taskId },
-          { now, userId, correlationId },
-        ),
-      )
-      .then(
-        event<TaskEvent>(
-          "TaskCompleted",
-          {
-            taskId,
-            completedOn: now,
-            userId,
-          },
-          eventMetadata,
-        ),
-      );
-  });
-
-  test("UnknownTask state throws IllegalStateError", () => {
+  test("UnknownTask state returns TaskIsNotActive event", () => {
     spec([])
       .when(completeTaskCommand)
-      .thenThrows(
-        IllegalStateError,
-        (error) => error.message === "State is not AddedTask",
-      );
+      .then([
+        event<TaskEvent>(
+          "TaskIsNotActive",
+          { taskId: completeTaskCommand.data.taskId },
+          eventMetadata,
+        ),
+      ]);
   });
 
-  test("CompletedTask state throws IllegalStateError", () => {
+  test("CompletedTask state returns TaskIsNotActive event", () => {
     spec([
       event<TaskEvent>(
         "TaskAdded",
@@ -398,13 +364,16 @@ describe("CompleteTask", () => {
       ),
     ])
       .when(completeTaskCommand)
-      .thenThrows(
-        IllegalStateError,
-        (error) => error.message === "State is not AddedTask",
-      );
+      .then([
+        event<TaskEvent>(
+          "TaskIsNotActive",
+          { taskId: completeTaskCommand.data.taskId },
+          eventMetadata,
+        ),
+      ]);
   });
 
-  test("RemovedTask state throws IllegalStateError", () => {
+  test("RemovedTask state returns TaskIsNotActive event", () => {
     spec([
       event<TaskEvent>(
         "TaskAdded",
@@ -428,9 +397,12 @@ describe("CompleteTask", () => {
       ),
     ])
       .when(completeTaskCommand)
-      .thenThrows(
-        IllegalStateError,
-        (error) => error.message === "State is not AddedTask",
-      );
+      .then([
+        event<TaskEvent>(
+          "TaskIsNotActive",
+          { taskId: completeTaskCommand.data.taskId },
+          eventMetadata,
+        ),
+      ]);
   });
 });

@@ -89,7 +89,8 @@ export const homePage = new Hono<{
           )}
         </table>
       </div>
-      `;
+      <div id="errors"></div>
+    `;
     return c.html(content);
   })
   .post("/complete-task/:id", async (c) => {
@@ -118,7 +119,7 @@ export const homePage = new Hono<{
       },
     );
     try {
-      await handle(eventStore, taskId, completeTaskCommand, {});
+      await handle(eventStore, taskId, completeTaskCommand);
       return sseRedirect(c, routes.HOME_PAGE);
     } catch (error) {
       logger.error(error);
