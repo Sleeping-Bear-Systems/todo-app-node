@@ -63,7 +63,8 @@ export const homePage = new Hono<{
             <th>Title</th>
             <th>Description</th>
             <th>Status</th>
-            <th>Action</th>
+            <th>Added On</th>
+            <th></th>
           </tr>
           ${tasks.map(
             (d) => html`
@@ -71,6 +72,7 @@ export const homePage = new Hono<{
               <td>${d.title}</td>
               <td>${d.description}</td>
               <td>${d.status}</td>
+              <td>${d.addedOn}</td>
               <td class="task-actions">
                 ${
                   d.status === "Active"
