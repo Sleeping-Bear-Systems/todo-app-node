@@ -134,3 +134,9 @@ To check for package upgrades:
 ```pwsh
 npx npm-check-updates
 ```
+
+## References
+
+### Icons
+
+[Plump Line - Free](https://www.streamlinehq.com/icons/plump-line-free)

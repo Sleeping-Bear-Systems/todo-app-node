@@ -71,15 +71,27 @@ export const homePage = new Hono<{
               <td>${d.title}</td>
               <td>${d.description}</td>
               <td>${d.status}</td>
-              <td>
+              <td class="task-actions">
                 ${
                   d.status === "Active"
                     ? html`
                       <form data-on:submit="@post('${routes.HOME_PAGE}/complete-task/${d._id}', {contentType: 'form'})">
-                        <button type="submit">Complete</button>
+                        <button class="icon-button" type="submit" aria-label="Complete task">
+                          <img
+                            class="button-icon"
+                            src="/images/Check-Thick--Streamline-Plump.svg"
+                            alt=""
+                          />
+                        </button>
                       </form>
                       <form data-on:submit="@post('${routes.HOME_PAGE}/remove-task/${d._id}', {contentType: 'form'})">
-                        <button type="submit">Remove</button>
+                        <button class="icon-button" type="submit" aria-label="Remove task">
+                          <img
+                            class="button-icon"
+                            src="/images/Recycle-Bin-2--Streamline-Plump.svg"
+                            alt=""
+                          />
+                        </button>
                       </form>
                     `
                     : html``
