@@ -5,6 +5,15 @@ async function signInAsAdmin(page: Page) {
   await page.getByLabel("Username").fill("admin");
   await page.getByLabel("Password").fill("password1234");
   await page.getByRole("button", { name: "Sign in" }).click();
+  await expect(page).toHaveURL(/\/auth\/home$/);
+}
+
+async function addTask(page: Page, title: string, description: string) {
+  await page.goto("/auth/add-task");
+  await page.getByLabel("Title").fill(title);
+  await page.getByLabel("Description").fill(description);
+  await page.getByRole("button", { name: "Add" }).click();
+  await expect(page).toHaveURL(/\/auth\/home$/);
 }
 
 test("GET /auth/home redirects unauthenticated users to /login", async ({
@@ -58,4 +67,53 @@ test("User can sign out from home page", async ({ page }) => {
 
   await page.goto("/auth/home");
   await expect(page).toHaveURL(/\/login$/);
+});
+
+test("User can complete an active task from home page", async ({ page }) => {
+  await signInAsAdmin(page);
+
+  const taskTitle = `Complete task ${Date.now()}`;
+  const taskDescription = "Task ready to complete";
+  await addTask(page, taskTitle, taskDescription);
+
+  const taskRow = page.locator("tr", {
+    has: page.getByRole("cell", { name: taskTitle }),
+  });
+
+  await expect(taskRow).toBeVisible();
+  await expect(taskRow.getByRole("cell", { name: "Active" })).toBeVisible();
+
+  await taskRow.getByRole("button", { name: "Complete task" }).click();
+
+  await expect(taskRow.getByRole("cell", { name: "Completed" })).toBeVisible();
+  await expect(
+    taskRow.getByRole("button", { name: "Complete task" }),
+  ).toHaveCount(0);
+  await expect(
+    taskRow.getByRole("button", { name: "Remove task" }),
+  ).toHaveCount(0);
+});
+
+test("User can remove an active task from home page", async ({ page }) => {
+  await signInAsAdmin(page);
+
+  const taskTitle = `Remove task ${Date.now()}`;
+  const taskDescription = "Task ready to remove";
+  await addTask(page, taskTitle, taskDescription);
+
+  const taskRow = page.locator("tr", {
+    has: page.getByRole("cell", { name: taskTitle }),
+  });
+
+  await expect(taskRow).toBeVisible();
+
+  await taskRow.getByRole("button", { name: "Remove task" }).click();
+
+  await expect(taskRow.getByRole("cell", { name: "Removed" })).toBeVisible();
+  await expect(
+    taskRow.getByRole("button", { name: "Complete task" }),
+  ).toHaveCount(0);
+  await expect(
+    taskRow.getByRole("button", { name: "Remove task" }),
+  ).toHaveCount(0);
 });
