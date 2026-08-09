@@ -108,7 +108,6 @@ export const homePage = new Hono<{
     return c.html(content);
   })
   .post("/complete-task/:id", async (c) => {
-    // check Datastar request
     if (!isDatastarRequest(c)) {
       return c.json({ message: "Datastar request required" }, 400);
     }
@@ -147,11 +146,10 @@ export const homePage = new Hono<{
       }
     } catch (error) {
       logger.error(error);
-      return c.json({ message: "Internal server error" }, 500);
+      return c.html(html`<div id="errors">Internal server error</div>`);
     }
   })
   .post("/remove-task/:id", async (c) => {
-    // check Datastar request
     if (!isDatastarRequest(c)) {
       return c.json({ message: "Datastar request required" }, 400);
     }
@@ -190,6 +188,6 @@ export const homePage = new Hono<{
       }
     } catch (error) {
       logger.error(error);
-      return c.json({ message: "Internal server error" }, 500);
+      return c.html(html`<div id="errors">Internal server error</div>`);
     }
   });
