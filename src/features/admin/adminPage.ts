@@ -11,7 +11,14 @@ export const adminPage = new Hono<{
   Variables: AuthenticatedAppVariables;
 }>()
   .get("/", (c) => {
-    const username = c.var.account.username;
+    if (!isDatastarRequest(c)) {
+      return c.json({ message: "Datastar request required" }, 400);
+    }
+
+    const { username, role } = c.var.account;
+    if (role !== "admin") {
+      return c.json({ message: "Forbidden" }, 403);
+    }
 
     const content = html`
       <h1>Admin</h1>
@@ -30,6 +37,7 @@ export const adminPage = new Hono<{
         path: c.req.path,
         children: content,
         username,
+        role,
       }),
     );
   })
@@ -37,6 +45,11 @@ export const adminPage = new Hono<{
     if (!isDatastarRequest(c)) {
       return c.json({ message: "Datastar request required" }, 400);
     }
+    const { role } = c.var.account;
+    if (role !== "admin") {
+      return c.json({ message: "Forbidden" }, 403);
+    }
+
     const uri = c.var.appConfig.postgres.uri;
     const logger = c.var.logger;
 

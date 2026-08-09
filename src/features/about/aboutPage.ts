@@ -6,6 +6,7 @@ import { Page } from "#shared/page.ts";
 export const aboutPage = new Hono<{
   Variables: AuthenticatedAppVariables;
 }>().get("/", (c) => {
+  const { username, role } = c.var.account;
   const now = c.var.clock.now();
   const currentYear = now.getFullYear();
   const copyrightYears = currentYear > 2026 ? `2026-${currentYear}` : "2026";
@@ -25,7 +26,8 @@ export const aboutPage = new Hono<{
       type: "authenticated",
       title: "About",
       path: c.req.path,
-      username: c.var.account.username,
+      username,
+      role,
       children: content,
     }),
   );

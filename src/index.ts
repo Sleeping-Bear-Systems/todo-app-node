@@ -19,6 +19,7 @@ import { loginPage } from "#features/login/loginPage.ts";
 import { logoutApi } from "#features/login/logoutApi.ts";
 import { createMockUsers } from "#features/login/user.ts";
 import { pingApi } from "#features/ping/pingApi.ts";
+import { toRole } from "#shared/account.ts";
 import { createAppConfig } from "#shared/appConfig.ts";
 import type {
   AppVariables,
@@ -41,6 +42,7 @@ const appJwt = jwt({
 const jwtPayloadSchema = z.object({
   sub: z.string(),
   preferred_username: z.string(),
+  role: z.string(),
 });
 
 async function validateJwt(
@@ -51,6 +53,7 @@ async function validateJwt(
   c.set("account", {
     userId: jwtPayload.sub,
     username: jwtPayload.preferred_username,
+    role: toRole(jwtPayload.role),
   });
 }
 

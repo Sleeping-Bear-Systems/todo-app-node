@@ -1,4 +1,5 @@
 import { createHash, randomUUID } from "node:crypto";
+import type { Role } from "#shared/account.ts";
 
 export type User = Readonly<{
   id: string;
@@ -20,7 +21,7 @@ export function createMockUsers() {
   getOrCreateUser(
     "johndoe",
     "password1357",
-    "user",
+    "standard",
     "64a0f114-538f-4de8-8cb6-fb757380732e",
   );
 }
@@ -28,7 +29,7 @@ export function createMockUsers() {
 function getOrCreateUser(
   username: string,
   password: string,
-  role: string,
+  role: Role,
   userId?: string,
 ): User {
   const normalizedUsername = username.trim().toLowerCase();

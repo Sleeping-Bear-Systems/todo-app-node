@@ -19,7 +19,7 @@ export const addTaskPage = new Hono<{
   Variables: AuthenticatedAppVariables;
 }>()
   .get("/", (c) => {
-    const username = c.var.account.username;
+    const { username, role } = c.var.account;
 
     const content = html`
       <h1>Add Task</h1>
@@ -55,6 +55,7 @@ export const addTaskPage = new Hono<{
         path: c.req.path,
         children: content,
         username,
+        role,
       }),
     );
   })
