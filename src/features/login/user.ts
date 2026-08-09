@@ -5,7 +5,7 @@ export type User = Readonly<{
   id: string;
   username: string;
   passwordHash: string;
-  role: string;
+  role: Role;
 }>;
 
 // temporary user list
