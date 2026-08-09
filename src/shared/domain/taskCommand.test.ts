@@ -137,7 +137,7 @@ describe("AddTask", () => {
       .then([event<TaskEvent>("TaskExists", { taskId }, eventMetadata)]);
   });
 
-  test("RemovedTask state throws returns TaskExists event", () => {
+  test("RemovedTask state returns TaskExists event", () => {
     spec([
       event<TaskEvent>(
         "TaskAdded",
