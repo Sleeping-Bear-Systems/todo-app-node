@@ -85,10 +85,24 @@ export const addTaskPage = new Hono<{
       },
     );
     try {
-      await handle(eventStore, addTaskCommand.data.taskId, addTaskCommand, {
-        expectedStreamVersion: STREAM_DOES_NOT_EXIST,
-      });
-      return sseRedirect(c, routes.HOME_PAGE);
+      const { events } = await handle(
+        eventStore,
+        addTaskCommand.data.taskId,
+        addTaskCommand,
+        {
+          expectedStreamVersion: STREAM_DOES_NOT_EXIST,
+        },
+      );
+      switch (events[0]?.type) {
+        case undefined:
+          logger.error("Unknown error");
+          return c.html(html`<div id="errors">Unknown error</div>`);
+        case "TaskExists":
+          logger.error(events[0]);
+          return c.html(html`<div id="errors">Domain error</div>`);
+        default:
+          return sseRedirect(c, routes.HOME_PAGE);
+      }
     } catch (error) {
       logger.error(error);
       return c.html(html`<div id="errors">Internal server error</div>`);

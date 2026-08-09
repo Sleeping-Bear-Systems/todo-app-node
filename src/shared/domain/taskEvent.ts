@@ -29,4 +29,5 @@ export type TaskEvent =
       EventMetadata
     >
   | Event<"TaskIsNotActive", { taskId: string }, EventMetadata>
-  | Event<"UserDoesNotOwnTask", { taskId: string }, EventMetadata>;
+  | Event<"UserDoesNotOwnTask", { taskId: string }, EventMetadata>
+  | Event<"TaskExists", { taskId: string }, EventMetadata>;
