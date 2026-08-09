@@ -24,7 +24,7 @@ test("Authenticated user can view the admin page", async ({ page }) => {
   await page.goto("/auth/admin");
 
   await expect(page).toHaveURL(/\/auth\/admin$/);
-  await expect(page).toHaveTitle("Add Task");
+  await expect(page).toHaveTitle("Admin");
   await expect(
     page.getByRole("heading", { level: 1, name: "Admin" }),
   ).toBeVisible();
