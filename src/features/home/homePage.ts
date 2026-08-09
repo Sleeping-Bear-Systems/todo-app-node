@@ -26,6 +26,7 @@ export const homePage = new Hono<{
         <h1>Home</h1>
         <a class="button-link" href="${routes.ADD_TASK_PAGE}">Add Task</a>
         <div id="tasks" data-init="@get('${routes.HOME_PAGE}/get-tasks')"></div>
+        <div id="errors"></div>
 
         <div hidden>
           <div id="home-calendar"></div>
@@ -103,7 +104,6 @@ export const homePage = new Hono<{
           )}
         </table>
       </div>
-      <div id="errors"></div>
     `;
     return c.html(content);
   })
@@ -133,8 +133,18 @@ export const homePage = new Hono<{
       },
     );
     try {
-      await handle(eventStore, taskId, completeTaskCommand);
-      return sseRedirect(c, routes.HOME_PAGE);
+      const { events } = await handle(eventStore, taskId, completeTaskCommand);
+      switch (events[0]?.type) {
+        case undefined:
+          logger.error("Unknown error");
+          return c.html(html`<div id="errors">Unknown error</div>`);
+        case "UserDoesNotOwnTask":
+        case "TaskIsNotActive":
+          logger.error(events[0]);
+          return c.html(html`<div id="errors">Domain error</div>`);
+        default:
+          return sseRedirect(c, routes.HOME_PAGE);
+      }
     } catch (error) {
       logger.error(error);
       return c.json({ message: "Internal server error" }, 500);
@@ -166,8 +176,18 @@ export const homePage = new Hono<{
       },
     );
     try {
-      await handle(eventStore, taskId, removeTaskCommand, {});
-      return sseRedirect(c, routes.HOME_PAGE);
+      const { events } = await handle(eventStore, taskId, removeTaskCommand);
+      switch (events[0]?.type) {
+        case undefined:
+          logger.error("Unknown error");
+          return c.html(html`<div id="errors">Unknown error</div>`);
+        case "UserDoesNotOwnTask":
+        case "TaskIsNotActive":
+          logger.error(events[0]);
+          return c.html(html`<div id="errors">Domain error</div>`);
+        default:
+          return sseRedirect(c, routes.HOME_PAGE);
+      }
     } catch (error) {
       logger.error(error);
       return c.json({ message: "Internal server error" }, 500);
