@@ -2,7 +2,7 @@ import { rebuildPostgreSQLProjections } from "@event-driven-io/emmett-postgresql
 import { Hono } from "hono";
 import { html } from "hono/html";
 import type { AuthenticatedAppVariables } from "#shared/appVariables.ts";
-import { isDatastarRequest } from "#shared/datastar.ts";
+import { isDatastarRequest, sseRedirect } from "#shared/datastar.ts";
 import { taskProjection } from "#shared/domain/taskProjection.ts";
 import { Page } from "#shared/page.ts";
 import { routes } from "#shared/routes.ts";
@@ -57,7 +57,7 @@ export const adminPage = new Hono<{
       logger.info("Rebuilding projections");
       await consumer.start();
       logger.info("Projections rebuilt");
-      return c.json({ message: "OK" }, 200);
+      return sseRedirect(c, routes.ADMIN_PAGE);
     } catch (error) {
       logger.error(error);
       return c.html(html`<div id="errors">Internal server error</div>`);
