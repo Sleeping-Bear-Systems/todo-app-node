@@ -10,6 +10,9 @@ export type TaskDocument = {
   description: string;
   status: "Unknown" | "Active" | "Removed" | "Completed";
   userId: string;
+  addedOn: Date;
+  completedOn?: Date;
+  removedOn?: Date;
 };
 
 export function initialState(): TaskDocument {
@@ -19,6 +22,7 @@ export function initialState(): TaskDocument {
     description: "",
     status: "Unknown",
     userId: "",
+    addedOn: new Date(0),
   };
 }
 
@@ -27,9 +31,13 @@ export function evolve(document: TaskDocument, event: TaskEvent): TaskDocument {
   switch (document.status) {
     case "Active":
       if (type === "TaskCompleted") {
-        return { ...document, status: "Completed" };
+        return {
+          ...document,
+          status: "Completed",
+          completedOn: data.completedOn,
+        };
       } else if (type === "TaskRemoved") {
-        return { ...document, status: "Removed" };
+        return { ...document, status: "Removed", removedOn: data.removedOn };
       }
       break;
     case "Unknown":
@@ -40,6 +48,7 @@ export function evolve(document: TaskDocument, event: TaskEvent): TaskDocument {
           description: data.description,
           status: "Active",
           userId: data.userId,
+          addedOn: data.addedOn,
         };
       }
       break;

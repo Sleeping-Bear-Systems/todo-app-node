@@ -27,4 +27,6 @@ export type TaskEvent =
       "TaskCompleted",
       { taskId: string; completedOn: Date; userId: string },
       EventMetadata
-    >;
+    >
+  | Event<"TaskIsNotActive", { taskId: string }, EventMetadata>
+  | Event<"UserDoesNotOwnTask", { taskId: string }, EventMetadata>;
