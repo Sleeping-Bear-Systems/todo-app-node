@@ -226,7 +226,7 @@ describe("RemoveTask", () => {
       );
   });
 
-  test("CompletedTask state returnsTaskIsNotActive event", () => {
+  test("CompletedTask state returns TaskIsNotActive event", () => {
     spec([
       event<TaskEvent>(
         "TaskAdded",
