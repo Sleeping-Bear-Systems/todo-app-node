@@ -1,11 +1,16 @@
 import { expect, type Page, test } from "@playwright/test";
 
 async function signInAsAdmin(page: Page) {
+  await page.setExtraHTTPHeaders({ "Datastar-Request": "true" });
   await page.goto("/login");
   await page.getByLabel("Username").fill("admin");
   await page.getByLabel("Password").fill("password1234");
   await page.getByRole("button", { name: "Sign in" }).click();
   await expect(page).toHaveURL(/\/auth\/home$/);
+}
+
+async function openAdminPage(page: Page) {
+  await page.goto("/auth/admin");
 }
 
 test("GET /auth/admin redirects unauthenticated users to /login", async ({
@@ -19,14 +24,17 @@ test("GET /auth/admin redirects unauthenticated users to /login", async ({
   ).toBeVisible();
 });
 
-test("Authenticated user can view the admin page", async ({ page }) => {
+test("Authenticated admin can view the admin page", async ({ page }) => {
   await signInAsAdmin(page);
-  await page.goto("/auth/admin");
+  await openAdminPage(page);
 
   await expect(page).toHaveURL(/\/auth\/admin$/);
   await expect(page).toHaveTitle("Admin");
   await expect(
     page.getByRole("heading", { level: 1, name: "Admin" }),
+  ).toBeVisible();
+  await expect(
+    page.getByRole("button", { name: "Rebuild Projections" }),
   ).toBeVisible();
 });
 
@@ -34,7 +42,7 @@ test("Admin page hides Admin link and can navigate to Home", async ({
   page,
 }) => {
   await signInAsAdmin(page);
-  await page.goto("/auth/admin");
+  await openAdminPage(page);
 
   const navigationBar = page.getByRole("navigation", {
     name: "Main navigation",
