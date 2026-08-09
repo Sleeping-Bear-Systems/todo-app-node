@@ -92,7 +92,7 @@ describe("AddTask", () => {
       );
   });
 
-  test("AddedTask state return TaskExists event", () => {
+  test("AddedTask state returns TaskExists event", () => {
     spec([
       event<TaskEvent>(
         "TaskAdded",
