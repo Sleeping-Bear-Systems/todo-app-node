@@ -14,7 +14,7 @@ export const adminPage = new Hono<{
   return c.html(
     Page({
       type: "authenticated",
-      title: "Add Task",
+      title: "Admin",
       path: c.req.path,
       children: content,
       username,
