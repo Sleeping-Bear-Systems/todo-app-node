@@ -15,10 +15,15 @@ export function NavigationBar(props: NavigationBarProps) {
     props.path === routes.ABOUT_PAGE
       ? html``
       : html`<a href="${routes.ABOUT_PAGE}">About</a>`;
+  const adminLink =
+    props.path === routes.ADMIN_PAGE
+      ? html``
+      : html`<a href="${routes.ADMIN_PAGE}">Admin</a>`;
 
   return html`
     <nav aria-label="Main navigation">
       ${homeLink}
+      ${adminLink}
       ${aboutLink}
       <span>${props.username}</span>
       <form method="post" action="${routes.LOGOUT_API}">

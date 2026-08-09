@@ -13,6 +13,7 @@ import { secureHeaders } from "hono/secure-headers";
 import z from "zod";
 import { aboutPage } from "#features/about/aboutPage.ts";
 import { addTaskPage } from "#features/add-task/addTaskPage.ts";
+import { adminPage } from "#features/admin/adminPage.ts";
 import { homePage } from "#features/home/homePage.ts";
 import { loginPage } from "#features/login/loginPage.ts";
 import { logoutApi } from "#features/login/logoutApi.ts";
@@ -106,7 +107,8 @@ const authenticatedPageRoutes = new Hono<{
   })
   .route("/about", aboutPage)
   .route("/add-task", addTaskPage)
-  .route("/home", homePage);
+  .route("/home", homePage)
+  .route("/admin", adminPage);
 
 // create application
 const app = new Hono<{ Variables: AppVariables }>();

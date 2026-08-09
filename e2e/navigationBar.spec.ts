@@ -18,7 +18,7 @@ test("Authenticated pages render navigation bar with username", async ({
   });
 
   await expect(navigationBar).toBeVisible();
-  await expect(navigationBar.getByText("admin")).toBeVisible();
+  await expect(navigationBar.getByText("admin", { exact: true })).toBeVisible();
   await expect(
     navigationBar.getByRole("button", { name: "Sign out" }),
   ).toBeVisible();
