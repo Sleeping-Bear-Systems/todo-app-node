@@ -11,10 +11,6 @@ export const adminPage = new Hono<{
   Variables: AuthenticatedAppVariables;
 }>()
   .get("/", (c) => {
-    if (!isDatastarRequest(c)) {
-      return c.json({ message: "Datastar request required" }, 400);
-    }
-
     const { username, role } = c.var.account;
     if (role !== "admin") {
       return c.json({ message: "Forbidden" }, 403);
