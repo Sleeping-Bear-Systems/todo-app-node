@@ -6,7 +6,7 @@ import { Page } from "#shared/page.ts";
 export const forbiddenPage = new Hono<{ Variables: AppVariables }>().get(
   "/",
   (c) => {
-    var content = html`
+    const content = html`
     <h1>Forbidden</h1>
   `;
     return c.html(
