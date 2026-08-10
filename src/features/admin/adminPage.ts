@@ -39,7 +39,7 @@ export const adminPage = new Hono<{
   })
   .post("/rebuild-projections", async (c) => {
     if (!c.var.isDatastarRequest) {
-      return sseRedirect(c, routes.ERROR_PAGE);
+      return c.redirect(routes.ERROR_PAGE);
     }
     const { role } = c.var.account;
     if (role !== "admin") {

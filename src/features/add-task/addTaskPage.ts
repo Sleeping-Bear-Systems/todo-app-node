@@ -62,7 +62,7 @@ export const addTaskPage = new Hono<{
   .post("/", zValidator("form", addTaskRequestSchema), async (c) => {
     // check Datastar request
     if (!c.var.isDatastarRequest) {
-      return sseRedirect(c, routes.ERROR_PAGE);
+      return c.redirect(routes.ERROR_PAGE);
     }
 
     const requestId = c.var.requestId;
