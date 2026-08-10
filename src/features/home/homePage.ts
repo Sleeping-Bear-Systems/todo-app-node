@@ -15,7 +15,7 @@ export const homePage = new Hono<{
   Variables: AuthenticatedAppVariables;
 }>()
   .get("/", async (c) => {
-    const { username } = c.var.account;
+    const { username, role } = c.var.account;
     const headContent = html`
       <script src="/scripts/full-calendar/index.global.min.js" defer></script>
       <script src="/scripts/full-calendar/home-calendar.js" defer></script>
@@ -40,6 +40,7 @@ export const homePage = new Hono<{
         title: "Home",
         path: c.req.path,
         username,
+        role,
         headContent,
         children: content,
       }),

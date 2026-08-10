@@ -1,4 +1,5 @@
 import { html } from "hono/html";
+import type { Role } from "./account.ts";
 import { NavigationBar } from "./navigationBar.ts";
 
 type HtmlContent = ReturnType<typeof html>;
@@ -16,6 +17,7 @@ type AuthenticatedPageProps = SharedPageProps &
   Readonly<{
     type: "authenticated";
     username: string;
+    role: Role;
   }>;
 
 type UnauthenticatedPageProps = SharedPageProps &
@@ -33,7 +35,11 @@ export function Page(props: PageProps) {
       : html`<meta name="description" content="${props.description}" />`;
   const navigation =
     props.type === "authenticated"
-      ? NavigationBar({ username: props.username, path: props.path })
+      ? NavigationBar({
+          username: props.username,
+          role: props.role,
+          path: props.path,
+        })
       : html``;
 
   return html`

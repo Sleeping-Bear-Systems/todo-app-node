@@ -1,8 +1,10 @@
 import { html } from "hono/html";
+import type { Role } from "./account.ts";
 import { routes } from "./routes.ts";
 
 type NavigationBarProps = Readonly<{
   username: string;
+  role: Role;
   path: string;
 }>;
 
@@ -16,7 +18,7 @@ export function NavigationBar(props: NavigationBarProps) {
       ? html``
       : html`<a href="${routes.ABOUT_PAGE}">About</a>`;
   const adminLink =
-    props.path === routes.ADMIN_PAGE
+    props.path === routes.ADMIN_PAGE || props.role !== "admin"
       ? html``
       : html`<a href="${routes.ADMIN_PAGE}">Admin</a>`;
 
