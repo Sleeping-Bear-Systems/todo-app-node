@@ -18,7 +18,7 @@ export function NavigationBar(props: NavigationBarProps) {
       ? html``
       : html`<a href="${routes.ABOUT_PAGE}">About</a>`;
   const adminLink =
-    props.path === routes.ADMIN_PAGE || props.role !== "admin"
+    props.path === routes.ADMIN_PAGE && props.role !== "admin"
       ? html``
       : html`<a href="${routes.ADMIN_PAGE}">Admin</a>`;
 
