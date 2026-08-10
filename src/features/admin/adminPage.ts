@@ -13,7 +13,7 @@ export const adminPage = new Hono<{
   .get("/", (c) => {
     const { username, role } = c.var.account;
     if (role !== "admin") {
-      return c.json({ message: "Forbidden" }, 403);
+      c.redirect(routes.FORBIDDEN_PAGE);
     }
 
     const content = html`
@@ -43,7 +43,7 @@ export const adminPage = new Hono<{
     }
     const { role } = c.var.account;
     if (role !== "admin") {
-      return c.json({ message: "Forbidden" }, 403);
+      return sseRedirect(c, routes.FORBIDDEN_PAGE);
     }
 
     const uri = c.var.appConfig.postgres.uri;
