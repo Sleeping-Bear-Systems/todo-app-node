@@ -5,7 +5,7 @@ import { Hono } from "hono";
 import { html } from "hono/html";
 import z from "zod";
 import type { AuthenticatedAppVariables } from "#shared/appVariables.ts";
-import { isDatastarRequest, sseRedirect } from "#shared/datastar.ts";
+import { sseRedirect } from "#shared/datastar.ts";
 import { handle, type TaskCommand } from "#shared/domain/taskCommand.ts";
 import { Page } from "#shared/page.ts";
 import { routes } from "#shared/routes.ts";
@@ -61,7 +61,7 @@ export const addTaskPage = new Hono<{
   })
   .post("/", zValidator("form", addTaskRequestSchema), async (c) => {
     // check Datastar request
-    if (!isDatastarRequest(c)) {
+    if (!c.var.isDatastarRequest) {
       return c.json({ message: "Datastar request required" }, 400);
     }
 

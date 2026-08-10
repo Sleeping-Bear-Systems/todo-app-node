@@ -131,6 +131,7 @@ app.use("*", async (c, next) => {
   c.set("clock", systemClock);
   c.set("eventStore", eventStore);
   c.set("readStore", readStore);
+  c.set("isDatastarRequest", c.req.header("Datastar-Request") === "true");
   await next();
 });
 

@@ -2,7 +2,7 @@ import { rebuildPostgreSQLProjections } from "@event-driven-io/emmett-postgresql
 import { Hono } from "hono";
 import { html } from "hono/html";
 import type { AuthenticatedAppVariables } from "#shared/appVariables.ts";
-import { isDatastarRequest, sseRedirect } from "#shared/datastar.ts";
+import { sseRedirect } from "#shared/datastar.ts";
 import { taskProjection } from "#shared/domain/taskProjection.ts";
 import { Page } from "#shared/page.ts";
 import { routes } from "#shared/routes.ts";
@@ -38,7 +38,7 @@ export const adminPage = new Hono<{
     );
   })
   .post("/rebuild-projections", async (c) => {
-    if (!isDatastarRequest(c)) {
+    if (!c.var.isDatastarRequest) {
       return c.json({ message: "Datastar request required" }, 400);
     }
     const { role } = c.var.account;

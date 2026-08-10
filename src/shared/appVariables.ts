@@ -12,6 +12,7 @@ export type AppVariables = Readonly<{
   logger: Logger;
   eventStore: EventStore;
   readStore: PongoClient;
+  isDatastarRequest: boolean;
 }> &
   RequestIdVariables;
 
