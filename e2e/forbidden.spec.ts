@@ -23,9 +23,7 @@ test("GET /forbidden renders forbidden page for unauthenticated users", async ({
   ).toHaveCount(0);
 });
 
-test("Authenticated users can open /forbidden directly", async ({
-  page,
-}) => {
+test("Authenticated users can open /forbidden directly", async ({ page }) => {
   await signInAsAdmin(page);
   await page.goto("/forbidden");
 
