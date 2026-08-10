@@ -9,8 +9,13 @@ async function signInAsAdmin(page: Page) {
   await expect(page).toHaveURL(/\/auth\/home$/);
 }
 
-async function openAdminPage(page: Page) {
-  await page.goto("/auth/admin");
+async function signInAsStandardUser(page: Page) {
+  await page.setExtraHTTPHeaders({ "Datastar-Request": "true" });
+  await page.goto("/login");
+  await page.getByLabel("Username").fill("johndoe");
+  await page.getByLabel("Password").fill("password1357");
+  await page.getByRole("button", { name: "Sign in" }).click();
+  await expect(page).toHaveURL(/\/auth\/home$/);
 }
 
 test("GET /auth/admin redirects unauthenticated users to /login", async ({
@@ -26,7 +31,7 @@ test("GET /auth/admin redirects unauthenticated users to /login", async ({
 
 test("Authenticated admin can view the admin page", async ({ page }) => {
   await signInAsAdmin(page);
-  await openAdminPage(page);
+  await page.goto("/auth/admin");
 
   await expect(page).toHaveURL(/\/auth\/admin$/);
   await expect(page).toHaveTitle("Admin");
@@ -42,7 +47,7 @@ test("Admin page hides Admin link and can navigate to Home", async ({
   page,
 }) => {
   await signInAsAdmin(page);
-  await openAdminPage(page);
+  await page.goto("/auth/admin");
 
   const navigationBar = page.getByRole("navigation", {
     name: "Main navigation",
@@ -59,4 +64,21 @@ test("Admin page hides Admin link and can navigate to Home", async ({
   await expect(
     page.getByRole("heading", { level: 1, name: "Home" }),
   ).toBeVisible();
+});
+
+test("Authenticated standard users are redirected from /auth/admin to /forbidden", async ({
+  page,
+}) => {
+  await signInAsStandardUser(page);
+
+  await page.goto("/auth/admin");
+
+  await expect(page).toHaveURL(/\/forbidden$/);
+  await expect(page).toHaveTitle("Forbidden");
+  await expect(
+    page.getByRole("heading", { level: 1, name: "Forbidden" }),
+  ).toBeVisible();
+  await expect(
+    page.getByRole("navigation", { name: "Main navigation" }),
+  ).toHaveCount(0);
 });

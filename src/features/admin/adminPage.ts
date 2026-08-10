@@ -13,7 +13,7 @@ export const adminPage = new Hono<{
   .get("/", (c) => {
     const { username, role } = c.var.account;
     if (role !== "admin") {
-      c.redirect(routes.FORBIDDEN_PAGE);
+      return c.redirect(routes.FORBIDDEN_PAGE);
     }
 
     const content = html`
