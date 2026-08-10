@@ -1,7 +1,6 @@
 import { expect, type Page, test } from "@playwright/test";
 
 async function signInAsAdmin(page: Page) {
-  await page.setExtraHTTPHeaders({ "Datastar-Request": "true" });
   await page.goto("/login");
   await page.getByLabel("Username").fill("admin");
   await page.getByLabel("Password").fill("password1234");
@@ -10,7 +9,6 @@ async function signInAsAdmin(page: Page) {
 }
 
 async function signInAsStandardUser(page: Page) {
-  await page.setExtraHTTPHeaders({ "Datastar-Request": "true" });
   await page.goto("/login");
   await page.getByLabel("Username").fill("johndoe");
   await page.getByLabel("Password").fill("password1357");
