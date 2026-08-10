@@ -11,7 +11,3 @@ export async function sseRedirect(c: Context, url: string): Promise<Response> {
     });
   });
 }
-
-export function isDatastarRequest(c: Context): boolean {
-  return c.req.header("Datastar-Request") === "true";
-}

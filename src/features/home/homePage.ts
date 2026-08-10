@@ -2,7 +2,7 @@ import { command } from "@event-driven-io/emmett";
 import { Hono } from "hono";
 import { html } from "hono/html";
 import type { AuthenticatedAppVariables } from "#shared/appVariables.ts";
-import { isDatastarRequest, sseRedirect } from "#shared/datastar.ts";
+import { sseRedirect } from "#shared/datastar.ts";
 import { handle, type TaskCommand } from "#shared/domain/taskCommand.ts";
 import {
   type TaskDocument,
@@ -47,7 +47,7 @@ export const homePage = new Hono<{
     );
   })
   .get("/get-tasks", async (c) => {
-    if (!isDatastarRequest(c)) {
+    if (!c.var.isDatastarRequest) {
       return c.json({ message: "Datastar request required" }, 400);
     }
     const { userId } = c.var.account;
@@ -109,7 +109,7 @@ export const homePage = new Hono<{
     return c.html(content);
   })
   .post("/complete-task/:id", async (c) => {
-    if (!isDatastarRequest(c)) {
+    if (!c.var.isDatastarRequest) {
       return c.json({ message: "Datastar request required" }, 400);
     }
 
@@ -151,7 +151,7 @@ export const homePage = new Hono<{
     }
   })
   .post("/remove-task/:id", async (c) => {
-    if (!isDatastarRequest(c)) {
+    if (!c.var.isDatastarRequest) {
       return c.json({ message: "Datastar request required" }, 400);
     }
 

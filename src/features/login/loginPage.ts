@@ -6,7 +6,7 @@ import { html } from "hono/html";
 import { sign, verify } from "hono/jwt";
 import z from "zod";
 import type { AppVariables } from "#shared/appVariables.ts";
-import { isDatastarRequest, sseRedirect } from "#shared/datastar.ts";
+import { sseRedirect } from "#shared/datastar.ts";
 import { Page } from "#shared/page.ts";
 import { routes } from "#shared/routes.ts";
 import { verifyUser } from "./user.ts";
@@ -73,7 +73,7 @@ export const loginPage = new Hono<{ Variables: AppVariables }>()
     );
   })
   .post("/", zValidator("form", loginRequestSchema), async (c) => {
-    if (!isDatastarRequest(c)) {
+    if (!c.var.isDatastarRequest) {
       return c.json({ message: "Datastar request required" }, 400);
     }
     const now = c.var.clock.now();
