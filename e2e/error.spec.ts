@@ -15,11 +15,17 @@ test("GET /error renders the error page", async ({ page }) => {
 test("POST /login without a Datastar request redirects to /error", async ({
   request,
 }) => {
-  const response = await request.post("/login", {
-    headers: { "Content-Type": "application/x-www-form-urlencoded" },
-    data: {
+  const baseURL = test.info().project.use.baseURL;
+  expect(typeof baseURL).toBe("string");
+
+  const response = await request.fetch("/login", {
+    method: "POST",
+    form: {
       username: "admin",
       password: "password1234",
+    },
+    headers: {
+      origin: new URL(baseURL as string).origin,
     },
     maxRedirects: 0,
   });
