@@ -15,6 +15,7 @@ import { aboutPage } from "#features/about/aboutPage.ts";
 import { addTaskPage } from "#features/add-task/addTaskPage.ts";
 import { adminPage } from "#features/admin/adminPage.ts";
 import { forbiddenPage } from "#features/admin/forbiddenPage.ts";
+import { errorPage } from "#features/error/errorPage.ts";
 import { homePage } from "#features/home/homePage.ts";
 import { loginPage } from "#features/login/loginPage.ts";
 import { logoutApi } from "#features/login/logoutApi.ts";
@@ -92,8 +93,9 @@ const authenticatedApiRoutes = new Hono<{
 
 // map page routes
 const pageRoutes = new Hono<{ Variables: AppVariables }>()
-  .route("/login", loginPage)
-  .route("/forbidden", forbiddenPage);
+  .route("/error", errorPage)
+  .route("/forbidden", forbiddenPage)
+  .route("/login", loginPage);
 
 // map authenticated page routes
 const authenticatedPageRoutes = new Hono<{
