@@ -74,7 +74,7 @@ export const loginPage = new Hono<{ Variables: AppVariables }>()
   })
   .post("/", zValidator("form", loginRequestSchema), async (c) => {
     if (!c.var.isDatastarRequest) {
-      return c.redirect(routes.ERROR_PAGE);
+      return c.redirect(routes.ERROR_PAGE, 303);
     }
     const now = c.var.clock.now();
     const appConfig = c.var.appConfig;

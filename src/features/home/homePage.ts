@@ -48,7 +48,7 @@ export const homePage = new Hono<{
   })
   .get("/get-tasks", async (c) => {
     if (!c.var.isDatastarRequest) {
-      return c.redirect(routes.ERROR_PAGE);
+      return c.redirect(routes.ERROR_PAGE, 303);
     }
     const { userId } = c.var.account;
     const readStore = c.var.readStore;
@@ -110,7 +110,7 @@ export const homePage = new Hono<{
   })
   .post("/complete-task/:id", async (c) => {
     if (!c.var.isDatastarRequest) {
-      return c.redirect(routes.ERROR_PAGE);
+      return c.redirect(routes.ERROR_PAGE, 303);
     }
 
     const taskId = c.req.param("id");
@@ -152,7 +152,7 @@ export const homePage = new Hono<{
   })
   .post("/remove-task/:id", async (c) => {
     if (!c.var.isDatastarRequest) {
-      return c.redirect(routes.ERROR_PAGE);
+      return c.redirect(routes.ERROR_PAGE, 303);
     }
 
     const taskId = c.req.param("id");
