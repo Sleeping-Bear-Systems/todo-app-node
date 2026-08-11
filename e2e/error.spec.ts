@@ -1,3 +1,5 @@
+/** biome-ignore-all lint/complexity/useLiteralKeys: noPropertyAccessFromIndexSignature = true */
+
 import { expect, test } from "@playwright/test";
 
 test("GET /error renders the error page", async ({ page }) => {
