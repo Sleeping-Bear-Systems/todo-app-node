@@ -4,13 +4,13 @@ import type { EventMetadata } from "./eventMetadata.ts";
 
 export type UserEvent =
   | Event<
-      "RegisterUser",
+      "UserRegistered",
       { userId: string; userName: string; passwordHash: string; role: Role },
       EventMetadata
     >
   | Event<
-      "ChangePassword",
+      "PasswordChanged",
       { userId: string; passwordHash: string },
       EventMetadata
     >
-  | Event<"ChangeRole", { userId: string; role: Role }, EventMetadata>;
+  | Event<"RoleChanged", { userId: string; role: Role }, EventMetadata>;

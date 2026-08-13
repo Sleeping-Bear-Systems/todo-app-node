@@ -21,7 +21,7 @@ export function evolve(state: UserState, event: UserEvent): UserState {
   const { type, data } = event;
   switch (state.status) {
     case "Unknown":
-      if (type === "RegisterUser") {
+      if (type === "UserRegistered") {
         return {
           status: "Active",
           userId: data.userId,
@@ -33,12 +33,12 @@ export function evolve(state: UserState, event: UserEvent): UserState {
       break;
     case "Active":
       switch (type) {
-        case "ChangePassword":
+        case "PasswordChanged":
           return {
             ...state,
             passwordHash: data.passwordHash,
           };
-        case "ChangeRole": {
+        case "RoleChanged": {
           return {
             ...state,
             role: data.role,
