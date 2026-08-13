@@ -1,6 +1,6 @@
 import { html } from "hono/html";
-import type { Role } from "./account.ts";
 import { NavigationBar } from "./navigationBar.ts";
+import type { Role } from "./role.ts";
 
 type HtmlContent = ReturnType<typeof html>;
 

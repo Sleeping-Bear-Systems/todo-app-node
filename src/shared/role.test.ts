@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { describe, test } from "node:test";
-import { toRole } from "./account.ts";
+import { toRole } from "./role.ts";
 
 describe("toRole", () => {
   test("returns admin for the admin role", () => {

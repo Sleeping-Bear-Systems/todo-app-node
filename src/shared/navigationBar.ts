@@ -1,5 +1,5 @@
 import { html } from "hono/html";
-import type { Role } from "./account.ts";
+import type { Role } from "./role.ts";
 import { routes } from "./routes.ts";
 
 type NavigationBarProps = Readonly<{

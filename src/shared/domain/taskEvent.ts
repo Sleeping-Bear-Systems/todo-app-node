@@ -1,10 +1,5 @@
 import type { Event } from "@event-driven-io/emmett";
-
-export type EventMetadata = Readonly<{
-  userId: string;
-  correlationId: string;
-  now: Date;
-}>;
+import type { EventMetadata } from "./eventMetadata.ts";
 
 export type TaskEvent =
   | Event<
