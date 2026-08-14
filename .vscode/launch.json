@@ -8,7 +8,7 @@
       "type": "node",
       "request": "launch",
       "name": "Launch Program",
-      "runtimeExecutable": "tsx",
+      "runtimeExecutable": "${workspaceFolder}/node_modules/.bin/tsx",
       "runtimeArgs": ["--tsconfig", "${workspaceFolder}/tsconfig.app.json"],
       "skipFiles": ["<node_internals>/**"],
       "program": "${workspaceFolder}/src/index.ts"
