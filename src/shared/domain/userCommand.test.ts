@@ -28,7 +28,7 @@ const userRegistered = event<UserEvent>(
   "UserRegistered",
   {
     userId,
-    userName: "Ada Lovelace",
+    username: "Ada Lovelace",
     passwordHash: "password-hash",
     role: "standard",
   },
@@ -40,7 +40,7 @@ describe("RegisterUser", () => {
     "RegisterUser",
     {
       userId,
-      userName: "Ada Lovelace",
+      username: "Ada Lovelace",
       passwordHash: "password-hash",
       role: "standard",
     },

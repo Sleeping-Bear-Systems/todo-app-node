@@ -14,7 +14,7 @@ const eventMetadata = {
 const unknownDocument: UserDocument = {
   _id: "",
   status: "Unknown",
-  userName: "",
+  username: "",
   passwordHash: "",
   role: "unknown",
 };
@@ -22,7 +22,7 @@ const unknownDocument: UserDocument = {
 const activeDocument: UserDocument = {
   _id: userId,
   status: "Active",
-  userName: "user",
+  username: "user",
   passwordHash: "old-password-hash",
   role: "standard",
 };
@@ -35,7 +35,7 @@ describe("evolve()", () => {
         "UserRegistered",
         {
           userId,
-          userName: "user",
+          username: "user",
           passwordHash: "password-hash",
           role: "standard",
         },
@@ -46,7 +46,7 @@ describe("evolve()", () => {
     assert.deepEqual(result, {
       _id: userId,
       status: "Active",
-      userName: "user",
+      username: "user",
       passwordHash: "password-hash",
       role: "standard",
     });
@@ -59,7 +59,7 @@ describe("evolve()", () => {
         "UserRegistered",
         {
           userId,
-          userName: "another-user",
+          username: "another-user",
           passwordHash: "another-password-hash",
           role: "admin",
         },
@@ -126,7 +126,7 @@ describe("initialState()", () => {
     assert.deepEqual(initialState(), {
       _id: "",
       status: "Unknown",
-      userName: "",
+      username: "",
       passwordHash: "",
       role: "unknown",
     });
