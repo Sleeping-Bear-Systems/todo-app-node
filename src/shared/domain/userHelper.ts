@@ -22,12 +22,12 @@ export async function createUser(
   clock: Clock,
 ): Promise<string> {
   const normalizedUsername = username.toLowerCase().trim();
-  const user = await readStore
+  const userDocument = await readStore
     .db()
     .collection<UserDocument>(usersCollectionName)
     .findOne({ username: normalizedUsername });
-  if (user !== null) {
-    return user?._id ?? "";
+  if (userDocument !== null) {
+    return userDocument._id;
   }
   const userId = randomUUID();
   const passwordHash = await bcrypt.hash(password, BCRYPT_SALT_ROUNDS);
