@@ -51,7 +51,7 @@ export async function createUser(
   return userId;
 }
 
-export async function createMockUsers2(
+export async function createMockUsers(
   eventStore: EventStore,
   readStore: PongoClient,
   clock: Clock,

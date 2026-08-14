@@ -19,7 +19,6 @@ import { errorPage } from "#features/error/errorPage.ts";
 import { homePage } from "#features/home/homePage.ts";
 import { loginPage } from "#features/login/loginPage.ts";
 import { logoutApi } from "#features/login/logoutApi.ts";
-import { createMockUsers } from "#features/login/user.ts";
 import { pingApi } from "#features/ping/pingApi.ts";
 import { createAppConfig } from "#shared/appConfig.ts";
 import type {
@@ -28,7 +27,7 @@ import type {
 } from "#shared/appVariables.ts";
 import { systemClock } from "#shared/clock.ts";
 import { taskProjection } from "#shared/domain/taskProjection.ts";
-import { createMockUsers2 } from "#shared/domain/userHelper.ts";
+import { createMockUsers } from "#shared/domain/userHelper.ts";
 import { userProjection } from "#shared/domain/userProjection.ts";
 import { toRole } from "#shared/role.ts";
 import { routes } from "#shared/routes.ts";
@@ -73,8 +72,7 @@ const readStore = pongoClient({
 });
 
 // create mock users
-createMockUsers();
-createMockUsers2(eventStore, readStore, systemClock);
+createMockUsers(eventStore, readStore, systemClock);
 
 // map API routes
 const apiRoutes = new Hono<{ Variables: AppVariables }>()
