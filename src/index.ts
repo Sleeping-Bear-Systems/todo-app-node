@@ -72,7 +72,10 @@ const readStore = pongoClient({
 });
 
 // create mock users
-if (appConfig.environment === "development" || appConfig.environment === "test") {
+if (
+  appConfig.environment === "development" ||
+  appConfig.environment === "test"
+) {
   await createMockUsers(eventStore, readStore, systemClock);
 }
 
