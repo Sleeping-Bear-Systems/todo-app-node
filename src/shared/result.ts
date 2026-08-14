@@ -13,8 +13,8 @@ export type Result<T> =
 export function toSuccess<T>(tag: string, value: T): Result<T> {
   return {
     type: "Success",
-    value,
     tag,
+    value,
   };
 }
 
