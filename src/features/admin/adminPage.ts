@@ -66,7 +66,7 @@ export const adminPage = new Hono<{
 
 async function rebuildTaskProjections(
   uri: string,
-  logger: winston.Logger,
+  logger: Logger,
 ): Promise<Result> {
   try {
     const consumer = rebuildPostgreSQLProjections({
