@@ -6,6 +6,9 @@
       "request": "launch",
       "name": "Launch Program",
       "runtimeExecutable": "${workspaceFolder}/node_modules/.bin/tsx",
+      "windows": {
+        "runtimeExecutable": "${workspaceFolder}/node_modules/.bin/tsx.cmd"
+      },
       "runtimeArgs": ["--tsconfig", "${workspaceFolder}/tsconfig.app.json"],
       "skipFiles": ["<node_internals>/**"],
       "program": "${workspaceFolder}/src/index.ts"
