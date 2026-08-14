@@ -72,7 +72,9 @@ const readStore = pongoClient({
 });
 
 // create mock users
-createMockUsers(eventStore, readStore, systemClock);
+if (appConfig.environment !== "production") {
+  await createMockUsers(eventStore, readStore, systemClock);
+}
 
 // map API routes
 const apiRoutes = new Hono<{ Variables: AppVariables }>()
