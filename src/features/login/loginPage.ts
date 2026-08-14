@@ -87,7 +87,7 @@ export const loginPage = new Hono<{ Variables: AppVariables }>()
     const readStore = c.var.readStore;
 
     try {
-      const normalizedUsername = username.toLocaleLowerCase().trim();
+      const normalizedUsername = username.toLowerCase().trim();
       const userDocument = await readStore
         .db()
         .collection<UserDocument>(usersCollectionName)

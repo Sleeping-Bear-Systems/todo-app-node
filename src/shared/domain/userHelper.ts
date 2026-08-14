@@ -21,7 +21,7 @@ export async function createUser(
   readStore: PongoClient,
   clock: Clock,
 ): Promise<string> {
-  const normalizedUsername = username.toLocaleLowerCase().trim();
+  const normalizedUsername = username.toLowerCase().trim();
   const user = await readStore
     .db()
     .collection<UserDocument>(usersCollectionName)
