@@ -28,6 +28,7 @@ import type {
 } from "#shared/appVariables.ts";
 import { systemClock } from "#shared/clock.ts";
 import { taskProjection } from "#shared/domain/taskProjection.ts";
+import { createMockUsers2 } from "#shared/domain/userHelper.ts";
 import { userProjection } from "#shared/domain/userProjection.ts";
 import { toRole } from "#shared/role.ts";
 import { routes } from "#shared/routes.ts";
@@ -60,9 +61,6 @@ async function validateJwt(
   });
 }
 
-// create mock users
-createMockUsers();
-
 // create event store
 const eventStore = getPostgreSQLEventStore(appConfig.postgres.uri, {
   projections: inlineProjections([taskProjection, userProjection]),
@@ -73,6 +71,10 @@ const readStore = pongoClient({
   driver: pgDriver,
   connectionString: appConfig.postgres.uri,
 });
+
+// create mock users
+createMockUsers();
+createMockUsers2(eventStore, readStore, systemClock);
 
 // map API routes
 const apiRoutes = new Hono<{ Variables: AppVariables }>()
