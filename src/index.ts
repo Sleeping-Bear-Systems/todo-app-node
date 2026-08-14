@@ -28,6 +28,7 @@ import type {
 } from "#shared/appVariables.ts";
 import { systemClock } from "#shared/clock.ts";
 import { taskProjection } from "#shared/domain/taskProjection.ts";
+import { userProjection } from "#shared/domain/userProjection.ts";
 import { toRole } from "#shared/role.ts";
 import { routes } from "#shared/routes.ts";
 import { createStructuredLogger } from "#shared/structuredLogger.ts";
@@ -64,7 +65,7 @@ createMockUsers();
 
 // create event store
 const eventStore = getPostgreSQLEventStore(appConfig.postgres.uri, {
-  projections: inlineProjections([taskProjection]),
+  projections: inlineProjections([taskProjection, userProjection]),
 });
 
 // create read store

@@ -1,4 +1,4 @@
-export type Result<T> =
+export type Result<T = unknown> =
   | Readonly<{
       type: "Success";
       value: T;
@@ -18,7 +18,7 @@ export function toSuccess<T>(tag: string, value: T): Result<T> {
   };
 }
 
-export function toFailure<T>(
+export function toFailure<T = unknown>(
   tag: string,
   message: string = "error",
 ): Result<T> {

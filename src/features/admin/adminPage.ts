@@ -1,10 +1,13 @@
 import { rebuildPostgreSQLProjections } from "@event-driven-io/emmett-postgresql";
 import { Hono } from "hono";
 import { html } from "hono/html";
+import type winston from "winston";
 import type { AuthenticatedAppVariables } from "#shared/appVariables.ts";
 import { sseRedirect } from "#shared/datastar.ts";
 import { taskProjection } from "#shared/domain/taskProjection.ts";
+import { userProjection } from "#shared/domain/userProjection.ts";
 import { Page } from "#shared/page.ts";
+import { type Result, toFailure, toSuccess } from "#shared/result.ts";
 import { routes } from "#shared/routes.ts";
 
 export const adminPage = new Hono<{
@@ -50,12 +53,9 @@ export const adminPage = new Hono<{
     const logger = c.var.logger;
 
     try {
-      const consumer = rebuildPostgreSQLProjections({
-        connectionString: uri,
-        projection: taskProjection,
-      });
       logger.info("Rebuilding projections");
-      await consumer.start();
+      await rebuildTaskProjections(uri, logger);
+      await rebuildUserProjections(uri, logger);
       logger.info("Projections rebuilt");
       return sseRedirect(c, routes.ADMIN_PAGE);
     } catch (error) {
@@ -63,3 +63,41 @@ export const adminPage = new Hono<{
       return c.html(html`<div id="errors">Internal server error</div>`);
     }
   });
+
+async function rebuildTaskProjections(
+  uri: string,
+  logger: winston.Logger,
+): Promise<Result> {
+  try {
+    const consumer = rebuildPostgreSQLProjections({
+      connectionString: uri,
+      projection: taskProjection,
+    });
+    await consumer.start();
+    return toSuccess("Tasks", undefined);
+  } catch (error) {
+    logger.error(error);
+    const message =
+      error instanceof Error ? error.message : "An error occurred";
+    return toFailure("Tasks", message);
+  }
+}
+
+async function rebuildUserProjections(
+  uri: string,
+  logger: winston.Logger,
+): Promise<Result> {
+  try {
+    const consumer = rebuildPostgreSQLProjections({
+      connectionString: uri,
+      projection: userProjection,
+    });
+    await consumer.start();
+    return toSuccess("Tasks", undefined);
+  } catch (error) {
+    logger.error(error);
+    const message =
+      error instanceof Error ? error.message : "An error occurred";
+    return toFailure("Tasks", message);
+  }
+}
