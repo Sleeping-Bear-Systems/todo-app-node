@@ -1,7 +1,7 @@
 import { rebuildPostgreSQLProjections } from "@event-driven-io/emmett-postgresql";
 import { Hono } from "hono";
 import { html } from "hono/html";
-import type winston from "winston";
+import type { Logger } from "winston";
 import type { AuthenticatedAppVariables } from "#shared/appVariables.ts";
 import { sseRedirect } from "#shared/datastar.ts";
 import { taskProjection } from "#shared/domain/taskProjection.ts";
@@ -85,7 +85,7 @@ async function rebuildTaskProjections(
 
 async function rebuildUserProjections(
   uri: string,
-  logger: winston.Logger,
+  logger: Logger,
 ): Promise<Result> {
   try {
     const consumer = rebuildPostgreSQLProjections({
