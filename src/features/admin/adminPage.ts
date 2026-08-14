@@ -74,12 +74,12 @@ async function rebuildTaskProjections(
       projection: taskProjection,
     });
     await consumer.start();
-    return toSuccess("Tasks", undefined);
+    return toSuccess("Users", undefined);
   } catch (error) {
     logger.error(error);
     const message =
       error instanceof Error ? error.message : "An error occurred";
-    return toFailure("Tasks", message);
+    return toFailure("Users", message);
   }
 }
 
