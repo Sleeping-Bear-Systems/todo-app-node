@@ -1,6 +1,7 @@
-export type Result =
+export type Result<T> =
   | Readonly<{
       type: "Success";
+      value: T;
       tag: string;
     }>
   | Readonly<{
@@ -9,14 +10,18 @@ export type Result =
       message: string;
     }>;
 
-export function toSuccess(tag: string): Result {
+export function toSuccess<T>(tag: string, value: T): Result<T> {
   return {
     type: "Success",
     tag,
+    value,
   };
 }
 
-export function toFailure(tag: string, message: string = "error"): Result {
+export function toFailure<T>(
+  tag: string,
+  message: string = "error",
+): Result<T> {
   return {
     type: "Failure",
     tag,
