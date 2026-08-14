@@ -7,7 +7,8 @@ import {
   IllegalStateError,
 } from "@event-driven-io/emmett";
 import { addDays } from "date-fns";
-import { decide, type TaskCommand, toEventMetadata } from "./taskCommand.ts";
+import { toEventMetadata } from "./commandMetadata.ts";
+import { decide, type TaskCommand } from "./taskCommand.ts";
 import type { TaskEvent } from "./taskEvent.ts";
 import { evolve, initialState } from "./taskState.ts";
 

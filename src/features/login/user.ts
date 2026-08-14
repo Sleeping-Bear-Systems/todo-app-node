@@ -1,5 +1,5 @@
 import { createHash, randomUUID } from "node:crypto";
-import type { Role } from "#shared/account.ts";
+import type { Role } from "#shared/role.ts";
 
 export type User = Readonly<{
   id: string;

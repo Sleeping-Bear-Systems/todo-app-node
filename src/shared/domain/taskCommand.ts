@@ -5,32 +5,9 @@ import {
   IllegalStateError,
   skipOn,
 } from "@event-driven-io/emmett";
-import type { EventMetadata, TaskEvent } from "./taskEvent.ts";
+import { type CommandMetadata, toEventMetadata } from "./commandMetadata.ts";
+import type { TaskEvent } from "./taskEvent.ts";
 import { evolve, initialState, type TaskState } from "./taskState.ts";
-
-/**
- * Command metadata.
- */
-export type CommandMetadata = Readonly<{
-  correlationId: string;
-  now: Date;
-  userId: string;
-}>;
-
-/**
- * Converts a CommandMetadata instance into an EventMetadata instance.
- * @param commandMetadata The command metadata to convert.
- * @returns The event metadata derived from the command metadata.
- */
-export function toEventMetadata(
-  commandMetadata: CommandMetadata,
-): EventMetadata {
-  return {
-    userId: commandMetadata.userId,
-    now: commandMetadata.now,
-    correlationId: commandMetadata.correlationId,
-  };
-}
 
 /**
  * Task commands.
@@ -63,7 +40,10 @@ export type TaskCommand =
       CommandMetadata
     >;
 
-export function decide(command: TaskCommand, state: TaskState): TaskEvent[] {
+export function decide(
+  command: TaskCommand,
+  state: TaskState,
+): TaskEvent | TaskEvent[] {
   const { type, data, metadata } = command;
   const eventMetadata = toEventMetadata(metadata);
   switch (type) {
@@ -71,81 +51,67 @@ export function decide(command: TaskCommand, state: TaskState): TaskEvent[] {
       if (state.status !== "UnknownTask") {
         throw new IllegalStateError("State is not UnknownTask");
       }
-      return [
-        event<TaskEvent>(
-          "TaskAdded",
-          {
-            taskId: data.taskId,
-            title: data.title,
-            description: data.description,
-            addedOn: data.addedOn ?? metadata.now,
-            userId: metadata.userId,
-          },
-          eventMetadata,
-        ),
-      ];
+      return event<TaskEvent>(
+        "TaskAdded",
+        {
+          taskId: data.taskId,
+          title: data.title,
+          description: data.description,
+          addedOn: data.addedOn ?? metadata.now,
+          userId: metadata.userId,
+        },
+        eventMetadata,
+      );
     }
     case "RemoveTask": {
       if (state.status !== "AddedTask") {
-        return [
-          event<TaskEvent>(
-            "TaskIsNotActive",
-            { taskId: data.taskId },
-            eventMetadata,
-          ),
-        ];
+        return event<TaskEvent>(
+          "TaskIsNotActive",
+          { taskId: data.taskId },
+          eventMetadata,
+        );
       }
       if (state.userId !== metadata.userId) {
-        return [
-          event<TaskEvent>(
-            "UserDoesNotOwnTask",
-            { taskId: data.taskId },
-            eventMetadata,
-          ),
-        ];
-      }
-      return [
-        event<TaskEvent>(
-          "TaskRemoved",
-          {
-            taskId: data.taskId,
-            removedOn: data.removedOn,
-            userId: metadata.userId,
-          },
+        return event<TaskEvent>(
+          "UserDoesNotOwnTask",
+          { taskId: data.taskId },
           eventMetadata,
-        ),
-      ];
+        );
+      }
+      return event<TaskEvent>(
+        "TaskRemoved",
+        {
+          taskId: data.taskId,
+          removedOn: data.removedOn,
+          userId: metadata.userId,
+        },
+        eventMetadata,
+      );
     }
     case "CompleteTask": {
       if (state.status !== "AddedTask") {
-        return [
-          event<TaskEvent>(
-            "TaskIsNotActive",
-            { taskId: data.taskId },
-            eventMetadata,
-          ),
-        ];
+        return event<TaskEvent>(
+          "TaskIsNotActive",
+          { taskId: data.taskId },
+          eventMetadata,
+        );
       }
       if (state.userId !== metadata.userId) {
-        return [
-          event<TaskEvent>(
-            "UserDoesNotOwnTask",
-            { taskId: data.taskId },
-            eventMetadata,
-          ),
-        ];
-      }
-      return [
-        event<TaskEvent>(
-          "TaskCompleted",
-          {
-            taskId: data.taskId,
-            completedOn: data.completedOn,
-            userId: metadata.userId,
-          },
+        return event<TaskEvent>(
+          "UserDoesNotOwnTask",
+          { taskId: data.taskId },
           eventMetadata,
-        ),
-      ];
+        );
+      }
+      return event<TaskEvent>(
+        "TaskCompleted",
+        {
+          taskId: data.taskId,
+          completedOn: data.completedOn,
+          userId: metadata.userId,
+        },
+        eventMetadata,
+      );
     }
     default: {
       const _exhaustive: never = command;
