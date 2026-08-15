@@ -5,7 +5,7 @@ import {
   STREAM_DOES_NOT_EXIST,
 } from "@event-driven-io/emmett";
 import type { PongoClient } from "@event-driven-io/pongo";
-import bcrypt from "bcrypt";
+import { genSalt, hash } from "bcrypt-ts";
 import type { Clock } from "#shared/clock.ts";
 import type { Role } from "#shared/role.ts";
 import { handle, type UserCommand } from "./userCommand.ts";
@@ -30,7 +30,8 @@ export async function createUser(
     return userDocument._id;
   }
   const userId = randomUUID();
-  const passwordHash = await bcrypt.hash(password, BCRYPT_SALT_ROUNDS);
+  const salt = await genSalt(BCRYPT_SALT_ROUNDS);
+  const passwordHash = await hash(password, salt);
   const registerUserCommand = command<UserCommand>(
     "RegisterUser",
     {

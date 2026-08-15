@@ -1,5 +1,5 @@
 import { zValidator } from "@hono/zod-validator";
-import bcrypt from "bcrypt";
+import { compare } from "bcrypt-ts";
 import { addDays } from "date-fns";
 import { Hono } from "hono";
 import { getCookie, setCookie } from "hono/cookie";
@@ -95,10 +95,7 @@ export const loginPage = new Hono<{ Variables: AppVariables }>()
       if (userDocument === null) {
         return c.html(html`<div id="errors">Invalid Credentials</div>`);
       }
-      const passwordCheck = await bcrypt.compare(
-        password,
-        userDocument.passwordHash,
-      );
+      const passwordCheck = await compare(password, userDocument.passwordHash);
       if (!passwordCheck) {
         return c.html(html`<div id="errors">Invalid Credentials</div>`);
       }
