@@ -17,8 +17,7 @@ pipeline {
                 }
             }
             steps {
-                /* groovylint-disable-next-line UnnecessaryParenthesesForMethodCallWithClosure */
-                withSecrets() {
+                withSecrets {
                     sh 'npm ci'
                     sh 'node --import tsx ./tools/create-database.ts --force'
                     sh 'npm run playwright:test'
