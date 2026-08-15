@@ -17,6 +17,7 @@ pipeline {
                 }
             }
             steps {
+                /* groovylint-disable-next-line UnnecessaryParenthesesForMethodCallWithClosure */
                 withSecrets() {
                     sh 'npm ci'
                     sh 'node --import tsx ./tools/create-database.ts --force'
