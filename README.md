@@ -2,6 +2,31 @@
 
 A simple ToDo web application using event sourcing.
 
+## Environment Variables
+
+The application reads these variables from the process environment:
+
+| Variable | Required | Description | Default or constraints |
+| --- | --- | --- | --- |
+| `POSTGRES_URI` | Yes | PostgreSQL connection URI used by the event store and read store. | Must use the `postgres://` or `postgresql://` protocol. |
+| `JWT_SECRET_KEY` | Yes | Secret used to sign authentication cookies. | Must be at least 64 characters long. |
+| `PORT` | No | TCP port on which the HTTP server listens. | `3000`; must be an integer from `1` to `65535`. |
+| `NODE_ENV` | No | Application environment. Development and test environments create mock users; production does not. | `development`; accepted values are `development`, `production`, and `test`. |
+| `SEQ_API_KEY` | No | API key for sending structured logs to Seq. | Seq logging is enabled only when this and `SEQ_URL` are both set. |
+| `SEQ_URL` | No | Seq server URL for structured logs. | Seq logging is enabled only when this and `SEQ_API_KEY` are both set. |
+
+For example, in PowerShell:
+
+```pwsh
+$env:POSTGRES_URI = "postgres://postgres:password@localhost:5432/todo_app"
+$env:JWT_SECRET_KEY = "replace-with-a-random-secret-at-least-64-characters-long"
+$env:NODE_ENV = "development"
+$env:PORT = "3000"
+npm run dev
+```
+
+`POSTGRES_URI` is also used by the database creation script. The script accepts an explicit `--uri` argument, which takes precedence over the environment variable.
+
 ## Installing dependencies
 
 ```pwsh
