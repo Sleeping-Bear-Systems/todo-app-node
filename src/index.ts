@@ -31,7 +31,7 @@ import { userProjection } from "#shared/domain/userProjection.ts";
 import { toRole } from "#shared/role.ts";
 import { routes } from "#shared/routes.ts";
 import { createStructuredLogger } from "#shared/structuredLogger.ts";
-import { createMockUsers } from "#shared/userHelper.ts";
+import { createAdminUser, createNormalUser } from "#shared/userHelper.ts";
 
 const appConfig = createAppConfig(process.env);
 const logger = createStructuredLogger(appConfig);
@@ -75,9 +75,11 @@ const readStore = pongoClient({
 switch (appConfig.environment) {
   case "development":
   case "test":
-    await createMockUsers(eventStore, readStore, systemClock);
+    await createAdminUser(appConfig, eventStore, systemClock);
+    await createNormalUser(eventStore, systemClock);
     break;
   case "production":
+    await createAdminUser(appConfig, eventStore, systemClock);
     break;
   default: {
     const exhaustive: never = appConfig.environment;

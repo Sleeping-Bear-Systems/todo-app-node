@@ -4,15 +4,14 @@ import {
   type EventStore,
   STREAM_DOES_NOT_EXIST,
 } from "@event-driven-io/emmett";
-import type { PongoClient } from "@event-driven-io/pongo";
 import { genSalt, hash } from "bcrypt-ts";
 import type { Clock } from "#shared/clock.ts";
-import type { Role } from "#shared/role.ts";
-import { handle, type UserCommand } from "./domain/userCommand.ts";
+import type { AppConfig } from "./appConfig.ts";
 import {
-  type UserDocument,
-  usersCollectionName,
-} from "./domain/userProjection.ts";
+  handle,
+  mapToStreamId,
+  type UserCommand,
+} from "./domain/userCommand.ts";
 
 const BCRYPT_SALT_ROUNDS = 12;
 
@@ -21,31 +20,25 @@ export async function hashPassword(password: string): Promise<string> {
   return await hash(password, salt);
 }
 
-export async function createUser(
-  username: string,
-  password: string,
-  role: Role,
+export async function createAdminUser(
+  appConfig: AppConfig,
   eventStore: EventStore,
-  readStore: PongoClient,
   clock: Clock,
-): Promise<string> {
-  const normalizedUsername = username.toLowerCase().trim();
-  const userDocument = await readStore
-    .db()
-    .collection<UserDocument>(usersCollectionName)
-    .findOne({ username: normalizedUsername });
-  if (userDocument !== null) {
-    return userDocument._id;
+): Promise<void> {
+  const userId = "709b0fd4-72af-4d37-9579-ecb40491a833";
+  const streamId = mapToStreamId(userId);
+  const exists = await eventStore.streamExists(streamId);
+  if (exists) {
+    return;
   }
-  const userId = randomUUID();
-  const passwordHash = await hashPassword(password);
+  const passwordHash = await hashPassword(appConfig.admin.password);
   const registerUserCommand = command<UserCommand>(
     "RegisterUser",
     {
       userId,
-      username: normalizedUsername,
+      username: appConfig.admin.username,
       passwordHash,
-      role,
+      role: "admin",
     },
     {
       userId: "system",
@@ -56,28 +49,34 @@ export async function createUser(
   await handle(eventStore, userId, registerUserCommand, {
     expectedStreamVersion: STREAM_DOES_NOT_EXIST,
   });
-  return userId;
 }
 
-export async function createMockUsers(
+export async function createNormalUser(
   eventStore: EventStore,
-  readStore: PongoClient,
   clock: Clock,
 ): Promise<void> {
-  await createUser(
-    "admin",
-    "password1234",
-    "admin",
-    eventStore,
-    readStore,
-    clock,
+  const userId = "8f521aba-eca4-46c8-b833-27041533e9ea";
+  const streamId = mapToStreamId(userId);
+  const exists = await eventStore.streamExists(streamId);
+  if (exists) {
+    return;
+  }
+  const passwordHash = await hashPassword("password1357");
+  const registerUserCommand = command<UserCommand>(
+    "RegisterUser",
+    {
+      userId,
+      username: "john-doe",
+      passwordHash,
+      role: "standard",
+    },
+    {
+      userId: "system",
+      now: clock.now(),
+      correlationId: randomUUID(),
+    },
   );
-  await createUser(
-    "john-doe",
-    "password1357",
-    "standard",
-    eventStore,
-    readStore,
-    clock,
-  );
+  await handle(eventStore, userId, registerUserCommand, {
+    expectedStreamVersion: STREAM_DOES_NOT_EXIST,
+  });
 }
