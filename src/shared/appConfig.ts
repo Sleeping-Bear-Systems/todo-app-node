@@ -16,7 +16,7 @@ const environmentVariablesSchema = z.object({
 
 export type AppConfig = Readonly<{
   port: number;
-  environment: "development" | "production" | "test";
+  environment: z.infer<typeof environmentVariablesSchema>["NODE_ENV"];
   seq: Readonly<{
     apiKey: string | undefined;
     url: string | undefined;
