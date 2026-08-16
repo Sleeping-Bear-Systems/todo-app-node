@@ -71,12 +71,18 @@ const readStore = pongoClient({
   connectionString: appConfig.postgres.uri,
 });
 
-// create mock users
-if (
-  appConfig.environment === "development" ||
-  appConfig.environment === "test"
-) {
-  await createMockUsers(eventStore, readStore, systemClock);
+// handle environment setup
+switch (appConfig.environment) {
+  case "development":
+  case "test":
+    await createMockUsers(eventStore, readStore, systemClock);
+    break;
+  case "production":
+    break;
+  default: {
+    const exhaustive: never = appConfig.environment;
+    throw new Error(`Unknown environment: ${exhaustive}`);
+  }
 }
 
 // map API routes

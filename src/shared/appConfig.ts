@@ -2,7 +2,9 @@ import z from "zod";
 
 const environmentVariablesSchema = z.object({
   PORT: z.coerce.number().int().min(1).max(65535).default(3000),
-  NODE_ENV: z.string().optional().default("development"),
+  NODE_ENV: z
+    .enum(["development", "production", "test"])
+    .default("development"),
   SEQ_API_KEY: z.string().optional(),
   SEQ_URL: z.url().optional(),
   JWT_SECRET_KEY: z.string().min(64),
@@ -14,7 +16,7 @@ const environmentVariablesSchema = z.object({
 
 export type AppConfig = Readonly<{
   port: number;
-  environment: string;
+  environment: "development" | "production" | "test";
   seq: Readonly<{
     apiKey: string | undefined;
     url: string | undefined;
