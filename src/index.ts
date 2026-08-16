@@ -27,11 +27,11 @@ import type {
 } from "#shared/appVariables.ts";
 import { systemClock } from "#shared/clock.ts";
 import { taskProjection } from "#shared/domain/taskProjection.ts";
-import { createMockUsers } from "#shared/domain/userHelper.ts";
 import { userProjection } from "#shared/domain/userProjection.ts";
 import { toRole } from "#shared/role.ts";
 import { routes } from "#shared/routes.ts";
 import { createStructuredLogger } from "#shared/structuredLogger.ts";
+import { createMockUsers } from "#shared/userHelper.ts";
 
 const appConfig = createAppConfig(process.env);
 const logger = createStructuredLogger(appConfig);
