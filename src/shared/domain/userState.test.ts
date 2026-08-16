@@ -14,7 +14,7 @@ const eventMetadata = {
 const activeUser: UserState = {
   status: "Active",
   userId,
-  userName: "Ada Lovelace",
+  username: "Ada Lovelace",
   passwordHash: "original-password-hash",
   role: "standard",
 };
@@ -27,7 +27,7 @@ describe("evolve()", () => {
         "UserRegistered",
         {
           userId,
-          userName: "Ada Lovelace",
+          username: "Ada Lovelace",
           passwordHash: "password-hash",
           role: "admin",
         },
@@ -38,7 +38,7 @@ describe("evolve()", () => {
     assert.deepEqual(result, {
       status: "Active",
       userId,
-      userName: "Ada Lovelace",
+      username: "Ada Lovelace",
       passwordHash: "password-hash",
       role: "admin",
     });
@@ -51,7 +51,7 @@ describe("evolve()", () => {
         "UserRegistered",
         {
           userId,
-          userName: "Grace Hopper",
+          username: "Grace Hopper",
           passwordHash: "replacement-password-hash",
           role: "admin",
         },

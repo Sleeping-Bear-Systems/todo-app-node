@@ -10,7 +10,7 @@ async function signInAsAdmin(page: Page) {
 
 async function signInAsStandardUser(page: Page) {
   await page.goto("/login");
-  await page.getByLabel("Username").fill("johndoe");
+  await page.getByLabel("Username").fill("john-doe");
   await page.getByLabel("Password").fill("password1357");
   await page.getByRole("button", { name: "Sign in" }).click();
   await expect(page).toHaveURL(/\/auth\/home$/);

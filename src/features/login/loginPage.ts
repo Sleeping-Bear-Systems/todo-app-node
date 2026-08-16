@@ -1,4 +1,5 @@
 import { zValidator } from "@hono/zod-validator";
+import { compare } from "bcrypt-ts";
 import { addDays } from "date-fns";
 import { Hono } from "hono";
 import { getCookie, setCookie } from "hono/cookie";
@@ -7,9 +8,12 @@ import { sign, verify } from "hono/jwt";
 import z from "zod";
 import type { AppVariables } from "#shared/appVariables.ts";
 import { sseRedirect } from "#shared/datastar.ts";
+import {
+  type UserDocument,
+  usersCollectionName,
+} from "#shared/domain/userProjection.ts";
 import { Page } from "#shared/page.ts";
 import { routes } from "#shared/routes.ts";
-import { verifyUser } from "./user.ts";
 
 const loginRequestSchema = z.object({
   username: z.string().min(3),
@@ -80,16 +84,25 @@ export const loginPage = new Hono<{ Variables: AppVariables }>()
     const appConfig = c.var.appConfig;
     const { username, password } = c.req.valid("form");
     const logger = c.var.logger;
+    const readStore = c.var.readStore;
 
     try {
-      const user = verifyUser(username, password);
-      if (user === undefined) {
+      const normalizedUsername = username.toLowerCase().trim();
+      const userDocument = await readStore
+        .db()
+        .collection<UserDocument>(usersCollectionName)
+        .findOne({ username: normalizedUsername });
+      if (userDocument === null) {
+        return c.html(html`<div id="errors">Invalid Credentials</div>`);
+      }
+      const passwordCheck = await compare(password, userDocument.passwordHash);
+      if (!passwordCheck) {
         return c.html(html`<div id="errors">Invalid Credentials</div>`);
       }
       const payload = {
-        sub: user.id,
-        preferred_username: user.username,
-        role: user.role,
+        sub: userDocument._id,
+        preferred_username: userDocument.username,
+        role: userDocument.role,
         iss: "todo-app-node",
         exp: Math.floor(addDays(now, 1).getTime() / 1000),
         iat: Math.floor(now.getTime() / 1000),

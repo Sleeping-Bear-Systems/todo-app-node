@@ -8,7 +8,7 @@ export type UserState =
   | Readonly<{
       status: "Active";
       userId: string;
-      userName: string;
+      username: string;
       passwordHash: string;
       role: Role;
     }>;
@@ -25,7 +25,7 @@ export function evolve(state: UserState, event: UserEvent): UserState {
         return {
           status: "Active",
           userId: data.userId,
-          userName: data.userName,
+          username: data.username,
           passwordHash: data.passwordHash,
           role: data.role,
         };

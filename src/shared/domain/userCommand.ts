@@ -12,7 +12,7 @@ import { evolve, initialState, type UserState } from "./userState.ts";
 export type UserCommand =
   | Command<
       "RegisterUser",
-      { userId: string; userName: string; passwordHash: string; role: Role },
+      { userId: string; username: string; passwordHash: string; role: Role },
       CommandMetadata
     >
   | Command<
@@ -37,7 +37,7 @@ export function decide(
         "UserRegistered",
         {
           userId: data.userId,
-          userName: data.userName,
+          username: data.username,
           passwordHash: data.passwordHash,
           role: data.role,
         },

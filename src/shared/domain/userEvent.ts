@@ -5,7 +5,7 @@ import type { EventMetadata } from "./eventMetadata.ts";
 export type UserEvent =
   | Event<
       "UserRegistered",
-      { userId: string; userName: string; passwordHash: string; role: Role },
+      { userId: string; username: string; passwordHash: string; role: Role },
       EventMetadata
     >
   | Event<

@@ -5,7 +5,7 @@ import type { UserEvent } from "./userEvent.ts";
 export type UserDocument = {
   _id: string;
   status: "Unknown" | "Active";
-  userName: string;
+  username: string;
   passwordHash: string;
   role: Role;
 };
@@ -14,7 +14,7 @@ export function initialState(): UserDocument {
   return {
     _id: "",
     status: "Unknown",
-    userName: "",
+    username: "",
     passwordHash: "",
     role: "unknown",
   };
@@ -28,7 +28,7 @@ export function evolve(document: UserDocument, event: UserEvent): UserDocument {
         return {
           _id: data.userId,
           status: "Active",
-          userName: data.userName,
+          username: data.username,
           passwordHash: data.passwordHash,
           role: data.role,
         };

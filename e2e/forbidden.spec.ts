@@ -11,7 +11,7 @@ async function signInAsAdmin(page: Page) {
 test("GET /forbidden renders forbidden page for unauthenticated users", async ({
   page,
 }) => {
-  await page.goto("/forbidden");
+  await page.goto("/forbidden", { waitUntil: "domcontentloaded" });
 
   await expect(page).toHaveURL(/\/forbidden$/);
   await expect(page).toHaveTitle("Forbidden");
@@ -25,7 +25,7 @@ test("GET /forbidden renders forbidden page for unauthenticated users", async ({
 
 test("Authenticated users can open /forbidden directly", async ({ page }) => {
   await signInAsAdmin(page);
-  await page.goto("/forbidden");
+  await page.goto("/forbidden", { waitUntil: "domcontentloaded" });
 
   await expect(page).toHaveURL(/\/forbidden$/);
   await expect(page).toHaveTitle("Forbidden");
