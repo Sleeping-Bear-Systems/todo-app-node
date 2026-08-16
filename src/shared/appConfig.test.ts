@@ -31,7 +31,13 @@ describe("createAppConfig", () => {
   });
 
   test("environment reflects NODE_ENV when set to production", () => {
-    const appConfig = createAppConfig(createEnv({ NODE_ENV: "production" }));
+    const appConfig = createAppConfig(
+      createEnv({
+        NODE_ENV: "production",
+        ADMIN_USERNAME: "prod-admin",
+        ADMIN_PASSWORD: "prod-password",
+      }),
+    );
     assert.equal(appConfig.environment, "production");
   });
 
@@ -42,6 +48,40 @@ describe("createAppConfig", () => {
 
   test("throws when NODE_ENV is unsupported", () => {
     assert.throws(() => createAppConfig(createEnv({ NODE_ENV: "staging" })));
+  });
+
+  test("uses default admin credentials in development", () => {
+    const appConfig = createAppConfig(createEnv({ NODE_ENV: "development" }));
+    assert.equal(appConfig.environment, "development");
+    assert.equal(appConfig.admin.username, "admin");
+    assert.equal(appConfig.admin.password, "password1234");
+  });
+
+  test("uses default admin credentials in test", () => {
+    const appConfig = createAppConfig(createEnv({ NODE_ENV: "test" }));
+    assert.equal(appConfig.environment, "test");
+    assert.equal(appConfig.admin.username, "admin");
+    assert.equal(appConfig.admin.password, "password1234");
+  });
+
+  test("requires explicit admin credentials in production", () => {
+    assert.throws(() => createAppConfig(createEnv({ NODE_ENV: "production" })));
+    assert.throws(() =>
+      createAppConfig(
+        createEnv({
+          NODE_ENV: "production",
+          ADMIN_USERNAME: "admin",
+        }),
+      ),
+    );
+    assert.throws(() =>
+      createAppConfig(
+        createEnv({
+          NODE_ENV: "production",
+          ADMIN_PASSWORD: "password1234",
+        }),
+      ),
+    );
   });
 
   test("seq apiKey is undefined when not set", () => {

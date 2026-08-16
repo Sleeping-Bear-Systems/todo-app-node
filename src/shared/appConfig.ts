@@ -12,11 +12,17 @@ const environmentVariablesSchema = z.object({
     const protocol = new URL(value).protocol;
     return protocol === "postgres:" || protocol === "postgresql:";
   }, "POSTGRES_URI must use postgres:// or postgresql://"),
+  ADMIN_USERNAME: z.string().optional(),
+  ADMIN_PASSWORD: z.string().optional(),
 });
 
 export type AppConfig = Readonly<{
   port: number;
   environment: z.infer<typeof environmentVariablesSchema>["NODE_ENV"];
+  admin: Readonly<{
+    username: string;
+    password: string;
+  }>;
   seq: Readonly<{
     apiKey: string | undefined;
     url: string | undefined;
@@ -30,13 +36,33 @@ export type AppConfig = Readonly<{
   }>;
 }>;
 
+const defaultAdminUsername: string = "admin";
+const defaultAdminPassword: string = "password1234";
+
 export function createAppConfig(
   processEnv: Record<string, string | undefined>,
 ): AppConfig {
   const environmentVariables = environmentVariablesSchema.parse(processEnv);
+
+  if (environmentVariables.NODE_ENV === "production") {
+    if (
+      environmentVariables.ADMIN_USERNAME === undefined ||
+      environmentVariables.ADMIN_USERNAME === defaultAdminUsername ||
+      environmentVariables.ADMIN_PASSWORD === undefined ||
+      environmentVariables.ADMIN_PASSWORD === defaultAdminPassword
+    )
+      throw new Error(
+        "ADMIN_USERNAME and ADMIN_PASSWORD must be set when NODE_ENV is production",
+      );
+  }
+
   return {
     port: environmentVariables.PORT,
     environment: environmentVariables.NODE_ENV,
+    admin: {
+      username: environmentVariables.ADMIN_USERNAME ?? defaultAdminUsername,
+      password: environmentVariables.ADMIN_PASSWORD ?? defaultAdminPassword,
+    },
     seq: {
       apiKey: environmentVariables.SEQ_API_KEY,
       url: environmentVariables.SEQ_URL,

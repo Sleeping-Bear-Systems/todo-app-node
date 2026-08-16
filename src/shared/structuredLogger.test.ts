@@ -17,6 +17,7 @@ const baseConfig: AppConfig = {
   postgres: {
     uri: "postgresql://user:password@host:5432/database",
   },
+  admin: { username: "admin", password: "password" },
 };
 
 describe("createStructuredLogger", () => {
