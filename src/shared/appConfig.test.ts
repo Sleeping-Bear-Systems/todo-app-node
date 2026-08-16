@@ -30,9 +30,18 @@ describe("createAppConfig", () => {
     assert.equal(appConfig.environment, "development");
   });
 
-  test("environment reflects NODE_ENV", () => {
+  test("environment reflects NODE_ENV when set to production", () => {
     const appConfig = createAppConfig(createEnv({ NODE_ENV: "production" }));
     assert.equal(appConfig.environment, "production");
+  });
+
+  test("environment reflects NODE_ENV when set to test", () => {
+    const appConfig = createAppConfig(createEnv({ NODE_ENV: "test" }));
+    assert.equal(appConfig.environment, "test");
+  });
+
+  test("throws when NODE_ENV is unsupported", () => {
+    assert.throws(() => createAppConfig(createEnv({ NODE_ENV: "staging" })));
   });
 
   test("seq apiKey is undefined when not set", () => {
