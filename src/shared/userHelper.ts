@@ -20,6 +20,9 @@ export async function hashPassword(password: string): Promise<string> {
   return await hash(password, salt);
 }
 
+const defaultAdminUsername: string = "admin";
+const defaultAdminPassword: string = "password1234";
+
 export async function createAdminUser(
   appConfig: AppConfig,
   eventStore: EventStore,
@@ -31,6 +34,16 @@ export async function createAdminUser(
   if (exists) {
     return;
   }
+  if (appConfig.environment === "production") {
+    if (
+      appConfig.admin.username === defaultAdminUsername ||
+      appConfig.admin.password === defaultAdminPassword
+    )
+      throw new Error(
+        "ADMIN_USERNAME and ADMIN_PASSWORD must be set when NODE_ENV is production",
+      );
+  }
+
   const passwordHash = await hashPassword(appConfig.admin.password);
   const registerUserCommand = command<UserCommand>(
     "RegisterUser",
