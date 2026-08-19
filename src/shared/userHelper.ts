@@ -8,8 +8,11 @@ import type { PongoClient } from "@event-driven-io/pongo";
 import { genSalt, hash } from "bcrypt-ts";
 import type { Clock } from "#shared/clock.ts";
 import type { Role } from "#shared/role.ts";
-import { handle, type UserCommand } from "./userCommand.ts";
-import { type UserDocument, usersCollectionName } from "./userProjection.ts";
+import { handle, type UserCommand } from "./domain/userCommand.ts";
+import {
+  type UserDocument,
+  usersCollectionName,
+} from "./domain/userProjection.ts";
 
 const BCRYPT_SALT_ROUNDS = 12;
 
