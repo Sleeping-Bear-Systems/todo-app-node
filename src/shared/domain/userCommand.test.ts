@@ -1,3 +1,4 @@
+import { strict as assert } from "node:assert";
 import { describe, test } from "node:test";
 import {
   command,
@@ -6,7 +7,7 @@ import {
   IllegalStateError,
 } from "@event-driven-io/emmett";
 import { toEventMetadata } from "./commandMetadata.ts";
-import { decide, type UserCommand } from "./userCommand.ts";
+import { decide, mapToStreamId, type UserCommand } from "./userCommand.ts";
 import type { UserEvent } from "./userEvent.ts";
 import { evolve, initialState } from "./userState.ts";
 
@@ -116,5 +117,40 @@ describe("ChangeRole", () => {
         IllegalStateError,
         (error) => error.message === "User does not exist",
       );
+  });
+});
+
+describe("mapToStreamId", () => {
+  test("should prepend 'user-' to the provided ID", () => {
+    const id = "b8835ccf-58ca-4720-985e-a71168d4e5bc";
+    const result = mapToStreamId(id);
+
+    assert.equal(result, `user-${id}`);
+  });
+
+  test("should handle simple string IDs", () => {
+    const result = mapToStreamId("123");
+
+    assert.equal(result, "user-123");
+  });
+
+  test("should handle empty string", () => {
+    const result = mapToStreamId("");
+
+    assert.equal(result, "user-");
+  });
+
+  test("should handle IDs with special characters", () => {
+    const id = "user@domain.com";
+    const result = mapToStreamId(id);
+
+    assert.equal(result, `user-${id}`);
+  });
+
+  test("should handle IDs with hyphens", () => {
+    const id = "test-user-123";
+    const result = mapToStreamId(id);
+
+    assert.equal(result, `user-${id}`);
   });
 });
