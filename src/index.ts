@@ -75,11 +75,11 @@ const readStore = pongoClient({
 switch (appConfig.environment) {
   case "development":
   case "test":
-    await createAdminUser(eventStore, systemClock);
+    await createAdminUser(false, process.env, eventStore, systemClock);
     await createStandardUser(eventStore, systemClock);
     break;
   case "production":
-    await createAdminUser(eventStore, systemClock);
+    await createAdminUser(true, process.env, eventStore, systemClock);
     break;
   default: {
     const exhaustive: never = appConfig.environment;
