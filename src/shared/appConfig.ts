@@ -14,9 +14,13 @@ const environmentVariablesSchema = z.object({
   }, "POSTGRES_URI must use postgres:// or postgresql://"),
 });
 
+export type Environment = z.infer<
+  typeof environmentVariablesSchema
+>["NODE_ENV"];
+
 export type AppConfig = Readonly<{
   port: number;
-  environment: z.infer<typeof environmentVariablesSchema>["NODE_ENV"];
+  environment: Environment;
   seq: Readonly<{
     apiKey: string | undefined;
     url: string | undefined;
