@@ -34,12 +34,13 @@ export async function createUser(
   if (streamExists) {
     return userId;
   }
+  const normalizedUsername = username.trim().toLowerCase();
   const passwordHash = await hashPassword(password);
   const registerUserCommand = command<UserCommand>(
     "RegisterUser",
     {
       userId,
-      username,
+      username: normalizedUsername,
       passwordHash,
       role,
     },
@@ -74,7 +75,7 @@ const defaultAdminPassword = "password1234";
 const adminUserId = "a865648c-d86b-415f-b6d1-e12b665027cc";
 
 const credentialsSchema = z.object({
-  ADMIN_USERNAME: z.string().trim().min(4),
+  ADMIN_USERNAME: z.string().trim().toLowerCase().min(4),
   ADMIN_PASSWORD: z.string().trim().min(8),
 });
 
@@ -90,7 +91,7 @@ export async function createAdminUser(
     const credentials = credentialsSchema.parse(processEnv);
     username = credentials.ADMIN_USERNAME;
     password = credentials.ADMIN_PASSWORD;
-    if (credentials.ADMIN_USERNAME.toLowerCase() === defaultAdminUsername) {
+    if (credentials.ADMIN_USERNAME === defaultAdminUsername) {
       throw new Error("Invalid admin username");
     }
     if (credentials.ADMIN_PASSWORD === defaultAdminPassword) {
