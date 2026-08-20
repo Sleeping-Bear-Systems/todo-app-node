@@ -52,7 +52,7 @@
     "playwright:test:non-blocking": "playwright test --reporter=line",
     "playwright:test:ui": "playwright test --ui",
     "playwright:test": "playwright test",
-    "start": "tsx --tsconfig tsconfig.app.json ./src/index.ts",
+    "start": "node --experimental-strip-types ./src/index.ts",
     "test": "node --import tsx --test ./src/**/*.test.ts"
   },
   "type": "module"
