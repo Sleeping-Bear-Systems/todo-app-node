@@ -6,14 +6,16 @@ A simple ToDo web application using event sourcing.
 
 The application reads these variables from the process environment:
 
-| Variable | Required | Description | Default or constraints |
-| --- | --- | --- | --- |
-| `POSTGRES_URI` | Yes | PostgreSQL connection URI used by the event store and read store. | Must use the `postgres://` or `postgresql://` protocol. |
-| `JWT_SECRET_KEY` | Yes | Secret used to sign authentication cookies. | Must be at least 64 characters long. |
-| `PORT` | No | TCP port on which the HTTP server listens. | `3000`; must be an integer from `1` to `65535`. |
-| `NODE_ENV` | No | Application environment. Development and test environments create mock users; production does not. | `development`; accepted values are `development`, `production`, and `test`. |
-| `SEQ_API_KEY` | No | API key for sending structured logs to Seq. | Seq logging is enabled only when this and `SEQ_URL` are both set. |
-| `SEQ_URL` | No | Seq server URL for structured logs. | Seq logging is enabled only when this and `SEQ_API_KEY` are both set. |
+| Variable         | Required                    | Description                                                                                                                   | Default or constraints                                                                                          |
+| ---------------- | --------------------------- | ----------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------- |
+| `POSTGRES_URI`   | Yes                         | PostgreSQL connection URI used by the event store and read store.                                                             | Must use the `postgres://` or `postgresql://` protocol.                                                         |
+| `JWT_SECRET_KEY` | Yes                         | Secret used to sign authentication cookies.                                                                                   | Must be at least 64 characters long.                                                                            |
+| `PORT`           | No                          | TCP port on which the HTTP server listens.                                                                                    | `3000`; must be an integer from `1` to `65535`.                                                                 |
+| `NODE_ENV`       | No                          | Application environment. Development and test environments create mock users; production requires explicit admin credentials. | `development`; accepted values are `development`, `production`, and `test`.                                     |
+| `SEQ_API_KEY`    | No                          | API key for sending structured logs to Seq.                                                                                   | Seq logging is enabled only when this and `SEQ_URL` are both set.                                               |
+| `SEQ_URL`        | No                          | Seq server URL for structured logs.                                                                                           | Seq logging is enabled only when this and `SEQ_API_KEY` are both set.                                           |
+| `ADMIN_USERNAME` | Required in production only | Admin username for the initial administrator account.                                                                         | Must be at least 4 characters after trimming and lowercasing, and must not be the default development username. |
+| `ADMIN_PASSWORD` | Required in production only | Admin password for the initial administrator account.                                                                         | Must be at least 8 characters after trimming, and must not be the default development password.                 |
 
 For example, in PowerShell:
 
@@ -24,6 +26,16 @@ $env:NODE_ENV = "development"
 $env:PORT = "3000"
 npm run dev
 ```
+
+For a production deployment, set unique admin credentials as well:
+
+```pwsh
+$env:NODE_ENV = "production"
+$env:ADMIN_USERNAME = "your-unique-admin-username"
+$env:ADMIN_PASSWORD = "your-strong-admin-password"
+```
+
+The app rejects the default development admin values in production and will fail fast if you reuse `admin` or `password1234`.
 
 `POSTGRES_URI` is also used by the database creation script. The script accepts an explicit `--uri` argument, which takes precedence over the environment variable.
 

@@ -1,0 +1,118 @@
+import { randomUUID } from "node:crypto";
+import {
+  command,
+  type EventStore,
+  STREAM_DOES_NOT_EXIST,
+} from "@event-driven-io/emmett";
+import { genSalt, hash } from "bcrypt-ts";
+import z from "zod";
+import type { Clock } from "#shared/clock.ts";
+import type { Role } from "#shared/role.ts";
+import {
+  handle,
+  mapToStreamId,
+  type UserCommand,
+} from "./domain/userCommand.ts";
+
+const BCRYPT_SALT_ROUNDS = 12;
+
+async function hashPassword(password: string): Promise<string> {
+  const salt = await genSalt(BCRYPT_SALT_ROUNDS);
+  return await hash(password, salt);
+}
+
+export async function createUser(
+  userId: string,
+  username: string,
+  password: string,
+  role: Role,
+  eventStore: EventStore,
+  clock: Clock,
+): Promise<string> {
+  const streamId = mapToStreamId(userId);
+  const streamExists = await eventStore.streamExists(streamId);
+  if (streamExists) {
+    return userId;
+  }
+  const normalizedUsername = username.trim().toLowerCase();
+  const passwordHash = await hashPassword(password);
+  const registerUserCommand = command<UserCommand>(
+    "RegisterUser",
+    {
+      userId,
+      username: normalizedUsername,
+      passwordHash,
+      role,
+    },
+    {
+      userId: "system",
+      now: clock.now(),
+      correlationId: randomUUID(),
+    },
+  );
+  await handle(eventStore, userId, registerUserCommand, {
+    expectedStreamVersion: STREAM_DOES_NOT_EXIST,
+  });
+  return userId;
+}
+
+export async function createStandardUser(
+  eventStore: EventStore,
+  clock: Clock,
+): Promise<string> {
+  return await createUser(
+    standardUserId,
+    "john-doe",
+    "password1357",
+    "standard",
+    eventStore,
+    clock,
+  );
+}
+
+export const defaultAdminUsername: string = "admin";
+export const defaultAdminPassword: string = "password1234";
+export const adminUserId: string = "a865648c-d86b-415f-b6d1-e12b665027cc";
+export const standardUserId: string = "16822321-9ebc-4c2a-aa1f-e29a3ea8e295";
+
+const credentialsSchema = z.object({
+  ADMIN_USERNAME: z.string().trim().toLowerCase().min(4),
+  ADMIN_PASSWORD: z.string().trim().min(8),
+});
+
+export async function createAdminUser(
+  isProduction: boolean,
+  processEnv: Record<string, string | undefined>,
+  eventStore: EventStore,
+  clock: Clock,
+): Promise<string> {
+  let username: string;
+  let password: string;
+  if (isProduction) {
+    const credentials = credentialsSchema.parse(processEnv);
+    username = credentials.ADMIN_USERNAME;
+    password = credentials.ADMIN_PASSWORD;
+    if (credentials.ADMIN_USERNAME === defaultAdminUsername) {
+      throw new Error(
+        "Invalid admin username: set ADMIN_USERNAME to a unique production value, not the default development username.",
+      );
+    }
+    if (credentials.ADMIN_PASSWORD === defaultAdminPassword) {
+      throw new Error(
+        "Invalid admin password: set ADMIN_PASSWORD to a unique production value, not the default development password.",
+      );
+    }
+  } else {
+    username = defaultAdminUsername;
+    password = defaultAdminPassword;
+  }
+
+  return await createUser(
+    adminUserId,
+    username,
+    password,
+    "admin",
+    eventStore,
+    clock,
+  );
+}

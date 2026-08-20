@@ -68,6 +68,10 @@ export function decide(
   }
 }
 
+export function mapToStreamId(id: string): string {
+  return `user-${id}`;
+}
+
 export const handle = DeciderCommandHandler<
   UserState,
   UserCommand,
@@ -77,5 +81,5 @@ export const handle = DeciderCommandHandler<
   evolve,
   initialState,
   decide,
-  mapToStreamId: (id: string): string => `user-${id}`,
+  mapToStreamId,
 });
