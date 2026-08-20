@@ -1,4 +1,4 @@
-import assert from "node:assert";
+import assert from "node:assert/strict";
 import test, { describe } from "node:test";
 import { getInMemoryEventStore } from "@event-driven-io/emmett";
 import { systemClock } from "./clock.ts";
