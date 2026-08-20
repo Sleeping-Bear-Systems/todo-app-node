@@ -93,10 +93,14 @@ export async function createAdminUser(
     username = credentials.ADMIN_USERNAME;
     password = credentials.ADMIN_PASSWORD;
     if (credentials.ADMIN_USERNAME === defaultAdminUsername) {
-      throw new Error("Invalid admin username");
+      throw new Error(
+        "Invalid admin username: set ADMIN_USERNAME to a unique production value, not the default development username.",
+      );
     }
     if (credentials.ADMIN_PASSWORD === defaultAdminPassword) {
-      throw new Error("Invalid admin password");
+      throw new Error(
+        "Invalid admin password: set ADMIN_PASSWORD to a unique production value, not the default development password.",
+      );
     }
   } else {
     username = defaultAdminUsername;

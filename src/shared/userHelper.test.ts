@@ -225,7 +225,10 @@ describe("createAdminUser", () => {
       assert.fail("Expected error to be thrown");
     } catch (error) {
       assert.ok(error instanceof Error);
-      assert.match((error as Error).message, /Invalid admin username/);
+      assert.equal(
+        (error as Error).message,
+        "Invalid admin username: set ADMIN_USERNAME to a unique production value, not the default development username.",
+      );
     }
   });
 
@@ -241,7 +244,10 @@ describe("createAdminUser", () => {
       assert.fail("Expected error to be thrown");
     } catch (error) {
       assert.ok(error instanceof Error);
-      assert.match((error as Error).message, /Invalid admin password/);
+      assert.equal(
+        (error as Error).message,
+        "Invalid admin password: set ADMIN_PASSWORD to a unique production value, not the default development password.",
+      );
     }
   });
 
