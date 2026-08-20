@@ -59,9 +59,9 @@ export async function createUser(
 export async function createStandardUser(
   eventStore: EventStore,
   clock: Clock,
-): Promise<void> {
-  await createUser(
-    "16822321-9ebc-4c2a-aa1f-e29a3ea8e295",
+): Promise<string> {
+  return await createUser(
+    standardUserId,
     "john-doe",
     "password1357",
     "standard",
@@ -70,9 +70,10 @@ export async function createStandardUser(
   );
 }
 
-const defaultAdminUsername = "admin";
-const defaultAdminPassword = "password1234";
-const adminUserId = "a865648c-d86b-415f-b6d1-e12b665027cc";
+export const defaultAdminUsername: string = "admin";
+export const defaultAdminPassword: string = "password1234";
+export const adminUserId: string = "a865648c-d86b-415f-b6d1-e12b665027cc";
+export const standardUserId: string = "16822321-9ebc-4c2a-aa1f-e29a3ea8e295";
 
 const credentialsSchema = z.object({
   ADMIN_USERNAME: z.string().trim().toLowerCase().min(4),
@@ -84,7 +85,7 @@ export async function createAdminUser(
   processEnv: Record<string, string | undefined>,
   eventStore: EventStore,
   clock: Clock,
-): Promise<void> {
+): Promise<string> {
   let username: string;
   let password: string;
   if (isProduction) {
@@ -102,5 +103,12 @@ export async function createAdminUser(
     password = defaultAdminPassword;
   }
 
-  await createUser(adminUserId, username, password, "admin", eventStore, clock);
+  return await createUser(
+    adminUserId,
+    username,
+    password,
+    "admin",
+    eventStore,
+    clock,
+  );
 }
