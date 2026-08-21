@@ -1,0 +1,32 @@
+/* groovylint-disable CompileStatic */
+pipeline {
+    agent none
+    environment {
+        OP_CLI_PATH = '/usr/local/bin/'
+        OP_SERVICE_ACCOUNT_TOKEN = credentials('sbs-op-service-account-token')
+        SEQ_API_KEY = 'op://SleepingBearSystems/kbh3ujcwvti5x2u72ymxfycq/credential'
+        SEQ_URL = 'op://SleepingBearSystems/kbh3ujcwvtikg5x2u72ymxfycq/url'
+        JWT_SECRET_KEY = 'op://SleepingBearSystems/sewpai64oo4a6n5vawgv5rohte/credential'
+        POSTGRES_URI = 'op://SleepingBearSystems/33rsxifu44baslarw7hg6eeltm/uri'
+    }
+    stages {
+        stage('Deploy Production') {
+            agent { label 'docker' }
+            environment {
+                REGISTRY = 'todo-app'
+                CONTAINER_NAME = 'todo-app-prod'
+                HOST_PORT = '3100'
+            }
+            steps {
+                withSecrets {
+                    sh 'docker build --tag $REGISTRY:$BUILD_TIMESTAMP_SHORT --tag $REGISTRY:latest .'
+                }
+            }
+        }
+        post {
+            always {
+                cleanWs()
+            }
+        }
+    }
+}
