@@ -3,7 +3,6 @@ import {
   DeciderCommandHandler,
   event,
   IllegalStateError,
-  skipOn,
 } from "@event-driven-io/emmett";
 import { type CommandMetadata, toEventMetadata } from "./commandMetadata.ts";
 import type { TaskEvent } from "./taskEvent.ts";
@@ -35,7 +34,7 @@ export type TaskCommand =
         taskId: string;
         title: string;
         description: string;
-        addedOn?: Date;
+        addedOn: Date;
       },
       CommandMetadata
     >;
@@ -57,7 +56,7 @@ export function decide(
           taskId: data.taskId,
           title: data.title,
           description: data.description,
-          addedOn: data.addedOn ?? metadata.now,
+          addedOn: data.addedOn,
           userId: metadata.userId,
         },
         eventMetadata,
@@ -65,18 +64,10 @@ export function decide(
     }
     case "RemoveTask": {
       if (state.status !== "AddedTask") {
-        return event<TaskEvent>(
-          "TaskIsNotActive",
-          { taskId: data.taskId },
-          eventMetadata,
-        );
+        throw new IllegalStateError("Task is not active");
       }
       if (state.userId !== metadata.userId) {
-        return event<TaskEvent>(
-          "UserDoesNotOwnTask",
-          { taskId: data.taskId },
-          eventMetadata,
-        );
+        throw new IllegalStateError("User does not own task");
       }
       return event<TaskEvent>(
         "TaskRemoved",
@@ -90,18 +81,10 @@ export function decide(
     }
     case "CompleteTask": {
       if (state.status !== "AddedTask") {
-        return event<TaskEvent>(
-          "TaskIsNotActive",
-          { taskId: data.taskId },
-          eventMetadata,
-        );
+        throw new IllegalStateError("Task is not active");
       }
       if (state.userId !== metadata.userId) {
-        return event<TaskEvent>(
-          "UserDoesNotOwnTask",
-          { taskId: data.taskId },
-          eventMetadata,
-        );
+        throw new IllegalStateError("User does not own task");
       }
       return event<TaskEvent>(
         "TaskCompleted",
@@ -130,10 +113,4 @@ export const handle = DeciderCommandHandler<
   initialState,
   decide,
   mapToStreamId: (id: string): string => `task-${id}`,
-  middleware: [
-    skipOn(
-      (event) =>
-        event.type === "TaskIsNotActive" || event.type === "UserDoesNotOwnTask",
-    ),
-  ],
 });

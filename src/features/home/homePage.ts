@@ -1,4 +1,4 @@
-import { command } from "@event-driven-io/emmett";
+import { command, IllegalStateError } from "@event-driven-io/emmett";
 import { Hono } from "hono";
 import { html } from "hono/html";
 import type { AuthenticatedAppVariables } from "#shared/appVariables.ts";
@@ -133,20 +133,13 @@ export const homePage = new Hono<{
       },
     );
     try {
-      const { events } = await handle(eventStore, taskId, completeTaskCommand);
-      switch (events[0]?.type) {
-        case undefined:
-          logger.error("Unknown error");
-          return c.html(html`<div id="errors">Unknown error</div>`);
-        case "UserDoesNotOwnTask":
-        case "TaskIsNotActive":
-          logger.error(events[0]);
-          return c.html(html`<div id="errors">Domain error</div>`);
-        default:
-          return sseRedirect(c, routes.HOME_PAGE);
-      }
+      await handle(eventStore, taskId, completeTaskCommand);
+      return sseRedirect(c, routes.HOME_PAGE);
     } catch (error) {
       logger.error(error);
+      if (error instanceof IllegalStateError) {
+        return c.html(html`<div id="errors">${error.message}</div>`);
+      }
       return c.html(html`<div id="errors">Internal server error</div>`);
     }
   })
@@ -175,20 +168,13 @@ export const homePage = new Hono<{
       },
     );
     try {
-      const { events } = await handle(eventStore, taskId, removeTaskCommand);
-      switch (events[0]?.type) {
-        case undefined:
-          logger.error("Unknown error");
-          return c.html(html`<div id="errors">Unknown error</div>`);
-        case "UserDoesNotOwnTask":
-        case "TaskIsNotActive":
-          logger.error(events[0]);
-          return c.html(html`<div id="errors">Domain error</div>`);
-        default:
-          return sseRedirect(c, routes.HOME_PAGE);
-      }
+      await handle(eventStore, taskId, removeTaskCommand);
+      return sseRedirect(c, routes.HOME_PAGE);
     } catch (error) {
       logger.error(error);
+      if (error instanceof IllegalStateError) {
+        return c.html(html`<div id="errors">${error.message}</div>`);
+      }
       return c.html(html`<div id="errors">Internal server error</div>`);
     }
   });
