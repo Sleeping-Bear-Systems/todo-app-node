@@ -19,7 +19,22 @@ pipeline {
             }
             steps {
                 withSecrets {
-                    sh 'docker build --tag $REGISTRY:$BUILD_TIMESTAMP_SHORT --tag $REGISTRY:latest .'
+                    sh 'docker build \
+                        --tag $REGISTRY:$BUILD_TIMESTAMP_SHORT \
+                        --tag $REGISTRY:latest .'
+                    sh 'docker stop $CONTAINER_NAME || true && docker rm $CONTAINER_NAME || true'
+                    sh '''
+                        docker run \
+                        --detach
+                        --publish $HOST_PORT:3000 \
+                        --name $CONTAINER_NAME \
+                        --env NODE_ENV=production \
+                        --env POSTGRES_URI=$POSTGRES_URI \
+                        --env SEQ_API_KEY=$SEQ_API_KEY \
+                        --env SEQ_RUL=$SEQ_URL \
+                        --env JWT_SECRET_KEY=$JWT_SECRET_KEY \
+                        $REGISTRY:latest
+                    '''
                 }
             }
             post {
