@@ -15,7 +15,7 @@ pipeline {
             environment {
                 REGISTRY = 'todo-app'
                 CONTAINER_NAME = 'todo-app-prod'
-                HOST_PORT = '3100'
+                HOST_PORT = '3600'
             }
             steps {
                 withSecrets {
