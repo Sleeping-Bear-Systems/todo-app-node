@@ -8,8 +8,8 @@ pipeline {
         POSTGRES_URI = 'op://SleepingBearSystems/33rsxifu44baslarw7hg6eeltm/uri'
         SEQ_API_KEY = 'op://SleepingBearSystems/kbh3ujcwvtikg5x2u72ymxfycq/credential'
         SEQ_URL = 'op://SleepingBearSystems/kbh3ujcwvtikg5x2u72ymxfycq/url'
-        ADMIN_USERNAME = "op://SleepingBearSystems/ppq76diqpesxmirkzzrt3cyvyi/username"
-        ADMIN_PASSWORD = "op://SleepingBearSystems/ppq76diqpesxmirkzzrt3cyvyi/password"
+        ADMIN_USERNAME = 'op://SleepingBearSystems/ppq76diqpesxmirkzzrt3cyvyi/username'
+        ADMIN_PASSWORD = 'op://SleepingBearSystems/ppq76diqpesxmirkzzrt3cyvyi/password'
     }
     stages {
         stage('Deploy Production') {
@@ -35,6 +35,8 @@ pipeline {
                         --env SEQ_API_KEY=$SEQ_API_KEY \
                         --env SEQ_RUL=$SEQ_URL \
                         --env JWT_SECRET_KEY=$JWT_SECRET_KEY \
+                        --env ADMIN_USERNAME=$ADMIN_USERNAME \
+                        --env ADMIN_PASSWORD=$ADMIN_PASSWORD \
                         $REGISTRY:latest
                     '''
                 }
