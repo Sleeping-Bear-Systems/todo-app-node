@@ -82,6 +82,7 @@ export const addTaskPage = new Hono<{
         taskId: randomUUID(),
         title: title,
         description: description,
+        addedOn: now,
       },
       {
         now,
