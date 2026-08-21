@@ -2,7 +2,6 @@ import {
   type Command,
   DeciderCommandHandler,
   event,
-  IllegalStateError,
   skipOn,
 } from "@event-driven-io/emmett";
 import { type CommandMetadata, toEventMetadata } from "./commandMetadata.ts";
@@ -49,7 +48,13 @@ export function decide(
   switch (type) {
     case "AddTask": {
       if (state.status !== "UnknownTask") {
-        throw new IllegalStateError("State is not UnknownTask");
+        return [
+          event<TaskEvent>(
+            "TaskExists",
+            { taskId: data.taskId },
+            eventMetadata,
+          ),
+        ];
       }
       return event<TaskEvent>(
         "TaskAdded",
@@ -131,9 +136,15 @@ export const handle = DeciderCommandHandler<
   decide,
   mapToStreamId: (id: string): string => `task-${id}`,
   middleware: [
-    skipOn(
-      (event) =>
-        event.type === "TaskIsNotActive" || event.type === "UserDoesNotOwnTask",
-    ),
+    skipOn((event) => {
+      switch (event.type) {
+        case "TaskExists":
+        case "TaskIsNotActive":
+        case "UserDoesNotOwnTask":
+          return true;
+        default:
+          return false;
+      }
+    }),
   ],
 });

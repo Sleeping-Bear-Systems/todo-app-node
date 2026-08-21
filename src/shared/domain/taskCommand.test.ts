@@ -1,11 +1,6 @@
 import assert from "node:assert/strict";
 import { describe, test } from "node:test";
-import {
-  command,
-  DeciderSpecification,
-  event,
-  IllegalStateError,
-} from "@event-driven-io/emmett";
+import { command, DeciderSpecification, event } from "@event-driven-io/emmett";
 import { addDays } from "date-fns";
 import { toEventMetadata } from "./commandMetadata.ts";
 import { decide, type TaskCommand } from "./taskCommand.ts";
@@ -98,7 +93,7 @@ describe("AddTask", () => {
       );
   });
 
-  test("AddedTask state throws IllegalStateError", () => {
+  test("AddedTask state returns TaskExists event", () => {
     spec([
       event<TaskEvent>(
         "TaskAdded",
@@ -113,13 +108,10 @@ describe("AddTask", () => {
       ),
     ])
       .when(addTaskCommand)
-      .thenThrows(
-        IllegalStateError,
-        (error) => error.message === "State is not UnknownTask",
-      );
+      .then([event<TaskEvent>("TaskExists", { taskId }, eventMetadata)]);
   });
 
-  test("CompletedTask state throws IllegalStateError", () => {
+  test("CompletedTask state returns TaskExists event", () => {
     spec([
       event<TaskEvent>(
         "TaskAdded",
@@ -143,13 +135,10 @@ describe("AddTask", () => {
       ),
     ])
       .when(addTaskCommand)
-      .thenThrows(
-        IllegalStateError,
-        (error) => error.message === "State is not UnknownTask",
-      );
+      .then([event<TaskEvent>("TaskExists", { taskId }, eventMetadata)]);
   });
 
-  test("RemovedTask state throws IllegalStateError", () => {
+  test("RemovedTask state returns TaskExists event", () => {
     spec([
       event<TaskEvent>(
         "TaskAdded",
@@ -173,10 +162,7 @@ describe("AddTask", () => {
       ),
     ])
       .when(addTaskCommand)
-      .thenThrows(
-        IllegalStateError,
-        (error) => error.message === "State is not UnknownTask",
-      );
+      .then([event<TaskEvent>("TaskExists", { taskId }, eventMetadata)]);
   });
 });
 
