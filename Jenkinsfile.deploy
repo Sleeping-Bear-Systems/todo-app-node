@@ -41,7 +41,7 @@ pipeline {
                         --env JWT_SECRET_KEY=$JWT_SECRET_KEY \
                         --env ADMIN_USERNAME=$ADMIN_USERNAME \
                         --env ADMIN_PASSWORD=$ADMIN_PASSWORD \
-                        "$REPOSITORY:$BUILD_TIMESTAMP_SHORT"
+                        $REPOSITORY:latest
                     '''
                 }
             }
