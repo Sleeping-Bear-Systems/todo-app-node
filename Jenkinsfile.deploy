@@ -22,8 +22,9 @@ pipeline {
             steps {
                 withSecrets {
                     sh '''
+                        BUILD_TIMESTAMP_SHORT=$(date -u +%Y%m%d-%H%M%S)
                         docker build \
-                        --tag $REGISTRY:$BUILD_TIMESTAMP_SHORT \
+                        --tag "$REGISTRY:$BUILD_TIMESTAMP_SHORT" \
                         --tag $REGISTRY:latest .
                         '''
                     sh 'docker stop $CONTAINER_NAME || true && docker rm $CONTAINER_NAME || true'
