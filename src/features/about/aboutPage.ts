@@ -12,13 +12,65 @@ export const aboutPage = new Hono<{
   const copyrightYears = currentYear > 2026 ? `2026-${currentYear}` : "2026";
   const content = html`
     <h1>About</h1>
-    <img
-      src="/images/sleeping_bear_logo.svg"
-      alt="Sleeping Bear Systems logo"
-      width="200"
-      height="200"
-    />
-    <div>&copy; ${copyrightYears} Sleeping Bear Systems</div>
+    <div class="about-layout">
+      <section class="about-panel">
+        <h2>Powered by</h2>
+        <div class="technology-list">
+          <a
+            class="technology-link"
+            href="https://event-driven-io.github.io/emmett/"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <img
+              src="/images/emmett-logo-square.png"
+              alt=""
+              width="60"
+              height="60"
+            />
+            <span>Emmett</span>
+          </a>
+          <a
+            class="technology-link"
+            href="https://hono.dev/"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <img
+              src="/images/hono.svg"
+              alt=""
+              width="60"
+              height="60"
+            />
+            <span>Hono</span>
+          </a>
+          <a
+            class="technology-link"
+            href="https://data-star.dev/"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <img
+              src="/images/datastar.jpg"
+              alt=""
+              width="60"
+              height="60"
+            />
+            <span>Datastar</span>
+          </a>
+        </div>
+      </section>
+
+      <aside class="about-brand">
+        <img
+          src="/images/sleeping_bear_logo.svg"
+          alt=""
+          width="30"
+          height="30"
+        />
+        <div>&copy; ${copyrightYears} Sleeping Bear Systems</div>
+      </aside>
+    </div>
   `;
 
   return c.html(
