@@ -1,0 +1,10 @@
+node_modules
+npm-debug.log
+.git
+.gitignore
+.vscode
+playwright-report
+test-results
+coverage
+dist
+src/**/*.test.ts
