@@ -111,7 +111,8 @@ export const loginPage = new Hono<{ Variables: AppVariables }>()
       setCookie(c, appConfig.jwt.cookieName, token, {
         httpOnly: true,
         sameSite: "strict",
-        secure: appConfig.environment === "production",
+        // Disabled for Docker testing
+        //secure: appConfig.environment === "production",
         expires: addDays(now, 1),
       });
       return await sseRedirect(c, routes.HOME_PAGE);
