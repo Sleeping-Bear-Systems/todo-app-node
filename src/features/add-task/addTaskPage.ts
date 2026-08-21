@@ -1,5 +1,9 @@
 import { randomUUID } from "node:crypto";
-import { command, STREAM_DOES_NOT_EXIST } from "@event-driven-io/emmett";
+import {
+  command,
+  IllegalStateError,
+  STREAM_DOES_NOT_EXIST,
+} from "@event-driven-io/emmett";
 import { zValidator } from "@hono/zod-validator";
 import { Hono } from "hono";
 import { html } from "hono/html";
@@ -92,6 +96,9 @@ export const addTaskPage = new Hono<{
       return sseRedirect(c, routes.HOME_PAGE);
     } catch (error) {
       logger.error(error);
+      if (error instanceof IllegalStateError) {
+        return c.html(html`<div id="errors">${error.message}</div>`);
+      }
       return c.html(html`<div id="errors">Internal server error</div>`);
     }
   });
