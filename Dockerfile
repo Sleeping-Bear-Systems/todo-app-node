@@ -1,4 +1,4 @@
-FROM node:26-slim
+FROM node:26-alpine3.24
 
 WORKDIR /app
 
@@ -17,4 +17,4 @@ EXPOSE 3000
 
 USER node
 
-CMD ["npm", "run", "start"]
+CMD ["node", "--experimental-strip-types", "./src/index.ts"]
