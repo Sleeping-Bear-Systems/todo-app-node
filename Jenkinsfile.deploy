@@ -15,7 +15,7 @@ pipeline {
         stage('Deploy Production') {
             agent { label 'docker' }
             environment {
-                REGISTRY = 'todo-app'
+                REPOSITORY = 'todo-app'
                 CONTAINER_NAME = 'todo-app-prod'
                 HOST_PORT = '3600'
             }
@@ -24,8 +24,8 @@ pipeline {
                     sh '''
                         BUILD_TIMESTAMP_SHORT=$(date -u +%Y%m%d-%H%M%S)
                         docker build \
-                        --tag "$REGISTRY:$BUILD_TIMESTAMP_SHORT" \
-                        --tag $REGISTRY:latest .
+                        --tag "$REPOSITORY:$BUILD_TIMESTAMP_SHORT" \
+                        --tag $REPOSITORY:latest .
                         '''
                     sh 'docker stop $CONTAINER_NAME || true && docker rm $CONTAINER_NAME || true'
                     sh '''
@@ -41,7 +41,7 @@ pipeline {
                         --env JWT_SECRET_KEY=$JWT_SECRET_KEY \
                         --env ADMIN_USERNAME=$ADMIN_USERNAME \
                         --env ADMIN_PASSWORD=$ADMIN_PASSWORD \
-                        $REGISTRY:latest
+                        $REPOSITORY:latest
                     '''
                 }
             }
