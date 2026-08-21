@@ -24,7 +24,6 @@ export const aboutPage = new Hono<{
           >
             <img
               src="/images/emmett-logo-square.png"
-              alt="Emmett logo"
               width="60"
               height="60"
             />
@@ -38,7 +37,6 @@ export const aboutPage = new Hono<{
           >
             <img
               src="/images/hono.svg"
-              alt="Hono logo"
               width="60"
               height="60"
             />
@@ -52,7 +50,6 @@ export const aboutPage = new Hono<{
           >
             <img
               src="/images/datastar.jpg"
-              alt="Datastar logo"
               width="60"
               height="60"
             />
@@ -64,7 +61,6 @@ export const aboutPage = new Hono<{
       <aside class="about-brand">
         <img
           src="/images/sleeping_bear_logo.svg"
-          alt="Sleeping Bear Systems logo"
           width="30"
           height="30"
         />
