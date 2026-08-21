@@ -35,12 +35,12 @@ pipeline {
                         --restart unless-stopped \
                         --name $CONTAINER_NAME \
                         --env NODE_ENV=production \
-                        --env POSTGRES_URI=$POSTGRES_URI \
-                        --env SEQ_API_KEY=$SEQ_API_KEY \
-                        --env SEQ_URL=$SEQ_URL \
-                        --env JWT_SECRET_KEY=$JWT_SECRET_KEY \
-                        --env ADMIN_USERNAME=$ADMIN_USERNAME \
-                        --env ADMIN_PASSWORD=$ADMIN_PASSWORD \
+                        --env POSTGRES_URI \
+                        --env SEQ_API_KEY \
+                        --env SEQ_URL \
+                        --env JWT_SECRET_KEY \
+                        --env ADMIN_USERNAME \
+                        --env ADMIN_PASSWORD \
                         $REPOSITORY:$BUILD_TIMESTAMP
                     '''
                 }
