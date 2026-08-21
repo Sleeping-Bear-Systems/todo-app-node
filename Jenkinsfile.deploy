@@ -31,6 +31,7 @@ pipeline {
                         docker run \
                         --detach \
                         --publish $HOST_PORT:3000 \
+                        --restart unless-stopped \
                         --name $CONTAINER_NAME \
                         --env NODE_ENV=production \
                         --env POSTGRES_URI=$POSTGRES_URI \
