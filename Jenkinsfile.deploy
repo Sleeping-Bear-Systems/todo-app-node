@@ -18,13 +18,13 @@ pipeline {
                 REPOSITORY = 'todo-app'
                 CONTAINER_NAME = 'todo-app-prod'
                 HOST_PORT = '3600'
-                BUILD_TIMESTAMP = $(date -u +%Y%m%d-%H%M%S)
             }
             steps {
                 withSecrets {
                     sh '''
+                        BUILD_TIMESTAMP_SHORT=$(date -u +%Y%m%d-%H%M%S)
                         docker build \
-                        --tag "$REPOSITORY:$BUILD_TIMESTAMP" \
+                        --tag "$REPOSITORY:$BUILD_TIMESTAMP_SHORT" \
                         --tag $REPOSITORY:latest .
                         '''
                     sh 'docker stop $CONTAINER_NAME || true && docker rm $CONTAINER_NAME || true'
