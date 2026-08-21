@@ -11,7 +11,7 @@ export const aboutPage = new Hono<{
   const currentYear = now.getFullYear();
   const copyrightYears = currentYear > 2026 ? `2026-${currentYear}` : "2026";
   const content = html`
-    <h1>About</h1>
+    <h1>ToDo App</h1>
     <div class="about-layout">
       <section class="about-panel">
         <h2>Powered by</h2>
