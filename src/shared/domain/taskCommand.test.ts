@@ -22,6 +22,7 @@ const taskId = "3d1b3bf1-33fb-44be-ad48-6850f2c74b20";
 const now = new Date("2026-06-09T00:27:19.000Z");
 const userId = "b8835ccf-58ca-4720-985e-a71168d4e5bc";
 const correlationId = "57c64c56-5034-4918-b9f1-2d56f438b276";
+const otherUserId = "a1229a75-5d8e-4b9c-8bd5-6bca5a99f1d0";
 const commandMetadata = {
   userId,
   correlationId,
@@ -191,6 +192,27 @@ describe("RemoveTask", () => {
       );
   });
 
+  test("throws IllegalStateError when another user owns the task", () => {
+    spec([
+      event<TaskEvent>(
+        "TaskAdded",
+        {
+          taskId,
+          title: "title",
+          description: "description",
+          userId: otherUserId,
+          addedOn: addDays(now, -1),
+        },
+        toEventMetadata({ ...commandMetadata, userId: otherUserId }),
+      ),
+    ])
+      .when(removeTaskCommand)
+      .thenThrows(
+        IllegalStateError,
+        (error) => error.message === "User does not own task",
+      );
+  });
+
   test("throws IllegalStateError when state is UnknownTask", () => {
     spec([])
       .when(removeTaskCommand)
@@ -293,6 +315,27 @@ describe("CompleteTask", () => {
           },
           eventMetadata,
         ),
+      );
+  });
+
+  test("throws IllegalStateError when another user owns the task", () => {
+    spec([
+      event<TaskEvent>(
+        "TaskAdded",
+        {
+          taskId,
+          title: "title",
+          description: "description",
+          userId: otherUserId,
+          addedOn: addDays(now, -1),
+        },
+        toEventMetadata({ ...commandMetadata, userId: otherUserId }),
+      ),
+    ])
+      .when(completeTaskCommand)
+      .thenThrows(
+        IllegalStateError,
+        (error) => error.message === "User does not own task",
       );
   });
 
