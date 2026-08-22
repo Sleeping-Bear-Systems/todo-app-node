@@ -28,9 +28,7 @@ test("Authenticated user can view the about page", async ({ page }) => {
   await expect(
     page.getByRole("heading", { level: 1, name: "About" }),
   ).toBeVisible();
-  await expect(
-    page.getByText(/^Version:\s+\d+\.\d+\.\d+\.\d+$/),
-  ).toBeVisible();
+  await expect(page.getByText(/^Version:\s+\d+\.\d+\.\d+\.\d+$/)).toBeVisible();
   await expect(page.getByText(/Sleeping Bear Systems/)).toBeVisible();
 });
 
