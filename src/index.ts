@@ -5,6 +5,7 @@ import { pongoClient } from "@event-driven-io/pongo";
 import { pgDriver } from "@event-driven-io/pongo/pg";
 import { serve } from "@hono/node-server";
 import { serveStatic } from "@hono/node-server/serve-static";
+import { structuredLogger } from "@hono/structured-logger";
 import { type Context, Hono } from "hono";
 import { cors } from "hono/cors";
 import { csrf } from "hono/csrf";
@@ -38,7 +39,7 @@ const require = createRequire(import.meta.url);
 const pkg = require("../package.json") as { version: string };
 
 const appConfig = createAppConfig(process.env, pkg.version);
-const logger = createStructuredLogger(appConfig);
+const rootLogger = createStructuredLogger(appConfig);
 
 const appJwt = jwt({
   secret: appConfig.jwt.secretKey,
@@ -136,18 +137,32 @@ const authenticatedPageRoutes = new Hono<{
 // create application
 const app = new Hono<{ Variables: AppVariables }>();
 
+// add request ID middleware
+app.use(requestId());
+
+// logging
+app.use(
+  structuredLogger({
+    createLogger: (c) => rootLogger.child({ requestId: c.var.requestId }),
+    onResponse: (logger, c, elapsedMs) => {
+      logger.info(`${c.req.method} ${c.req.path}`, {
+        method: c.req.method,
+        path: c.req.path,
+        status: c.res.status,
+        elapsedMs,
+      });
+    },
+  }),
+);
+
 // add security middlewares
 app.use(secureHeaders());
 app.use("/api/*", cors()); // TODO: add allowlist
 app.use(csrf());
 
-// add request ID middleware
-app.use(requestId());
-
 // add services
 app.use("*", async (c, next) => {
   c.set("appConfig", appConfig);
-  c.set("logger", logger);
   c.set("clock", systemClock);
   c.set("eventStore", eventStore);
   c.set("readStore", readStore);
@@ -174,6 +189,6 @@ serve(
     port: appConfig.port,
   },
   (info) => {
-    logger.info(`Server is running on http://localhost:${info.port}`);
+    rootLogger.info(`🚀 Server is running on http://localhost:${info.port}`);
   },
 );
