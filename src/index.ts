@@ -157,6 +157,7 @@ app.use(
         elapsedMs,
       });
     },
+  }),
 );
 
 // add services
