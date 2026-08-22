@@ -162,7 +162,6 @@ app.use(
 // add services
 app.use("*", async (c, next) => {
   c.set("appConfig", appConfig);
-  //c.set("logger", rootLogger);
   c.set("clock", systemClock);
   c.set("eventStore", eventStore);
   c.set("readStore", readStore);
