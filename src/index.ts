@@ -150,13 +150,13 @@ app.use(
   structuredLogger({
     createLogger: (c) => rootLogger.child({ requestId: c.var.requestId }),
     onResponse: (logger, c, elapsedMs) => {
-      logger.info(`${c.req.method} ${c.req.url}`, {
+      logger.info(`${c.req.method} ${c.req.path}`, {
         method: c.req.method,
         path: c.req.path,
+        status: c.res.status,
         elapsedMs,
       });
     },
-  }),
 );
 
 // add services
