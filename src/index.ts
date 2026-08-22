@@ -32,8 +32,9 @@ import { toRole } from "#shared/role.ts";
 import { routes } from "#shared/routes.ts";
 import { createStructuredLogger } from "#shared/structuredLogger.ts";
 import { createAdminUser, createStandardUser } from "#shared/userHelper.ts";
+import pkg from "../package.json" with { type: "json" };
 
-const appConfig = createAppConfig(process.env);
+const appConfig = createAppConfig(process.env, pkg.version);
 const logger = createStructuredLogger(appConfig);
 
 const appJwt = jwt({

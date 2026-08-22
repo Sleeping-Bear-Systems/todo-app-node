@@ -12,6 +12,7 @@ const environmentVariablesSchema = z.object({
     const protocol = new URL(value).protocol;
     return protocol === "postgres:" || protocol === "postgresql:";
   }, "POSTGRES_URI must use postgres:// or postgresql://"),
+  BUILD_NUMBER: z.string().optional().default("0"),
 });
 
 export type Environment = z.infer<
@@ -32,10 +33,12 @@ export type AppConfig = Readonly<{
   postgres: Readonly<{
     uri: string;
   }>;
+  version: string;
 }>;
 
 export function createAppConfig(
   processEnv: Record<string, string | undefined>,
+  packageVersion: string,
 ): AppConfig {
   const environmentVariables = environmentVariablesSchema.parse(processEnv);
   return {
@@ -52,5 +55,6 @@ export function createAppConfig(
     postgres: {
       uri: environmentVariables.POSTGRES_URI,
     },
+    version: `${packageVersion}.${environmentVariables.BUILD_NUMBER}`,
   };
 }
