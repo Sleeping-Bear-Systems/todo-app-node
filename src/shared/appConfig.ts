@@ -12,7 +12,7 @@ const environmentVariablesSchema = z.object({
     const protocol = new URL(value).protocol;
     return protocol === "postgres:" || protocol === "postgresql:";
   }, "POSTGRES_URI must use postgres:// or postgresql://"),
-  BUILD_NUMBER: z.string().optional().default("0"),
+  BUILD_NUMBER: z.coerce.number().int().nonnegative().default(0),
 });
 
 export type Environment = z.infer<

@@ -40,6 +40,24 @@ describe("createAppConfig", () => {
     assert.equal(appConfig.version, "1.2.3.42");
   });
 
+  test("throws when BUILD_NUMBER is negative", () => {
+    assert.throws(() =>
+      createAppConfig(createEnv({ BUILD_NUMBER: "-1" }), version),
+    );
+  });
+
+  test("throws when BUILD_NUMBER is not an integer", () => {
+    assert.throws(() =>
+      createAppConfig(createEnv({ BUILD_NUMBER: "3.14" }), version),
+    );
+  });
+
+  test("throws when BUILD_NUMBER is not numeric", () => {
+    assert.throws(() =>
+      createAppConfig(createEnv({ BUILD_NUMBER: "abc" }), version),
+    );
+  });
+
   test("environment defaults to development", () => {
     const appConfig = createAppConfig(createEnv(), version);
     assert.equal(appConfig.environment, "development");
