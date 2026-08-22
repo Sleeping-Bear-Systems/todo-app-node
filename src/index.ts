@@ -137,11 +137,6 @@ const authenticatedPageRoutes = new Hono<{
 // create application
 const app = new Hono<{ Variables: AppVariables }>();
 
-// add security middlewares
-app.use(secureHeaders());
-app.use("/api/*", cors()); // TODO: add allowlist
-app.use(csrf());
-
 // add request ID middleware
 app.use(requestId());
 
@@ -159,6 +154,11 @@ app.use(
     },
   }),
 );
+
+// add security middlewares
+app.use(secureHeaders());
+app.use("/api/*", cors()); // TODO: add allowlist
+app.use(csrf());
 
 // add services
 app.use("*", async (c, next) => {
