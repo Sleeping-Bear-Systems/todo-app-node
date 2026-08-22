@@ -9,6 +9,7 @@
     "@event-driven-io/emmett-postgresql": "0.43.0-beta.37",
     "@event-driven-io/pongo": "0.17.0-beta.47",
     "@hono/node-server": "^2.1.1",
+    "@hono/structured-logger": "^1.0.0",
     "@hono/zod-validator": "^0.9.0",
     "bcrypt-ts": "^9.0.2",
     "date-fns": "^4.4.0",
