@@ -55,5 +55,6 @@
     "start": "node --experimental-strip-types ./src/index.ts",
     "test": "node --import tsx --test ./src/**/*.test.ts"
   },
-  "type": "module"
+  "type": "module",
+  "version": "0.1.0"
 }
