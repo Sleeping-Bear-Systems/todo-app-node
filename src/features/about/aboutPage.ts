@@ -16,7 +16,7 @@ export const aboutPage = new Hono<{
     <h1>About</h1>
     <div class="about-layout">
       <section class="about-panel">
-        <h1>Version: ${version}</h1>
+        <p>Version: ${version}</p>
         <h2>Powered by</h2>
         <div class="technology-list">
           <a
