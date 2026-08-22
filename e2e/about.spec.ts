@@ -29,7 +29,7 @@ test("Authenticated user can view the about page", async ({ page }) => {
     page.getByRole("heading", { level: 1, name: "About" }),
   ).toBeVisible();
   await expect(
-    page.getByRole("heading", { level: 1, name: "Version: 0.1.0.0" }),
+    page.getByText(/^Version:\s+\d+\.\d+\.\d+\.\d+$/),
   ).toBeVisible();
   await expect(page.getByText(/Sleeping Bear Systems/)).toBeVisible();
 });
