@@ -8,6 +8,7 @@ pipeline {
         SEQ_URL = 'op://SleepingBearSystems/kbh3ujcwvtikg5x2u72ymxfycq/url'
         JWT_SECRET_KEY = 'op://SleepingBearSystems/sewpai64oo4a6n5vawgv5rohte/credential'
         POSTGRES_URI = 'op://SleepingBearSystems/a5i3avqunfzw5gttbtedbii7mi/uri'
+        NODE_ENV = 'test'
     }
     stages {
         stage('Playwright E2E') {
