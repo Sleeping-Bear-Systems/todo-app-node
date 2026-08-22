@@ -1,3 +1,4 @@
+import { createRequire } from "node:module";
 import { inlineProjections } from "@event-driven-io/emmett";
 import { getPostgreSQLEventStore } from "@event-driven-io/emmett-postgresql";
 import { pongoClient } from "@event-driven-io/pongo";
@@ -32,7 +33,9 @@ import { toRole } from "#shared/role.ts";
 import { routes } from "#shared/routes.ts";
 import { createStructuredLogger } from "#shared/structuredLogger.ts";
 import { createAdminUser, createStandardUser } from "#shared/userHelper.ts";
-import pkg from "../package.json" with { type: "json" };
+
+const require = createRequire(import.meta.url);
+const pkg = require("../package.json") as { version: string };
 
 const appConfig = createAppConfig(process.env, pkg.version);
 const logger = createStructuredLogger(appConfig);
