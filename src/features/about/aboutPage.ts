@@ -10,10 +10,13 @@ export const aboutPage = new Hono<{
   const now = c.var.clock.now();
   const currentYear = now.getFullYear();
   const copyrightYears = currentYear > 2026 ? `2026-${currentYear}` : "2026";
+  const version = c.var.appConfig.version;
+
   const content = html`
     <h1>About</h1>
     <div class="about-layout">
       <section class="about-panel">
+        <h1>Version: ${version}</h1>
         <h2>Powered by</h2>
         <div class="technology-list">
           <a
