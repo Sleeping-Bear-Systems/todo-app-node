@@ -32,7 +32,7 @@ pipeline {
                 POSTGRES_URI = 'op://SleepingBearSystems/33rsxifu44baslarw7hg6eeltm/uri'
             }
             steps {
-                timeout(time: 14, unit: 'MINUTES') {
+                timeout(time: 15, unit: 'MINUTES') {
                     input(
                         message: 'RESET_DATABASE is enabled. This will DROP and recreate ' +
                             'the production database. Proceed?',
