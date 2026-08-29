@@ -1,12 +1,49 @@
 /* groovylint-disable CompileStatic */
 pipeline {
     agent none
+    options {
+        disableConcurrentBuilds()
+    }
+    parameters {
+        booleanParam(
+            name: 'RESET_DATABASE',
+            defaultValue: false,
+            description: 'Drop and recreate the production database. Destructive.'
+        )
+    }
     environment {
         BUILD_TIMESTAMP = "${new Date().format('yyyyMMdd-HHmmss', TimeZone.getTimeZone('UTC'))}"
         OP_CLI_PATH = '/usr/local/bin/'
         OP_SERVICE_ACCOUNT_TOKEN = credentials('sbs-op-service-account-token')
     }
     stages {
+        stage('Reset Database') {
+            when {
+                beforeAgent true
+                expression { params.RESET_DATABASE }
+            }
+            agent {
+                docker {
+                    image 'node:26'
+                    label 'docker'
+                }
+            }
+            environment {
+                POSTGRES_URI = 'op://SleepingBearSystems/33rsxifu44baslarw7hg6eeltm/uri'
+            }
+            steps {
+                input message: 'RESET_DATABASE is enabled. This will DROP and recreate the production database. Proceed?', ok: 'Reset database'
+                sh 'npm ci'
+                withSecrets {
+                    sh 'npm run database:reset'
+                }
+            }
+            post {
+                always {
+                    cleanWs()
+                }
+            }
+        }
         stage('Deploy Production') {
             agent { label 'docker' }
             environment {
