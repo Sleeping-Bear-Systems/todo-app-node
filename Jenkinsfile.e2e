@@ -1,6 +1,9 @@
 /* groovylint-disable-next-line CompileStatic */
 pipeline {
     agent none
+    options {
+        disableConcurrentBuilds()
+    }
     environment {
         CI = 'true'
         OP_CLI_PATH = '/usr/local/bin/'
@@ -21,8 +24,8 @@ pipeline {
                 SEQ_URL = 'op://SleepingBearSystems/kbh3ujcwvtikg5x2u72ymxfycq/url'
             }
             steps {
+                sh 'npm ci'
                 withSecrets {
-                    sh 'npm ci'
                     sh 'node --import tsx ./tools/create-database.ts --force'
                     sh 'npm run playwright:test'
                 }
