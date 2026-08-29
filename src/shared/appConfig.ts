@@ -33,11 +33,15 @@ export type AppConfig = Readonly<{
   postgres: Readonly<{
     uri: string;
   }>;
-  version: string;
+  application: Readonly<{
+    name: string;
+    version: string;
+  }>;
 }>;
 
 export function createAppConfig(
   processEnv: Record<string, string | undefined>,
+  packageName: string,
   packageVersion: string,
 ): AppConfig {
   const environmentVariables = environmentVariablesSchema.parse(processEnv);
@@ -50,11 +54,14 @@ export function createAppConfig(
     },
     jwt: {
       secretKey: environmentVariables.JWT_SECRET_KEY,
-      cookieName: "todo-app-node",
+      cookieName: `${packageName}-${environmentVariables.NODE_ENV}`,
     },
     postgres: {
       uri: environmentVariables.POSTGRES_URI,
     },
-    version: `${packageVersion}.${environmentVariables.BUILD_NUMBER}`,
+    application: {
+      name: packageName,
+      version: `${packageVersion}.${environmentVariables.BUILD_NUMBER}`,
+    },
   };
 }

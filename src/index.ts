@@ -38,9 +38,9 @@ import { createStructuredLogger } from "#shared/structuredLogger.ts";
 import { createAdminUser, createStandardUser } from "#shared/userHelper.ts";
 
 const require = createRequire(import.meta.url);
-const pkg = require("../package.json") as { version: string };
+const pkg = require("../package.json") as { name: string; version: string };
 
-const appConfig = createAppConfig(process.env, pkg.version);
+const appConfig = createAppConfig(process.env, pkg.name, pkg.version);
 const rootLogger = createStructuredLogger(appConfig);
 
 rootLogger.info("🚀 Starting application");

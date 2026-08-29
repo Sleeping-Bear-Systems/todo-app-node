@@ -17,7 +17,10 @@ const baseConfig: AppConfig = {
   postgres: {
     uri: "postgresql://user:password@host:5432/database",
   },
-  version: "0.0.0.0",
+  application: {
+    name: "name",
+    version: "0.0.0.0",
+  },
 };
 
 describe("createStructuredLogger", () => {
