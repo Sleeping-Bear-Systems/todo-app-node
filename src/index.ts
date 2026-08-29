@@ -12,6 +12,8 @@ import { csrf } from "hono/csrf";
 import { jwt } from "hono/jwt";
 import { requestId } from "hono/request-id";
 import { secureHeaders } from "hono/secure-headers";
+import type { ClientConfig } from "pg";
+import { parseIntoClientConfig } from "pg-connection-string";
 import z from "zod";
 import { aboutPage } from "#features/about/aboutPage.ts";
 import { addTaskPage } from "#features/add-task/addTaskPage.ts";
@@ -41,6 +43,8 @@ const pkg = require("../package.json") as { version: string };
 const appConfig = createAppConfig(process.env, pkg.version);
 const rootLogger = createStructuredLogger(appConfig);
 
+rootLogger.info("🚀 Starting application");
+
 const appJwt = jwt({
   secret: appConfig.jwt.secretKey,
   alg: "HS256",
@@ -65,18 +69,30 @@ async function validateJwt(
   });
 }
 
+// get connection string
+const clientConfig: ClientConfig = parseIntoClientConfig(
+  appConfig.postgres.uri,
+);
+rootLogger.info("Checking database connection string", {
+  host: clientConfig.host ?? "unknown",
+  database: clientConfig.database ?? "unknown",
+});
+
 // create event store
+rootLogger.info("Creating event store");
 const eventStore = getPostgreSQLEventStore(appConfig.postgres.uri, {
   projections: inlineProjections([taskProjection, userProjection]),
 });
 
 // create read store
+rootLogger.info("Creating read store");
 const readStore = pongoClient({
   driver: pgDriver,
   connectionString: appConfig.postgres.uri,
 });
 
 // handle environment setup
+rootLogger.info("Running environment-specific setup");
 switch (appConfig.environment) {
   case "development":
   case "test":
@@ -93,6 +109,7 @@ switch (appConfig.environment) {
 }
 
 // map API routes
+rootLogger.info("Configuring routes");
 const apiRoutes = new Hono<{ Variables: AppVariables }>()
   .route("/logout", logoutApi)
   .route("/ping", pingApi);
@@ -145,7 +162,7 @@ app.use(
   structuredLogger({
     createLogger: (c) => rootLogger.child({ requestId: c.var.requestId }),
     onResponse: (logger, c, elapsedMs) => {
-      logger.info(`${c.req.method} ${c.req.path}`, {
+      logger.info(`${c.req.method} ${c.req.path} ${c.res.status}`, {
         method: c.req.method,
         path: c.req.path,
         status: c.res.status,
@@ -183,12 +200,13 @@ app.get("/", (c) => {
 });
 
 // run application
+rootLogger.info("Starting server");
 serve(
   {
     fetch: app.fetch,
     port: appConfig.port,
   },
   (info) => {
-    rootLogger.info(`🚀 Server is running on http://localhost:${info.port}`);
+    rootLogger.info(`Server is running on http://localhost:${info.port}`);
   },
 );
