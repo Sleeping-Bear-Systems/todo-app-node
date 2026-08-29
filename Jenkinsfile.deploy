@@ -32,11 +32,16 @@ pipeline {
                 POSTGRES_URI = 'op://SleepingBearSystems/33rsxifu44baslarw7hg6eeltm/uri'
             }
             steps {
+                input message: 'RESET_DATABASE is enabled. This will DROP and recreate the production database. Proceed?', ok: 'Reset database'
                 withSecrets {
                     sh 'npm ci && npm run database:reset'
                 }
             }
-        }
+            post {
+                always {
+                    cleanWs()
+                }
+            }
         stage('Deploy Production') {
             agent { label 'docker' }
             environment {
