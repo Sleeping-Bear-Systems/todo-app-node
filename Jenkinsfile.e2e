@@ -4,11 +4,6 @@ pipeline {
     environment {
         CI = 'true'
         OP_CLI_PATH = '/usr/local/bin/'
-        SEQ_API_KEY = 'op://SleepingBearSystems/kbh3ujcwvtikg5x2u72ymxfycq/credential'
-        SEQ_URL = 'op://SleepingBearSystems/kbh3ujcwvtikg5x2u72ymxfycq/url'
-        JWT_SECRET_KEY = 'op://SleepingBearSystems/sewpai64oo4a6n5vawgv5rohte/credential'
-        POSTGRES_URI = 'op://SleepingBearSystems/a5i3avqunfzw5gttbtedbii7mi/uri'
-        NODE_ENV = 'test'
     }
     stages {
         stage('Playwright E2E') {
@@ -16,6 +11,13 @@ pipeline {
                 docker {
                     image 'mcr.microsoft.com/playwright:v1.62.1-noble'
                 }
+            }
+            environment {
+                JWT_SECRET_KEY = 'op://SleepingBearSystems/sewpai64oo4a6n5vawgv5rohte/credential'
+                NODE_ENV = 'test'
+                POSTGRES_URI = 'op://SleepingBearSystems/a5i3avqunfzw5gttbtedbii7mi/uri'
+                SEQ_API_KEY = 'op://SleepingBearSystems/kbh3ujcwvtikg5x2u72ymxfycq/credential'
+                SEQ_URL = 'op://SleepingBearSystems/kbh3ujcwvtikg5x2u72ymxfycq/url'
             }
             steps {
                 withSecrets {
