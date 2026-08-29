@@ -14,28 +14,28 @@ import { evolve, initialState, type TaskState } from "./taskState.ts";
 export type TaskCommand =
   | Command<
       "RemoveTask",
-      {
+      Readonly<{
         taskId: string;
         removedOn: Date;
-      },
+      }>,
       CommandMetadata
     >
   | Command<
       "CompleteTask",
-      {
+      Readonly<{
         taskId: string;
         completedOn: Date;
-      },
+      }>,
       CommandMetadata
     >
   | Command<
       "AddTask",
-      {
+      Readonly<{
         taskId: string;
         title: string;
         description: string;
         addedOn: Date;
-      },
+      }>,
       CommandMetadata
     >;
 

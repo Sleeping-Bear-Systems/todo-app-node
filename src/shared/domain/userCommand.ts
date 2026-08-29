@@ -12,15 +12,24 @@ import { evolve, initialState, type UserState } from "./userState.ts";
 export type UserCommand =
   | Command<
       "RegisterUser",
-      { userId: string; username: string; passwordHash: string; role: Role },
+      Readonly<{
+        userId: string;
+        username: string;
+        passwordHash: string;
+        role: Role;
+      }>,
       CommandMetadata
     >
   | Command<
       "ChangePassword",
-      { userId: string; passwordHash: string },
+      Readonly<{ userId: string; passwordHash: string }>,
       CommandMetadata
     >
-  | Command<"ChangeRole", { userId: string; role: Role }, CommandMetadata>;
+  | Command<
+      "ChangeRole",
+      Readonly<{ userId: string; role: Role }>,
+      CommandMetadata
+    >;
 
 export function decide(
   command: UserCommand,
