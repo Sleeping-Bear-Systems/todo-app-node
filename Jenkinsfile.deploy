@@ -10,7 +10,7 @@ pipeline {
         stage('Deploy Production') {
             agent { label 'docker' }
             environment {
-                ADMIN_PASSWORD = 'op://SleepingBearSystems/qypc6wb66va4hqsr53i3fhvpoe/username'
+                ADMIN_PASSWORD = 'op://SleepingBearSystems/qypc6wb66va4hqsr53i3fhvpoe/password'
                 ADMIN_USERNAME = 'op://SleepingBearSystems/qypc6wb66va4hqsr53i3fhvpoe/username'
                 CONTAINER_NAME = 'todo-app-prod'
                 HOST_PORT = '3600'
