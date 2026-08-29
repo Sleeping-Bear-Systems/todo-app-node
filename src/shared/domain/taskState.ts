@@ -1,29 +1,29 @@
 import type { TaskEvent } from "./taskEvent.ts";
 
 export type TaskState =
-  | {
+  | Readonly<{
       status: "UnknownTask";
-    }
-  | {
+    }>
+  | Readonly<{
       status: "AddedTask";
       taskId: string;
       title: string;
       description: string;
       addedOn: Date;
       userId: string;
-    }
-  | {
+    }>
+  | Readonly<{
       status: "RemovedTask";
       taskId: string;
       removedOn: Date;
       userId: string;
-    }
-  | {
+    }>
+  | Readonly<{
       status: "CompletedTask";
       taskId: string;
       completedOn: Date;
       userId: string;
-    };
+    }>;
 
 export function initialState(): TaskState {
   return {

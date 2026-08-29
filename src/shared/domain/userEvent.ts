@@ -5,12 +5,21 @@ import type { EventMetadata } from "./eventMetadata.ts";
 export type UserEvent =
   | Event<
       "UserRegistered",
-      { userId: string; username: string; passwordHash: string; role: Role },
+      Readonly<{
+        userId: string;
+        username: string;
+        passwordHash: string;
+        role: Role;
+      }>,
       EventMetadata
     >
   | Event<
       "PasswordChanged",
-      { userId: string; passwordHash: string },
+      Readonly<{ userId: string; passwordHash: string }>,
       EventMetadata
     >
-  | Event<"RoleChanged", { userId: string; role: Role }, EventMetadata>;
+  | Event<
+      "RoleChanged",
+      Readonly<{ userId: string; role: Role }>,
+      EventMetadata
+    >;
