@@ -33,8 +33,9 @@ pipeline {
             }
             steps {
                 input message: 'RESET_DATABASE is enabled. This will DROP and recreate the production database. Proceed?', ok: 'Reset database'
+                sh 'npm ci'
                 withSecrets {
-                    sh 'npm ci && npm run database:reset'
+                    sh 'npm run database:reset'
                 }
             }
             post {
@@ -42,6 +43,7 @@ pipeline {
                     cleanWs()
                 }
             }
+        }
         stage('Deploy Production') {
             agent { label 'docker' }
             environment {
