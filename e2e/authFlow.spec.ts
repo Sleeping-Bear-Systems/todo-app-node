@@ -1,7 +1,7 @@
 /** biome-ignore-all lint/complexity/useLiteralKeys: noPropertyAccessFromIndexSignature = true */
 import { expect, type Page, test } from "@playwright/test";
 
-const authCookieName = "todo-app-node";
+const authCookieName = `todo-app-node-${process.env["NODE_ENV"] ?? "development"}`;
 
 async function signInAsAdmin(page: Page) {
   await page.goto("/login");

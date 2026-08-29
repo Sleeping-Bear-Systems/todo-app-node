@@ -103,7 +103,7 @@ export const loginPage = new Hono<{ Variables: AppVariables }>()
         sub: userDocument._id,
         preferred_username: userDocument.username,
         role: userDocument.role,
-        iss: "todo-app-node",
+        iss: appConfig.application.name,
         exp: Math.floor(addDays(now, 1).getTime() / 1000),
         iat: Math.floor(now.getTime() / 1000),
       };
