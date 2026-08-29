@@ -4,6 +4,7 @@ pipeline {
     environment {
         CI = 'true'
         OP_CLI_PATH = '/usr/local/bin/'
+        OP_SERVICE_ACCOUNT_TOKEN = credentials('sbs-op-service-account-token')
     }
     stages {
         stage('Playwright E2E') {

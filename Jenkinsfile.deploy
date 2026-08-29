@@ -10,8 +10,8 @@ pipeline {
         stage('Deploy Production') {
             agent { label 'docker' }
             environment {
-                ADMIN_PASSWORD = 'op://SleepingBearSystems/ppq76diqpesxmirkzzrt3cyvyi/password'
-                ADMIN_USERNAME = 'op://SleepingBearSystems/ppq76diqpesxmirkzzrt3cyvyi/username'
+                ADMIN_PASSWORD = 'op://SleepingBearSystems/qypc6wb66va4hqsr53i3fhvpoe/username'
+                ADMIN_USERNAME = 'op://SleepingBearSystems/qypc6wb66va4hqsr53i3fhvpoe/username'
                 CONTAINER_NAME = 'todo-app-prod'
                 HOST_PORT = '3600'
                 JWT_SECRET_KEY = 'op://SleepingBearSystems/sewpai64oo4a6n5vawgv5rohte/credential'
