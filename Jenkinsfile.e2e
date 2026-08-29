@@ -1,6 +1,9 @@
 /* groovylint-disable-next-line CompileStatic */
 pipeline {
     agent none
+    options {
+        disableConcurrentBuilds()
+    }
     environment {
         CI = 'true'
         OP_CLI_PATH = '/usr/local/bin/'
