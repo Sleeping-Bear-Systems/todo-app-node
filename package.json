@@ -54,7 +54,7 @@
     "playwright:test:ui": "playwright test --ui",
     "playwright:test": "playwright test",
     "start": "node --experimental-strip-types ./src/index.ts",
-    "test": "node --import tsx --test ./src/**/*.test.ts"
+    "test": "node --import tsx --test \"./src/**/*.test.ts\""
   },
   "type": "module",
   "version": "0.1.1"
