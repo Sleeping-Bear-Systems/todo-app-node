@@ -10,23 +10,23 @@
     "@event-driven-io/pongo": "0.17.0-beta.47",
     "@hono/node-server": "^2.1.1",
     "@hono/structured-logger": "^1.0.0",
-    "@hono/zod-validator": "^0.9.0",
+    "@hono/zod-validator": "^0.9.1",
     "bcrypt-ts": "^9.0.2",
     "date-fns": "^4.4.0",
-    "hono": "^4.13.3",
+    "hono": "^4.13.7",
     "pg": "^8.23.0",
     "pg-connection-string": "^2.14.0",
     "winston": "^3.19.0",
-    "zod": "^4.4.3"
+    "zod": "^4.5.4"
   },
   "devDependencies": {
-    "@biomejs/biome": "^2.5.10",
-    "@playwright/test": "^1.62.1",
+    "@biomejs/biome": "^2.5.12",
+    "@playwright/test": "^1.63.0",
     "@tsconfig/node26": "^26.0.1",
     "@tsconfig/strictest": "^2.0.8",
-    "@types/node": "^26.2.0",
+    "@types/node": "^26.5.0",
     "@types/pg": "^8.23.1",
-    "tsx": "^4.23.12",
+    "tsx": "^4.23.13",
     "typescript": "^7.0.2"
   },
   "engines": {
