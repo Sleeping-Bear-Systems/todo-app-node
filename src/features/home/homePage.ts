@@ -60,7 +60,7 @@ export const homePage = new Hono<{
 
     const content = html`
       <div id="tasks">
-        <table>
+        <table class="tasks-grid">
           <tr>
             <th>Title</th>
             <th>Description</th>
@@ -73,7 +73,7 @@ export const homePage = new Hono<{
             <tr>
               <td>${d.title}</td>
               <td>${d.description}</td>
-              <td>${d.status}</td>
+              <td><span class="task-status task-status-${d.status.toLowerCase()}">${d.status}</span></td>
               <td>${d.addedOn}</td>
               <td class="task-actions">
                 ${
