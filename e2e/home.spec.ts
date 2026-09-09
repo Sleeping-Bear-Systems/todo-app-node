@@ -42,7 +42,7 @@ test("Authenticated user can view the home page", async ({ page }) => {
     "href",
     "/auth/add-task",
   );
-  await expect(page.getByRole("button", { name: "Sign out" })).toBeVisible();
+  await expect(page.getByRole("button", { name: "Logout" })).toBeVisible();
 });
 
 test("User can navigate to add-task page from home page", async ({ page }) => {
@@ -56,9 +56,9 @@ test("User can navigate to add-task page from home page", async ({ page }) => {
   ).toBeVisible();
 });
 
-test("User can sign out from home page", async ({ page }) => {
+test("User can log out from home page", async ({ page }) => {
   await signInAsAdmin(page);
-  await page.getByRole("button", { name: "Sign out" }).click();
+  await page.getByRole("button", { name: "Logout" }).click();
 
   await expect(page).toHaveURL(/\/login$/);
   await expect(
