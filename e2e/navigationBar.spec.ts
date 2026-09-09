@@ -20,7 +20,7 @@ test("Authenticated pages render navigation bar with username", async ({
   await expect(navigationBar).toBeVisible();
   await expect(navigationBar.getByText("admin", { exact: true })).toBeVisible();
   await expect(
-    navigationBar.getByRole("button", { name: "Sign out" }),
+    navigationBar.getByRole("button", { name: "Logout" }),
   ).toBeVisible();
 });
 
@@ -71,7 +71,7 @@ test("About page hides About link and can navigate to Home", async ({
   ).toBeVisible();
 });
 
-test("User can sign out from navigation bar", async ({ page }) => {
+test("User can log out from navigation bar", async ({ page }) => {
   await signInAsAdmin(page);
   await page.goto("/auth/about");
 
@@ -79,7 +79,7 @@ test("User can sign out from navigation bar", async ({ page }) => {
     name: "Main navigation",
   });
 
-  await navigationBar.getByRole("button", { name: "Sign out" }).click();
+  await navigationBar.getByRole("button", { name: "Logout" }).click();
 
   await expect(page).toHaveURL(/\/login$/);
   await expect(
