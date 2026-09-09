@@ -12,25 +12,23 @@ export function NavigationBar(props: NavigationBarProps) {
   const homeLink =
     props.path === routes.HOME_PAGE
       ? html``
-      : html`<a href="${routes.HOME_PAGE}">Home</a>`;
+      : html`<a class="nav-link" href="${routes.HOME_PAGE}">Home</a>`;
   const aboutLink =
     props.path === routes.ABOUT_PAGE
       ? html``
-      : html`<a href="${routes.ABOUT_PAGE}">About</a>`;
+      : html`<a class="nav-link" href="${routes.ABOUT_PAGE}">About</a>`;
   const adminLink =
     props.path === routes.ADMIN_PAGE || props.role !== "admin"
       ? html``
-      : html`<a href="${routes.ADMIN_PAGE}">Admin</a>`;
+      : html`<a class="nav-link" href="${routes.ADMIN_PAGE}">Admin</a>`;
 
   return html`
     <nav aria-label="Main navigation">
-      ${homeLink}
-      ${adminLink}
-      ${aboutLink}
-      <span>${props.username}</span>
-      <form method="post" action="${routes.LOGOUT_API}">
-        <button type="submit">Sign out</button>
-      </form>
+      <div class="nav-links">${homeLink} ${adminLink} ${aboutLink}</div>
+      <div class="nav-user">
+        <span class="nav-username">${props.username}</span>
+        <button data-on:click="@post('${routes.LOGOUT_API}')">Logout</button>
+      </div>
     </nav>
   `;
 }

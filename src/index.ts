@@ -30,6 +30,7 @@ import type {
   AuthenticatedAppVariables,
 } from "#shared/appVariables.ts";
 import { systemClock } from "#shared/clock.ts";
+import { isDatastarRequest } from "#shared/datastar.ts";
 import { taskProjection } from "#shared/domain/taskProjection.ts";
 import { userProjection } from "#shared/domain/userProjection.ts";
 import { toRole } from "#shared/role.ts";
@@ -183,7 +184,7 @@ app.use("*", async (c, next) => {
   c.set("clock", systemClock);
   c.set("eventStore", eventStore);
   c.set("readStore", readStore);
-  c.set("isDatastarRequest", c.req.header("Datastar-Request") === "true");
+  c.set("isDatastarRequest", isDatastarRequest(c));
   await next();
 });
 
