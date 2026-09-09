@@ -203,12 +203,6 @@ form {
   max-width: 24rem;
 }
 
-.nav-user form {
-  display: inline-flex;
-  align-items: center;
-  max-width: none;
-}
-
 @media (max-width: 640px) {
   .about-layout {
     grid-template-columns: 1fr;

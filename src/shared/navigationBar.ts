@@ -25,7 +25,7 @@ export function NavigationBar(props: NavigationBarProps) {
   return html`
     <nav aria-label="Main navigation">
       <div class="nav-links">${homeLink} ${adminLink} ${aboutLink}</div>
-      <div class="nav-user">
+      <div>
         <span class="nav-username">${props.username}</span>
         <button class="nav-signout" data-on:click="@post('${routes.LOGOUT_API}')">Logout</button>
       </div>
