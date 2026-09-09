@@ -21,11 +21,12 @@ export const adminPage = new Hono<{
 
     const content = html`
       <h1>Admin</h1>
-      <form data-on:submit="@post('${routes.ADMIN_PAGE}/rebuild-projections', {contentType: 'form'})">
-        <button class="icon-button" type="submit" aria-label="Rebuild projections">
-          Rebuild Projections
-        </button>
-      </form>
+      <button
+        aria-label="Rebuild projections"
+        data-on:click="@post('${routes.ADMIN_PAGE}/rebuild-projections')"
+      >
+        Rebuild Projections
+      </button>
       <div id="errors"></div>
     `;
 
