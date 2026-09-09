@@ -21,10 +21,7 @@ export const adminPage = new Hono<{
 
     const content = html`
       <h1>Admin</h1>
-      <button
-        aria-label="Rebuild projections"
-        data-on:click="@post('${routes.ADMIN_PAGE}/rebuild-projections')"
-      >
+      <button data-on:click="@post('${routes.ADMIN_PAGE}/rebuild-projections')">
         Rebuild Projections
       </button>
       <div id="errors"></div>
