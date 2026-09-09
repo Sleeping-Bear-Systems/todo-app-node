@@ -27,7 +27,7 @@ export function NavigationBar(props: NavigationBarProps) {
       <div class="nav-links">${homeLink} ${adminLink} ${aboutLink}</div>
       <div class="nav-user">
         <span class="nav-username">${props.username}</span>
-        <button data-on:click="@post('${routes.LOGOUT_API}')">Logout</button>
+        <button class="nav-signout" data-on:click="@post('${routes.LOGOUT_API}')">Logout</button>
       </div>
     </nav>
   `;
