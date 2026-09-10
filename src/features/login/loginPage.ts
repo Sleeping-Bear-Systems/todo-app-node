@@ -65,10 +65,10 @@ export const loginPage = new Hono<{ Variables: AppVariables }>()
           type="submit"
           data-attr:disabled="$fetching"
         >
-          Sign in
+          Login
         </button>
       </form>
-      <div data-show="$_fetching">Logging in...</div>
+      <div data-show="$fetching">Logging in...</div>
       <div id="errors"></div>
     `;
 

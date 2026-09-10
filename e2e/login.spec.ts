@@ -4,13 +4,13 @@ async function signInAsAdmin(page: Page) {
   await page.goto("/login");
   await page.getByLabel("Username").fill("admin");
   await page.getByLabel("Password").fill("password1234");
-  await page.getByRole("button", { name: "Sign in" }).click();
+  await page.getByRole("button", { name: "Login" }).click();
 }
 
 async function attemptSignIn(page: Page, username: string, password: string) {
   await page.getByLabel("Username").fill(username);
   await page.getByLabel("Password").fill(password);
-  await page.getByRole("button", { name: "Sign in" }).click();
+  await page.getByRole("button", { name: "Login" }).click();
 }
 
 test("GET /login renders the login form", async ({ page }) => {
@@ -26,7 +26,7 @@ test("GET /login renders the login form", async ({ page }) => {
 
   await expect(page.getByLabel("Username")).toBeVisible();
   await expect(page.getByLabel("Password")).toBeVisible();
-  await expect(page.getByRole("button", { name: "Sign in" })).toBeVisible();
+  await expect(page.getByRole("button", { name: "Login" })).toBeVisible();
   await expect(
     page.getByRole("navigation", { name: "Main navigation" }),
   ).toHaveCount(0);
@@ -56,7 +56,7 @@ test("Empty login submission is blocked before sending the request", async ({
   page,
 }) => {
   await page.goto("/login");
-  await page.getByRole("button", { name: "Sign in" }).click();
+  await page.getByRole("button", { name: "Login" }).click();
 
   await expect(page).toHaveURL(/\/login$/);
   await expect(page.getByLabel("Username")).toBeVisible();
@@ -69,7 +69,7 @@ test("Short usernames and passwords are blocked by client-side validation", asyn
   await page.goto("/login");
   await page.getByLabel("Username").fill("ab");
   await page.getByLabel("Password").fill("short");
-  await page.getByRole("button", { name: "Sign in" }).click();
+  await page.getByRole("button", { name: "Login" }).click();
 
   await expect(page).toHaveURL(/\/login$/);
   await expect(page.locator("#errors")).toHaveText("");
