@@ -124,10 +124,10 @@ export const loginPage = new Hono<{ Variables: AppVariables }>()
       });
       return await sseRedirect(c, routes.HOME_PAGE);
     } catch (error) {
-      logger.error(error);
       if (error instanceof ZodError) {
         return c.html(html`<div id="errors">Invalid credentials</div>`);
       }
+      logger.error(error);
       return c.html(html`<div id="errors">Internal server error</div>`);
     }
   });
