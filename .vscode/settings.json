@@ -56,5 +56,31 @@
   "files.associations": {
     "Jenkinsfile": "groovy",
     "Jenkinsfile.*": "groovy"
-  }
+  },
+  "datastar.enabledLanguages": [
+    "html",
+    "php",
+    "twig",
+    "edge",
+    "nunjucks",
+    "templ",
+    "astro",
+    "vue",
+    "svelte",
+    "handlebars",
+    "mustache",
+    "liquid",
+    "erb",
+    "ejs",
+    "pug",
+    "razor",
+    "blade",
+    "django-html",
+    "jinja",
+    "gohtml",
+    "jsp",
+    "aspnetcorerazor",
+    "typescript",
+    "javascript"
+  ]
 }
