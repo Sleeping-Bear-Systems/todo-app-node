@@ -52,7 +52,7 @@ test("Authenticated users are redirected away from /login", async ({
   ).toBeVisible();
 });
 
-test("Empty login submission is blocked before sending the request", async ({
+test("Empty login submission is rejected with an inline invalid credentials error", async ({
   page,
 }) => {
   await page.goto("/login");
@@ -61,6 +61,7 @@ test("Empty login submission is blocked before sending the request", async ({
   await expect(page).toHaveURL(/\/login$/);
   await expect(page.getByLabel("Username")).toBeVisible();
   await expect(page.getByLabel("Password")).toBeVisible();
+  await expect(page.locator("#errors")).toContainText("Invalid credentials");
 });
 
 test("Short usernames and passwords are treated as invalid credentials", async ({
