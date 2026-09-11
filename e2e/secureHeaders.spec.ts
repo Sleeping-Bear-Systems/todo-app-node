@@ -18,7 +18,7 @@ test("GET /auth/about includes secure headers", async ({ page }) => {
   await page.goto("/login");
   await page.getByLabel("Username").fill("admin");
   await page.getByLabel("Password").fill("password1234");
-  await page.getByRole("button", { name: "Sign in" }).click();
+  await page.getByRole("button", { name: "Login" }).click();
   await expect(page).toHaveURL(/\/auth\/home$/);
 
   const response = await page.request.get("/auth/about");

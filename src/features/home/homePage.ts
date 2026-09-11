@@ -79,24 +79,30 @@ export const homePage = new Hono<{
                 ${
                   d.status === "Active"
                     ? html`
-                      <form data-on:submit="@post('${routes.HOME_PAGE}/complete-task/${d._id}', {contentType: 'form'})">
-                        <button class="icon-button" type="submit" aria-label="Complete task">
-                          <img
-                            class="button-icon"
-                            src="/images/Check-Thick--Streamline-Plump.svg"
-                            alt=""
-                          />
-                        </button>
-                      </form>
-                      <form data-on:submit="@post('${routes.HOME_PAGE}/remove-task/${d._id}', {contentType: 'form'})">
-                        <button class="icon-button" type="submit" aria-label="Remove task">
-                          <img
-                            class="button-icon"
-                            src="/images/Recycle-Bin-2--Streamline-Plump.svg"
-                            alt=""
-                          />
-                        </button>
-                      </form>
+                      <button
+                        class="icon-button"
+                        aria-label="Complete task"
+                        data-on:click="@post('${routes.HOME_PAGE}/complete-task/${d._id}')"
+                        type="button"
+                      >
+                        <img
+                          class="button-icon"
+                          src="/images/Check-Thick--Streamline-Plump.svg"
+                          alt=""
+                        />
+                      </button>
+                      <button
+                        class="icon-button"
+                        aria-label="Remove task"
+                        data-on:click="@post('${routes.HOME_PAGE}/remove-task/${d._id}')"
+                        type="button"
+                      >
+                        <img
+                          class="button-icon"
+                          src="/images/Recycle-Bin-2--Streamline-Plump.svg"
+                          alt=""
+                        />
+                      </button>
                     `
                     : html``
                 }

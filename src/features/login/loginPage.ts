@@ -1,23 +1,23 @@
-import { zValidator } from "@hono/zod-validator";
 import { compare } from "bcrypt-ts";
 import { addDays } from "date-fns";
 import { Hono } from "hono";
 import { getCookie, setCookie } from "hono/cookie";
 import { html } from "hono/html";
 import { sign, verify } from "hono/jwt";
-import z from "zod";
+import z, { ZodError } from "zod";
 import type { AppVariables } from "#shared/appVariables.ts";
 import { sseRedirect } from "#shared/datastar.ts";
 import {
   type UserDocument,
   usersCollectionName,
 } from "#shared/domain/userProjection.ts";
+import { formDataStringEntries } from "#shared/hono.ts";
 import { Page } from "#shared/page.ts";
 import { routes } from "#shared/routes.ts";
 
 const loginRequestSchema = z.object({
-  username: z.string().min(3),
-  password: z.string().min(8),
+  username: z.string().min(1),
+  password: z.string().min(1),
 });
 
 export const loginPage = new Hono<{ Variables: AppVariables }>()
@@ -39,6 +39,7 @@ export const loginPage = new Hono<{ Variables: AppVariables }>()
       <form
         id="login-form"
         data-on:submit="@post('${routes.LOGIN_PAGE}', {contentType: 'form'})"
+        data-indicator:fetching
       >
         <div>
           <label for="username">Username</label>
@@ -46,9 +47,8 @@ export const loginPage = new Hono<{ Variables: AppVariables }>()
             id="username"
             name="username"
             type="text"
-            required
-            minLength="3"
             autoComplete="username"
+            data-attr:readonly="$fetching"
           />
         </div>
         <div>
@@ -57,13 +57,18 @@ export const loginPage = new Hono<{ Variables: AppVariables }>()
             id="password"
             name="password"
             type="password"
-            required
-            minLength="8"
             autoComplete="current-password"
+            data-attr:readonly="$fetching"
           />
         </div>
-        <button type="submit">Sign in</button>
+        <button
+          type="submit"
+          data-attr:disabled="$fetching"
+        >
+          Login
+        </button>
       </form>
+      <div data-show="$fetching">Logging in...</div>
       <div id="errors"></div>
     `;
 
@@ -76,28 +81,31 @@ export const loginPage = new Hono<{ Variables: AppVariables }>()
       }),
     );
   })
-  .post("/", zValidator("form", loginRequestSchema), async (c) => {
+  .post("/", async (c) => {
     if (!c.var.isDatastarRequest) {
       return c.redirect(routes.ERROR_PAGE, 303);
     }
     const now = c.var.clock.now();
     const appConfig = c.var.appConfig;
-    const { username, password } = c.req.valid("form");
     const logger = c.var.logger;
     const readStore = c.var.readStore;
 
     try {
+      const formData = await c.req.formData();
+      const stringEntries = formDataStringEntries(formData);
+      const { username, password } = loginRequestSchema.parse(stringEntries);
+
       const normalizedUsername = username.toLowerCase().trim();
       const userDocument = await readStore
         .db()
         .collection<UserDocument>(usersCollectionName)
         .findOne({ username: normalizedUsername });
       if (userDocument === null) {
-        return c.html(html`<div id="errors">Invalid Credentials</div>`);
+        return c.html(html`<div id="errors">Invalid credentials</div>`);
       }
       const passwordCheck = await compare(password, userDocument.passwordHash);
       if (!passwordCheck) {
-        return c.html(html`<div id="errors">Invalid Credentials</div>`);
+        return c.html(html`<div id="errors">Invalid credentials</div>`);
       }
       const payload = {
         sub: userDocument._id,
@@ -116,6 +124,9 @@ export const loginPage = new Hono<{ Variables: AppVariables }>()
       });
       return await sseRedirect(c, routes.HOME_PAGE);
     } catch (error) {
+      if (error instanceof ZodError) {
+        return c.html(html`<div id="errors">Invalid credentials</div>`);
+      }
       logger.error(error);
       return c.html(html`<div id="errors">Internal server error</div>`);
     }
