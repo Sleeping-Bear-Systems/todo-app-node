@@ -82,5 +82,9 @@
     "aspnetcorerazor",
     "typescript",
     "javascript"
-  ]
+  ],
+  "emmet.includeLanguages": {
+    "typescript": "html",
+    "javascript": "html"
+  }
 }
