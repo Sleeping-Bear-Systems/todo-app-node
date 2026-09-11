@@ -1,4 +1,3 @@
-import { IllegalStateError } from "@event-driven-io/emmett";
 import { compare } from "bcrypt-ts";
 import { addDays } from "date-fns";
 import { Hono } from "hono";
