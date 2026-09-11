@@ -83,6 +83,7 @@ export const homePage = new Hono<{
                         class="icon-button"
                         aria-label="Complete task"
                         data-on:click="@post('${routes.HOME_PAGE}/complete-task/${d._id}')"
+                        type="button"
                       >
                         <img
                           class="button-icon"
@@ -94,6 +95,7 @@ export const homePage = new Hono<{
                         class="icon-button"
                         aria-label="Remove task"
                         data-on:click="@post('${routes.HOME_PAGE}/remove-task/${d._id}')"
+                        type="button"
                       >
                         <img
                           class="button-icon"
