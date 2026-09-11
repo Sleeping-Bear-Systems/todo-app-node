@@ -48,7 +48,7 @@ export const loginPage = new Hono<{ Variables: AppVariables }>()
             name="username"
             type="text"
             autoComplete="username"
-            data-attr:disabled="$fetching"
+            data-attr:readonly="$fetching"
           />
         </div>
         <div>
@@ -58,7 +58,7 @@ export const loginPage = new Hono<{ Variables: AppVariables }>()
             name="password"
             type="password"
             autoComplete="current-password"
-            data-attr:disabled="$fetching"
+            data-attr:readonly="$fetching"
           />
         </div>
         <button
