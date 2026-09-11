@@ -37,7 +37,7 @@ test("Invalid credentials render inline login error", async ({ page }) => {
   await attemptSignIn(page, "admin", "wrong-pass");
 
   await expect(page).toHaveURL(/\/login$/);
-  await expect(page.locator("#errors")).toContainText("Invalid Credentials");
+  await expect(page.locator("#errors")).toContainText("Invalid credentials");
 });
 
 test("Authenticated users are redirected away from /login", async ({
@@ -91,7 +91,7 @@ test("Invalid login does not authenticate user", async ({ page }) => {
   await attemptSignIn(page, "admin", "wrong-pass");
 
   await expect(page).toHaveURL(/\/login$/);
-  await expect(page.locator("#errors")).toContainText("Invalid Credentials");
+  await expect(page.locator("#errors")).toContainText("Invalid credentials");
 
   await page.goto("/auth/home");
   await expect(page).toHaveURL(/\/login$/);
@@ -106,11 +106,11 @@ test("Repeated invalid login attempts keep a single inline error container", asy
   await page.goto("/login");
   await attemptSignIn(page, "admin", "wrong-pass");
 
-  await expect(page.locator("#errors")).toContainText("Invalid Credentials");
+  await expect(page.locator("#errors")).toContainText("Invalid credentials");
 
   await attemptSignIn(page, "admin", "still-wrong");
 
   const errors = page.locator("#errors");
   await expect(errors).toHaveCount(1);
-  await expect(errors).toContainText("Invalid Credentials");
+  await expect(errors).toContainText("Invalid credentials");
 });
