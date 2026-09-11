@@ -63,7 +63,7 @@ test("Empty login submission is blocked before sending the request", async ({
   await expect(page.getByLabel("Password")).toBeVisible();
 });
 
-test("Short usernames and passwords are blocked by client-side validation", async ({
+test("Short usernames and passwords are treated as invalid credentials", async ({
   page,
 }) => {
   await page.goto("/login");
@@ -72,7 +72,7 @@ test("Short usernames and passwords are blocked by client-side validation", asyn
   await page.getByRole("button", { name: "Login" }).click();
 
   await expect(page).toHaveURL(/\/login$/);
-  await expect(page.locator("#errors")).toHaveText("");
+  await expect(page.locator("#errors")).toContainText("Invalid credentials");
 });
 
 test("Valid credentials sign in from login form and redirect to home", async ({
