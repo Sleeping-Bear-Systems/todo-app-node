@@ -39,7 +39,7 @@ export const loginPage = new Hono<{ Variables: AppVariables }>()
       <form
         id="login-form"
         data-on:submit="@post('${routes.LOGIN_PAGE}', {contentType: 'form'})"
-        data-indicator:fetching
+        data-indicator:_fetching
       >
         <div>
           <label for="username">Username</label>
@@ -48,7 +48,7 @@ export const loginPage = new Hono<{ Variables: AppVariables }>()
             name="username"
             type="text"
             autoComplete="username"
-            data-attr:readonly="$fetching"
+            data-attr:readonly="$_fetching"
           />
         </div>
         <div>
@@ -58,17 +58,17 @@ export const loginPage = new Hono<{ Variables: AppVariables }>()
             name="password"
             type="password"
             autoComplete="current-password"
-            data-attr:readonly="$fetching"
+            data-attr:readonly="$_fetching"
           />
         </div>
         <button
           type="submit"
-          data-attr:disabled="$fetching"
+          data-attr:disabled="$_fetching"
         >
           Login
         </button>
       </form>
-      <div data-show="$fetching">Logging in...</div>
+      <div data-show="$_fetching">Logging in...</div>
       <div id="errors"></div>
     `;
 
