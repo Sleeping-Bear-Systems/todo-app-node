@@ -13,7 +13,7 @@
     "@hono/zod-validator": "^0.9.1",
     "bcrypt-ts": "^9.0.2",
     "date-fns": "^4.4.0",
-    "hono": "^4.13.7",
+    "hono": "^4.13.13",
     "pg": "^8.23.0",
     "pg-connection-string": "^2.14.0",
     "winston": "^3.19.0",
